@@ -1,12 +1,12 @@
 import { jsPDF } from "jspdf";
-import Roboto from "./assets/fonts/Roboto-Regular-normal.js";
-import RobotoBold from "./assets/fonts/Roboto-Bold-normal.js";
-import HKGroteskBold from "./assets/fonts/HKGrotesk-Bold-normal";
-import HKGroteskRegular from "./assets/fonts/HKGrotesk-Regular-normal";
-import PoppinsLight from "./assets/fonts/Poppins-Light-normal";
-import PoppinsBold from "./assets/fonts/Poppins-Bold-normal";
+import Roboto from "../assets/fonts/Roboto-Regular-normal.js";
+import RobotoBold from "../assets/fonts/Roboto-Bold-normal.js";
+import HKGroteskBold from "../assets/fonts/HKGrotesk-Bold-normal.js";
+import HKGroteskRegular from "../assets/fonts/HKGrotesk-Regular-normal.js";
+import PoppinsLight from "../assets/fonts/Poppins-Light-normal.js";
+import PoppinsBold from "../assets/fonts/Poppins-Bold-normal.js";
 
-export class MinimalTemplate {
+export class MinimalistTemplate {
     constructor() {
         this.doc = new jsPDF();
         this.doc.addFileToVFS("Roboto-Regular.ttf", Roboto);
@@ -124,7 +124,7 @@ export class MinimalTemplate {
 
             if (data.stackoverflow) {
                 var stackOverflow = new Image();
-                stackOverflow.src = require("./assets/icons/stack-overflow-white.png");
+                stackOverflow.src = require("../assets/icons/stack-overflow-white.png");
                 this.doc.addImage(stackOverflow, sidebarMargin, sidebarHeightRef, 7, 7);
                 this.doc.textWithLink(
                     "stackoverflow",
@@ -140,7 +140,7 @@ export class MinimalTemplate {
 
             if (data.website) {
                 var website = new Image();
-                website.src = require("./assets/icons/web-white.png");
+                website.src = require("../assets/icons/web-white.png");
                 this.doc.addImage(website, sidebarMargin, sidebarHeightRef, 7, 7);
                 this.doc.textWithLink(
                     data.website,
@@ -157,7 +157,7 @@ export class MinimalTemplate {
 
             if (data.linkedin) {
                 var linkedin = new Image();
-                linkedin.src = require("./assets/icons/linkedin-white.png");
+                linkedin.src = require("../assets/icons/linkedin-white.png");
                 this.doc.addImage(linkedin, sidebarMargin, sidebarHeightRef, 7, 7);
                 this.doc.textWithLink(
                     data.linkedin,
@@ -173,7 +173,7 @@ export class MinimalTemplate {
 
             if (data.github) {
                 var github = new Image();
-                github.src = require("./assets/icons/github-white.png");
+                github.src = require("../assets/icons/github-white.png");
                 this.doc.addImage(github, sidebarMargin, sidebarHeightRef, 7, 7);
                 this.doc.textWithLink(
                     data.github,
@@ -188,14 +188,14 @@ export class MinimalTemplate {
             }
 
             var phone = new Image();
-            phone.src = require("./assets/icons/phone-white.png");
+            phone.src = require("../assets/icons/phone-white.png");
             this.doc.addImage(phone, sidebarMargin, sidebarHeightRef, 7, 7);
             this.doc.text(data.phone, sidebarMargin + 8, sidebarHeightRef + 5);
 
             sidebarHeightRef -= this.config.headerLineHeight;
 
             var email = new Image();
-            email.src = require("./assets/icons/email-white.png");
+            email.src = require("../assets/icons/email-white.png");
             this.doc.addImage(email, sidebarMargin, sidebarHeightRef, 7, 7);
             this.doc.text(data.email, sidebarMargin + 8, sidebarHeightRef + 5);
 
@@ -377,11 +377,11 @@ export class MinimalTemplate {
         this.doc.setFontSize(this.config.text.content);
 
         var fullCircleIcon = new Image();
-        fullCircleIcon.src = require("./assets/icons/circle.png");
+        fullCircleIcon.src = require("../assets/icons/circle.png");
         var halfCircleIcon = new Image();
-        halfCircleIcon.src = require("./assets/icons/circle-half-full.png");
+        halfCircleIcon.src = require("../assets/icons/circle-half-full.png");
         var emptyCircleIcon = new Image();
-        emptyCircleIcon.src = require("./assets/icons/circle-outline.png");
+        emptyCircleIcon.src = require("../assets/icons/circle-outline.png");
         var maxNameWidth = 0;
 
         skills.forEach(skill => {
