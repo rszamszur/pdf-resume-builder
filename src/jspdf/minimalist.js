@@ -138,6 +138,22 @@ export class MinimalistTemplate {
                 sidebarHeightRef -= this.config.headerLineHeight;
             }
 
+            if (data.twitter) {
+                var twitter = new Image();
+                twitter.src = require("../assets/icons/twitter-white.png");
+                this.doc.addImage(twitter, sidebarMargin, sidebarHeightRef, 7, 7);
+                this.doc.textWithLink(
+                    data.twitter,
+                    sidebarMargin + 8,
+                    sidebarHeightRef + 5,
+                    {
+                        url: `https://twitter.com/${data.twitter}`,
+                    }
+                );
+
+                sidebarHeightRef -= this.config.headerLineHeight;
+            }
+
             if (data.website) {
                 var website = new Image();
                 website.src = require("../assets/icons/web-white.png");
@@ -147,7 +163,7 @@ export class MinimalistTemplate {
                     sidebarMargin + 8,
                     sidebarHeightRef + 5,
                     {
-                        url: data.website,
+                        url: `https://${data.website}`,
                     }
                 );
 
