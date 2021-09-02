@@ -6,7 +6,7 @@ import HKGroteskRegular from "../assets/fonts/HKGrotesk-Regular-normal.js";
 import PoppinsLight from "../assets/fonts/Poppins-Light-normal.js";
 import PoppinsBold from "../assets/fonts/Poppins-Bold-normal.js";
 
-export class MinimalistTemplate {
+export class LessIsBetter {
     constructor() {
         this.doc = new jsPDF();
         this.doc.addFileToVFS("Roboto-Regular.ttf", Roboto);
@@ -21,7 +21,7 @@ export class MinimalistTemplate {
                 name: 35,
                 tagline: 16,
                 header: 18,
-                contact: 12,
+                sidebarContent: 12,
                 subHeader: 10,
                 content: 9,
             },
@@ -46,7 +46,179 @@ export class MinimalistTemplate {
         this.currentPage = 1;
     }
 
-    generatePDF(data) {
+    static schema() {
+        return {
+            type: "object",
+            properties: {
+                name: { type: "string" },
+                lastname: { type: "string" },
+                tagline: { type: "string" },
+                email: { type: "string" },
+                phone: { type: "string" },
+                linkedin: { type: "string" },
+                github: { type: "string" },
+                website: { type: "string" },
+                twitter: { type: "string" },
+                stackoverflow: { type: "string" },
+                about: { type: "string" },
+                education: {
+                    type: "array",
+                    minItems: 1,
+                    items: {
+                        type: "object",
+                        properties: {
+                            degree: { type: "string" },
+                            university: { type: "string" },
+                            time: { type: "string" },
+                            details: {
+                                type: "array",
+                                minItems: 1,
+                                items: { type: "string" },
+                            },
+                        },
+                        required: ["degree", "university", "time"],
+                    },
+                },
+                experience: {
+                    type: "array",
+                    minItems: 1,
+                    items: {
+                        type: "object",
+                        properties: {
+                            role: { type: "string" },
+                            company: { type: "string" },
+                            time: { type: "string" },
+                            details: {
+                                type: "array",
+                                minItems: 1,
+                                items: { type: "string" },
+                            },
+                        },
+                        required: ["role", "company", "time"],
+                    },
+                },
+                projects: {
+                    type: "object",
+                    properties: {
+                        items: {
+                            type: "array",
+                            minItems: 1,
+                            items: {
+                                type: "object",
+                                properties: {
+                                    name: { type: "string" },
+                                    tagline: { type: "string" },
+                                    link: { type: "string" },
+                                    details: { type: "string" },
+                                },
+                                required: ["name", "details"],
+                            },
+                        },
+                    },
+                    required: ["items"],
+                },
+                skills2Rows: {
+                    type: "boolean",
+                    default: true,
+                },
+                skills: {
+                    type: "array",
+                    minItems: 1,
+                    items: {
+                        type: "object",
+                        properties: {
+                            name: { type: "string" },
+                            level: {
+                                type: "number",
+                                enum: [
+                                    0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0,
+                                ],
+                            },
+                        },
+                        required: ["name", "level"],
+                    },
+                },
+                languages: {
+                    type: "array",
+                    minItems: 1,
+                    items: {
+                        type: "object",
+                        properties: {
+                            name: { type: "string" },
+                            level: { type: "string" },
+                        },
+                        required: ["name"],
+                    },
+                },
+                courses: {
+                    type: "array",
+                    minItems: 1,
+                    items: { type: "string" },
+                },
+                interests: {
+                    type: "array",
+                    minItems: 1,
+                    items: {
+                        type: "object",
+                        properties: {
+                            name: { type: "string" },
+                            link: { type: "string" },
+                        },
+                        required: ["name"],
+                    },
+                },
+                numPages: {
+                    type: "boolean",
+                    default: true,
+                },
+            },
+            required: [
+                "name",
+                "lastname",
+                "email",
+                "phone",
+                "education",
+                "experience",
+                "skills",
+            ],
+            additionalProperties: false,
+        };
+    }
+
+    static defaultOptions() {
+        return {
+            sidebarWidth: 70,
+            text: {
+                name: 35,
+                tagline: 16,
+                header: 18,
+                sidebarContent: 12,
+                subHeader: 10,
+                content: 9,
+            },
+            margin: {
+                top: 20,
+                bottom: 20,
+                left: 15,
+                inner: 15,
+                between: 10,
+                list: 5,
+            },
+            headerLineHeight: 8,
+            lineHeight: 6,
+            subLineHeight: 4,
+        }
+    }
+
+    generatePDF(data, options = null) {
+        if (options) {
+            this.config = {
+                ...this.config,
+                ...options,
+            }
+            this.heightRef = this.config.margin.top;
+        }
+
         if (data.about) {
             this._addAbout(data.about);
         }
@@ -83,7 +255,7 @@ export class MinimalistTemplate {
                         `${j} / ${pages}`,
                         this.config.margin.left,
                         this.doc.internal.pageSize.height - 6
-                    );1
+                    ); 1
                 }
             }
         }
@@ -104,7 +276,7 @@ export class MinimalistTemplate {
             angle: -90,
             charSpace: 1,
         });
-        this.doc.text(data.surname.toUpperCase(), 170, this.config.margin.top - 5, {
+        this.doc.text(data.lastname.toUpperCase(), 170, this.config.margin.top - 5, {
             angle: -90,
             charSpace: 1,
         });
@@ -119,7 +291,7 @@ export class MinimalistTemplate {
         var sidebarMargin = (docWidth - this.config.sidebarWidth) + this.config.margin.inner;
 
         if (withContact) {
-            this.doc.setFontSize(this.config.text.contact);
+            this.doc.setFontSize(this.config.text.sidebarContent);
             sidebarHeightRef -= 7; // normalize height
 
             if (data.stackoverflow) {
@@ -225,7 +397,7 @@ export class MinimalistTemplate {
         if (withExtras) {
             if (data.languages) {
                 this.doc.setFont("Poppins-Light", "normal");
-                this.doc.setFontSize(this.config.text.contact);
+                this.doc.setFontSize(this.config.text.sidebarContent);
                 data.languages.reverse().forEach(lang => {
                     this.doc.text(`${lang.name} (${lang.level})`, sidebarMargin, sidebarHeightRef);
                     sidebarHeightRef -= this.config.headerLineHeight;
@@ -239,7 +411,7 @@ export class MinimalistTemplate {
 
             if (data.interests) {
                 this.doc.setFont("Poppins-Light", "normal");
-                this.doc.setFontSize(this.config.text.contact);
+                this.doc.setFontSize(this.config.text.sidebarContent);
                 data.interests.reverse().forEach(item => {
                     if (item.link) {
                         this.doc.textWithLink(item.name, sidebarMargin, sidebarHeightRef, {
