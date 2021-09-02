@@ -16,4 +16,5 @@ if ! command -v npm &> /dev/null; then
 fi
 
 npm install
+npm run lint
 npm run build
