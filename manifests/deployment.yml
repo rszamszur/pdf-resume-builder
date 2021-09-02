@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pdf-resume-builder-deployment
+  labels: 
+    app: pdf-resume-builder
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pdf-resume-builder
+  template:
+    metadata:
+      labels:
+        app: pdf-resume-builder
+    spec:
+      containers:
+        - name : pdf-resume-builder
+          image: localhost/pdf-resume-builder:0.1.0
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 30
+            periodSeconds: 60
