@@ -1,6 +1,6 @@
 <template>
   <v-form ref="form" lazy-validation>
-    <h2 class="text-h2 text-sm-h3">Step 1: Chose template</h2>
+    <h2 class="text-h5 text-sm-h3 text-md-h2">Step 1: Chose template</h2>
     <v-slide-group
       v-model="chosen"
       class="pa-4"
@@ -195,7 +195,7 @@
       </v-row>
     </div>
     <v-divider class="mb-4 mt-2"></v-divider>
-    <h2 class="text-h2 text-sm-h3 mb-4">Step 2: Load JSON Data</h2>
+    <h2 class="text-h5 text-sm-h3 text-md-h2 mb-4">Step 2: Load JSON Data</h2>
     <p>
       <v-icon color="info">mdi-information</v-icon> If you don't know what
       data?!, then have a look at
@@ -238,7 +238,7 @@
       <v-btn text color="error" @click="reset">Reset</v-btn>
     </div>
     <v-divider class="mb-4 mt-2"></v-divider>
-    <h2 class="text-h2 text-sm-h3">Step 3... oh wait here is no step 3 :)</h2>
+    <h2 class="text-h5 text-sm-h3 text-md-h2">Step 3... oh wait here is no step 3 :)</h2>
   </v-form>
 </template>
 
@@ -344,11 +344,11 @@ export default {
       this.disabled = false;
       this.loading = false;
       this.showAfter = false;
-      this.templates.forEach(template => {
+      this.templates.forEach((template) => {
         template.options = template.class.defaultOptions();
       });
       this.$refs.input.reset();
-    }
+    },
   },
 };
 </script>
