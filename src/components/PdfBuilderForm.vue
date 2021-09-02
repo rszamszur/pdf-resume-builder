@@ -238,7 +238,7 @@
       <v-btn text color="error" @click="reset">Reset</v-btn>
     </div>
     <v-divider class="mb-4 mt-2"></v-divider>
-    <h2 class="text-h5 text-sm-h3 text-md-h2">Step 3... oh wait here is no step 3 :)</h2>
+    <h2 class="text-h5 text-sm-h3 text-md-h2">Step 3: Get hired</h2>
   </v-form>
 </template>
 
