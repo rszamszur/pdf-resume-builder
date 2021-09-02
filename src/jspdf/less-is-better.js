@@ -698,6 +698,33 @@ export class LessIsBetter {
 
     _reset() {
         this.doc = new jsPDF();
+        this.config = {
+            sidebarWidth: 70,
+            text: {
+                name: 35,
+                tagline: 16,
+                header: 18,
+                sidebarContent: 12,
+                subHeader: 10,
+                content: 9,
+            },
+            margin: {
+                top: 20,
+                bottom: 20,
+                left: 15,
+                inner: 15,
+                between: 10,
+                list: 5,
+            },
+            color: {
+                white: "#ffffff",
+                black: "#000000",
+                gray: "#4d4e53",
+            },
+            headerLineHeight: 8,
+            lineHeight: 6,
+            subLineHeight: 4,
+        };
         this.heightRef = this.config.margin.top;
         this.currentPage = 1;
     }
