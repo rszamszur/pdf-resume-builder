@@ -8,7 +8,7 @@ export default new Vuetify({
         iconfont: 'mdi'
     },
     theme: {
-        dark: false,
+        dark: localStorage.getItem("dark-theme") || false,
         themes: {
             light: {
                 appbar: "#1976D2",
@@ -19,12 +19,6 @@ export default new Vuetify({
                 appbar: "#272727",
                 primary: "#2196F3",
                 footer: "#313131",
-            },
-            options: {
-                themeCache: {
-                    get: key => localStorage.getItem(key),
-                    set: (key, value) => localStorage.setItem(key, value),
-                },
             },
         },
     },
