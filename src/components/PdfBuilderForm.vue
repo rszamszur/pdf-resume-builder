@@ -56,7 +56,7 @@
     <div v-if="showOptions">
       <v-row>
         <v-col cols="12" md="6">
-          <v-subheader>Margins</v-subheader>
+          <div class="text-overline">Margins</div>
           <v-slider
             v-model="templates[chosen].options.margin.left"
             color="primary"
@@ -107,7 +107,7 @@
           ></v-slider>
         </v-col>
         <v-col cols="12" md="6">
-          <v-subheader>Fonts</v-subheader>
+          <div class="text-overline">Fonts</div>
           <v-slider
             v-model="templates[chosen].options.text.name"
             color="primary"
@@ -158,7 +158,7 @@
           ></v-slider>
         </v-col>
         <v-col cols="12" md="12">
-          <v-subheader>Misc</v-subheader>
+          <div class="text-overline">Misc</div>
           <v-slider
             v-model="templates[chosen].options.sidebarWidth"
             color="primary"
@@ -199,7 +199,9 @@
     <p>
       <v-icon color="info">mdi-information</v-icon> If you don't know what
       data?!, then have a look at
-      <a href="https://github.com/rszamszur/pdf-resume-builder/tree/master/examples" target="_blank"
+      <a
+        href="https://github.com/rszamszur/pdf-resume-builder/tree/master/examples"
+        target="_blank"
         >examples</a
       >
       and
@@ -208,6 +210,7 @@
       >
     </p>
     <v-file-input
+      ref="input"
       :rules="rules"
       accept="application/json"
       outlined
@@ -215,13 +218,24 @@
       label="JSON Data"
       :show-size="1000"
       :error-messages="inputErrors"
-      :disabled="chosen != 0"
+      :loading="loading"
+      :disabled="chosen != 0 || disabled"
       @change="loadJSON"
     ></v-file-input>
     <div v-if="schemaErrors">
-      <v-alert dense outlined type="error" v-for="(error, i) in schemaErrors" :key="i">
+      <v-alert
+        dense
+        outlined
+        type="error"
+        v-for="(error, i) in schemaErrors"
+        :key="i"
+      >
         {{ error.message }}
       </v-alert>
+    </div>
+    <div v-if="showAfter">
+      <v-btn text color="primary" @click="generatePDF">Generate Again</v-btn>
+      <v-btn text color="error" @click="reset">Reset</v-btn>
     </div>
     <v-divider class="mb-4 mt-2"></v-divider>
     <h2 class="text-h2 text-sm-h3">Step 3... oh wait here is no step 3 :)</h2>
@@ -251,14 +265,14 @@ export default {
           name: "ShineLikeDiamond",
           thumbnail: require("../assets/ShineLikeDiamond-cs.png"),
           link: null,
-          class: null,
+          class: LessIsBetter,
           options: LessIsBetter.defaultOptions(),
         },
         {
           name: "WebGyver",
           thumbnail: require("../assets/WebGyver-cs.png"),
           link: null,
-          class: null,
+          class: LessIsBetter,
           options: LessIsBetter.defaultOptions(),
         },
       ],
@@ -269,12 +283,20 @@ export default {
       ],
       inputErrors: [],
       schemaErrors: null,
+      disabled: false,
+      loading: false,
+      showAfter: false,
+      data: null,
     };
   },
   methods: {
     loadJSON(file) {
       this.inputErrors = [];
       this.schemaErrors = null;
+      this.disabled = true;
+      this.loading = true;
+      this.showAfter = false;
+      this.data = null;
       if (this.$refs.form.validate()) {
         console.log(file);
         const reader = new FileReader();
@@ -283,14 +305,18 @@ export default {
           try {
             const data = JSON.parse(event.target.result);
             this.validateJSON(data);
-          }
-          catch {
-            this.inputErrors.push("Coudlnt parse provided JSON file, most likely it is malformed.")
-            return
+          } catch {
+            this.inputErrors.push(
+              "Coudlnt parse provided JSON file, most likely it is malformed."
+            );
+            return;
           }
         });
         reader.readAsText(file);
       }
+
+      this.disabled = false;
+      this.loading = false;
     },
     validateJSON(data) {
       console.log(data);
@@ -299,18 +325,30 @@ export default {
       );
       var valid = validate(data);
       if (valid) {
-        this.generatePDF(data);
+        this.data = data;
+        this.generatePDF();
+        this.showAfter = true;
       } else {
-        console.log(validate.errors);
-        console.log(this.$refs.jsonInput);
         this.inputErrors.push("Provided JSON file doesn't pass schema.");
         this.schemaErrors = validate.errors;
       }
     },
-    generatePDF(data) {
+    generatePDF() {
       const cv = new this.templates[this.chosen].class();
-      cv.generatePDF(data, this.templates[this.chosen].options);
+      cv.generatePDF(this.data, this.templates[this.chosen].options);
     },
+    reset() {
+      this.data = null;
+      this.inputErrors = [];
+      this.schemaErrors = null;
+      this.disabled = false;
+      this.loading = false;
+      this.showAfter = false;
+      this.templates.forEach(template => {
+        template.options = template.class.defaultOptions();
+      });
+      this.$refs.input.reset();
+    }
   },
 };
 </script>
