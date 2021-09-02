@@ -21,7 +21,7 @@
           <v-col class="grow">
             This application is stateless and does <strong>not</strong> store
             any data! Uploaded JSON file is only loaded into memory for the
-            current session in order to populate jdPDF templates with your data.
+            current session in order to populate PDF template with your data.
           </v-col>
           <v-col class="shrink">
             <v-btn color="info" outlined @click="closeAlert"> Okay </v-btn>
