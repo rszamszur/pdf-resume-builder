@@ -35,3 +35,5 @@ jobs:
           build_dir: dist
           commit_message: "Deploy to GitHubPages"
           jekyll: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
