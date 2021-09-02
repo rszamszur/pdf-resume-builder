@@ -8,7 +8,7 @@ export default new Vuetify({
         iconfont: 'mdi'
     },
     theme: {
-        dark: localStorage.getItem("dark-theme") || false,
+        dark: localStorage.getItem("dark-theme") === "true" ? true : false,
         themes: {
             light: {
                 appbar: "#1976D2",

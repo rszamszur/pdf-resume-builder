@@ -16,6 +16,18 @@
     </v-app-bar>
 
     <v-main>
+      <v-alert prominent text type="info" :value="!dismissed">
+        <v-row align="center">
+          <v-col class="grow">
+            This application is stateless and does <strong>not</strong> store
+            any data! Uploaded JSON file is only loaded into memory for the
+            current session in order to populate jdPDF templates with your data.
+          </v-col>
+          <v-col class="shrink">
+            <v-btn color="info" outlined @click="closeAlert"> Okay </v-btn>
+          </v-col>
+        </v-row>
+      </v-alert>
       <Main />
     </v-main>
 
@@ -34,11 +46,18 @@ export default {
     Footer,
   },
   data() {
-    return {};
+    return {
+      dismissed:
+        localStorage.getItem("disclaimer-dismissed") === "true" ? true : false,
+    };
   },
   methods: {
     saveTheme() {
-      localStorage.setItem("dark-theme", this.$vuetify.theme.dark);
+      localStorage.setItem("dark-theme", this.$vuetify.theme.dark.toString());
+    },
+    closeAlert() {
+      this.dismissed = true;
+      localStorage.setItem("disclaimer-dismissed", true.toString());
     },
   },
 };
