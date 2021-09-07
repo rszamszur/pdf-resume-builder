@@ -35,6 +35,11 @@
     </v-slide-group>
     <div class="text-subtitle-1">
       Chosen template: <strong>{{ templates[chosen].name }}</strong>
+      <span v-if="templates[chosen].link != null">
+        (
+        <a :href="templates[chosen].link" target="_blan">Example</a>
+        )
+      </span>
     </div>
     <p>
       <v-icon color="info">mdi-information</v-icon> In case chosen template
@@ -318,7 +323,7 @@
 <script>
 import Ajv from "ajv";
 import { LessIsBetter } from "../jspdf/less-is-better.js";
-import { ShineLikeDiamond } from "../jspdf/shine-like-diamond.js"
+import { ShineLikeDiamond } from "../jspdf/shine-like-diamond.js";
 
 export default {
   name: "PdfBuilderForm",
@@ -331,14 +336,14 @@ export default {
         {
           name: "LessIsBetter",
           thumbnail: require("../assets/LessIsBetter.png"),
-          link: null,
+          link: "https://github.com/rszamszur/pdf-resume-builder/blob/assets/LessIsBetter_example.pdf",
           class: LessIsBetter,
           options: LessIsBetter.editableOptions(),
         },
         {
           name: "ShineLikeDiamond",
-          thumbnail: require("../assets/ShineLikeDiamond-cs.png"),
-          link: null,
+          thumbnail: require("../assets/ShineLikeDiamond.png"),
+          link: "https://github.com/rszamszur/pdf-resume-builder/blob/assets/ShineLikeDiamond_example.pdf",
           class: ShineLikeDiamond,
           options: ShineLikeDiamond.editableOptions(),
         },
