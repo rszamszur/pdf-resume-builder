@@ -47,7 +47,10 @@ export class ShineLikeDiamond extends BaseTemplate {
                 tagline: 8,
                 header: 20,
                 subHeader: 5,
+                sidebarHeader: 6,
+                sidebarContent: 8,
                 content: 4,
+                normalize: -4,
             },
         };
         super(conf);
@@ -65,11 +68,11 @@ export class ShineLikeDiamond extends BaseTemplate {
 
     generatePDF(data, options = null) {
         if (options) {
-            this.config = {
-                ...this.config,
+            this.conf = {
+                ...this.conf,
                 ...options,
             }
-            this.heightRef = this.config.margin.top;
+            this.heightRef = this.conf.margin.top;
         }
 
         this._addTitle(data.name, data.lastname, data.tagline);
@@ -114,22 +117,22 @@ export class ShineLikeDiamond extends BaseTemplate {
         }
         this._addSidebarInverse(data);
         this.doc.save("resume.pdf");
+        this._reset();
     }
 
     _addTitle(name, lastname, tagline) {
-        const contentMargin = this.conf.sidebarWidth + this.conf.margin.left;
         this.heightRef = 33;
         this.doc.setFont("Montserrat-ExtraBold", "normal");
         this.doc.setTextColor(this.conf.color.primary);
         this.doc.setFontSize(this.conf.text.name);
-        this.doc.text(name.toUpperCase(), contentMargin, this.heightRef, { charSpace: 1 });
+        this.doc.text(name.toUpperCase(), this.totalLeftMargin, this.heightRef, { charSpace: 1 });
         this.heightRef += this.conf.height.name;
-        this.doc.text(lastname.toUpperCase(), contentMargin, this.heightRef, { charSpace: 1 });
+        this.doc.text(lastname.toUpperCase(), this.totalLeftMargin, this.heightRef, { charSpace: 1 });
         this.heightRef += this.conf.height.tagline;
         this.doc.setFont("Montserrat-SemiBold", "normal");
         this.doc.setFontSize(this.conf.text.tagline);
         this.doc.setTextColor(this.conf.color.secondary);
-        this.doc.text(tagline.toUpperCase(), contentMargin, this.heightRef, { charSpace: 0.5 });
+        this.doc.text(tagline.toUpperCase(), this.totalLeftMargin, this.heightRef, { charSpace: 0.5 });
         this.heightRef += this.conf.margin.between;
     }
 
@@ -162,13 +165,13 @@ export class ShineLikeDiamond extends BaseTemplate {
         email.src = require("../assets/icons/email.png");
         this.doc.addImage(email, this.conf.margin.sidebar, sidebarHeightRef, 6, 6);
         this.doc.text(data.contact.email, this.conf.margin.sidebar + 8, sidebarHeightRef + 4);
-        sidebarHeightRef += 8;
+        sidebarHeightRef += this.conf.height.sidebarContent;
 
         var phone = new Image();
         phone.src = require("../assets/icons/phone.png");
         this.doc.addImage(phone, this.conf.margin.sidebar, sidebarHeightRef, 6, 6);
         this.doc.text(data.contact.phone, this.conf.margin.sidebar + 8, sidebarHeightRef + 4);
-        sidebarHeightRef += 8;
+        sidebarHeightRef += this.conf.height.sidebarContent;
 
         if (data.contact.github) {
             var github = new Image();
@@ -183,7 +186,7 @@ export class ShineLikeDiamond extends BaseTemplate {
                 }
             );
 
-            sidebarHeightRef += 8;
+            sidebarHeightRef += this.conf.height.sidebarContent;
         }
 
         if (data.contact.linkedin) {
@@ -199,7 +202,7 @@ export class ShineLikeDiamond extends BaseTemplate {
                 }
             );
 
-            sidebarHeightRef += 8;
+            sidebarHeightRef += this.conf.height.sidebarContent;
         }
 
         if (data.contact.website) {
@@ -215,7 +218,7 @@ export class ShineLikeDiamond extends BaseTemplate {
                 }
             );
 
-            sidebarHeightRef += 8;
+            sidebarHeightRef += this.conf.height.sidebarContent;
         }
 
         if (data.contact.twitter) {
@@ -231,7 +234,7 @@ export class ShineLikeDiamond extends BaseTemplate {
                 }
             );
 
-            sidebarHeightRef += 8;
+            sidebarHeightRef += this.conf.height.sidebarContent;
         }
 
         if (data.contact.stackoverflow) {
@@ -252,7 +255,7 @@ export class ShineLikeDiamond extends BaseTemplate {
         const count = Object.keys(data.contact).length - 1;
 
         if (count > 4) {
-            sidebarHeightRef += (count - 4) * 8;
+            sidebarHeightRef += (count - 4) * this.conf.height.sidebarContent;
         }
 
         //calculated line equation
@@ -268,7 +271,7 @@ export class ShineLikeDiamond extends BaseTemplate {
             this.doc.setTextColor(this.conf.color.white);
             this.doc.setFontSize(this.conf.text.sidebarHeader);
             this.doc.text("LANGUAGES", this.conf.margin.sidebar, sidebarHeightRef, { charSpace: 0.5 });
-            sidebarHeightRef += 6;
+            sidebarHeightRef += this.conf.height.sidebarHeader;
 
             this.doc.setFontSize(this.conf.text.sidebarContent);
             data.languages.forEach(lang => {
@@ -284,7 +287,7 @@ export class ShineLikeDiamond extends BaseTemplate {
             this.doc.setTextColor(this.conf.color.white);
             this.doc.setFontSize(this.conf.text.sidebarHeader);
             this.doc.text("INTERESTS", this.conf.margin.sidebar, sidebarHeightRef, { charSpace: 0.5 });
-            sidebarHeightRef += 6;
+            sidebarHeightRef += this.conf.height.sidebarHeader;
 
             this.doc.setFontSize(this.conf.text.sidebarContent);
             data.interests.forEach(item => {
@@ -306,7 +309,7 @@ export class ShineLikeDiamond extends BaseTemplate {
         const count = Object.keys(data.contact).length - 1;
 
         if (count > 4) {
-            sidebarHeightRef += (count - 4) * 8;
+            sidebarHeightRef += (count - 4) * this.conf.height.sidebarContent;
         }
 
         //calculated line equation
@@ -324,7 +327,7 @@ export class ShineLikeDiamond extends BaseTemplate {
         this.doc.setTextColor(this.conf.color.white);
         this.doc.setFontSize(this.conf.text.sidebarHeader);
         this.doc.text("CONTACT", this.conf.margin.sidebar, sidebarHeightRef, { charSpace: 0.5 });
-        sidebarHeightRef += 6;
+        sidebarHeightRef += this.conf.height.sidebarHeader;
 
         this.doc.setFont("Montserrat-Regular", "normal");
         this.doc.setFontSize(this.conf.text.sidebarContent);
@@ -334,13 +337,13 @@ export class ShineLikeDiamond extends BaseTemplate {
         email.src = require("../assets/icons/email-white.png");
         this.doc.addImage(email, this.conf.margin.sidebar, sidebarHeightRef, 6, 6);
         this.doc.text(data.contact.email, this.conf.margin.sidebar + 8, sidebarHeightRef + 4);
-        sidebarHeightRef += 8;
+        sidebarHeightRef += this.conf.height.sidebarContent;
 
         var phone = new Image();
         phone.src = require("../assets/icons/phone-white.png");
         this.doc.addImage(phone, this.conf.margin.sidebar, sidebarHeightRef, 6, 6);
         this.doc.text(data.contact.phone, this.conf.margin.sidebar + 8, sidebarHeightRef + 4);
-        sidebarHeightRef += 8;
+        sidebarHeightRef += this.conf.height.sidebarContent;
 
         if (data.contact.github) {
             var github = new Image();
@@ -355,7 +358,7 @@ export class ShineLikeDiamond extends BaseTemplate {
                 }
             );
 
-            sidebarHeightRef += 8;
+            sidebarHeightRef += this.conf.height.sidebarContent;
         }
 
         if (data.contact.linkedin) {
@@ -371,7 +374,7 @@ export class ShineLikeDiamond extends BaseTemplate {
                 }
             );
 
-            sidebarHeightRef += 8;
+            sidebarHeightRef += this.conf.height.sidebarContent;
         }
 
         if (data.contact.website) {
@@ -387,7 +390,7 @@ export class ShineLikeDiamond extends BaseTemplate {
                 }
             );
 
-            sidebarHeightRef += 8;
+            sidebarHeightRef += this.conf.height.sidebarContent;
         }
 
         if (data.contact.twitter) {
@@ -403,7 +406,7 @@ export class ShineLikeDiamond extends BaseTemplate {
                 }
             );
 
-            sidebarHeightRef += 8;
+            sidebarHeightRef += this.conf.height.sidebarContent;
         }
 
         if (data.contact.stackoverflow) {
@@ -426,14 +429,14 @@ export class ShineLikeDiamond extends BaseTemplate {
         this._isEnoughSpace(this.conf.height.header);
         this.doc.setFillColor("#1A1A1A");
         this.doc.setDrawColor("#1A1A1A");
-        this.doc.triangle(this.contentMargin, this.heightRef + 6, this.contentMargin + 6, this.heightRef + 9, this.contentMargin + 6, this.heightRef, "F");
-        this.doc.triangle(this.contentMargin, this.heightRef + 6, this.contentMargin + 6, this.heightRef + 9, this.contentMargin, this.heightRef + 15, "F");
-        this.doc.line(this.contentMargin, this.heightRef + 6, this.contentMargin + 6, this.heightRef + 9, "F");
+        this.doc.triangle(this.totalLeftMargin, this.heightRef + 6, this.totalLeftMargin + 6, this.heightRef + 9, this.totalLeftMargin + 6, this.heightRef, "F");
+        this.doc.triangle(this.totalLeftMargin, this.heightRef + 6, this.totalLeftMargin + 6, this.heightRef + 9, this.totalLeftMargin, this.heightRef + 15, "F");
+        this.doc.line(this.totalLeftMargin, this.heightRef + 6, this.totalLeftMargin + 6, this.heightRef + 9, "F");
 
         this.doc.setFont("Montserrat-Medium", "normal");
         this.doc.setTextColor(this.conf.color.primary);
         this.doc.setFontSize(this.conf.text.header);
-        this.doc.text(name, this.contentMargin + 10, this.heightRef + 7, { charSpace: 0.5 });
+        this.doc.text(name, this.totalLeftMargin + 10, this.heightRef + 7, { charSpace: 0.5 });
         this.heightRef += this.conf.height.header;
     }
 
