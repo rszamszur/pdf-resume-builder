@@ -62,7 +62,7 @@ export class ShineLikeDiamond extends BaseTemplate {
         this.doc.addFileToVFS("Montserrat-Regular.ttf", MontserratRegular);
     }
 
-    static defaultOptions() {
+    static editableOptions() {
         return {
             text: {
                 subHeader: 12,

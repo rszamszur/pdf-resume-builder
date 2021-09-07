@@ -162,8 +162,8 @@ export class BaseTemplate {
         };
     }
 
-    static defaultOptions() {
-        throw new Error("Method 'defaultOptions()' must be implemented.");
+    static editableOptions() {
+        throw new Error("Method 'editableOptions()' must be implemented.");
     }
 
     generatePDF() {

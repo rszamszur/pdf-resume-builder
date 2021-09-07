@@ -61,7 +61,7 @@ export class LessIsBetter extends BaseTemplate {
         this.doc.addFileToVFS("Poppins-Bold.ttf", PoppinsBold);
     }
 
-    static defaultOptions() {
+    static editableOptions() {
         return {
             sidebarWidth: 70,
             text: {
