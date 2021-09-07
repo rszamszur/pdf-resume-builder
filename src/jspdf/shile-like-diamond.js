@@ -1,4 +1,4 @@
-import { jsPDF } from "jspdf";
+import { BaseTemplate } from "./base.js";
 import MontserratBlack from "../assets/fonts/Montserrat-Black-normal.js";
 import MontserratExtraBold from "../assets/fonts/Montserrat-ExtraBold-normal.js";
 import MontserratBold from "../assets/fonts/Montserrat-Bold-normal.js";
@@ -6,17 +6,11 @@ import MontserratSemiBold from "../assets/fonts/Montserrat-SemiBold-normal.js";
 import MontserratMedium from "../assets/fonts/Montserrat-Medium-normal.js";
 import MontserratRegular from "../assets/fonts/Montserrat-Regular-normal.js";
 
-export class ShineLikeDiamond {
+export class ShineLikeDiamond extends BaseTemplate {
     constructor() {
-        this.doc = new jsPDF();
-        this.doc.addFileToVFS("Montserrat-Black.ttf", MontserratBlack);
-        this.doc.addFileToVFS("Montserrat-ExtraBold.ttf", MontserratExtraBold);
-        this.doc.addFileToVFS("Montserrat-Bold.ttf", MontserratBold);
-        this.doc.addFileToVFS("Montserrat-SemiBold.ttf", MontserratSemiBold);
-        this.doc.addFileToVFS("Montserrat-Medium.ttf", MontserratMedium);
-        this.doc.addFileToVFS("Montserrat-Regular.ttf", MontserratRegular);
-        this.conf = {
+        const conf = {
             sidebarWidth: 60,
+            sidebarRight: false,
             text: {
                 name: 35,
                 tagline: 18,
@@ -25,6 +19,12 @@ export class ShineLikeDiamond {
                 sidebarHeader: 16,
                 sidebarContent: 10,
                 content: 10,
+            },
+            font: {
+                subHeader: "Montserrat-Medium",
+                subHeaderTagline: "Montserrat-Regular",
+                content: "Montserrat-Regular",
+                contentBold: "Montserrat-SemiBold",
             },
             margin: {
                 top: 20,
@@ -50,21 +50,27 @@ export class ShineLikeDiamond {
                 content: 4,
             },
         };
-        this.heightRef = this.conf.margin.top;
-        this.contentMargin = this.conf.margin.left + this.conf.sidebarWidth;
-        this.currentPage = 1;
-    }
-
-    static schema() {
-        return {}
+        super(conf);
+        this.doc.addFileToVFS("Montserrat-Black.ttf", MontserratBlack);
+        this.doc.addFileToVFS("Montserrat-ExtraBold.ttf", MontserratExtraBold);
+        this.doc.addFileToVFS("Montserrat-Bold.ttf", MontserratBold);
+        this.doc.addFileToVFS("Montserrat-SemiBold.ttf", MontserratSemiBold);
+        this.doc.addFileToVFS("Montserrat-Medium.ttf", MontserratMedium);
+        this.doc.addFileToVFS("Montserrat-Regular.ttf", MontserratRegular);
     }
 
     static defaultOptions() {
         return {}
     }
 
-    generatePDF(data) {
-        this._addSidebar(data);
+    generatePDF(data, options = null) {
+        if (options) {
+            this.config = {
+                ...this.config,
+                ...options,
+            }
+            this.heightRef = this.config.margin.top;
+        }
 
         this._addTitle(data.name, data.lastname, data.tagline);
         if (data.about) {
@@ -111,18 +117,19 @@ export class ShineLikeDiamond {
     }
 
     _addTitle(name, lastname, tagline) {
+        const contentMargin = this.conf.sidebarWidth + this.conf.margin.left;
         this.heightRef = 33;
         this.doc.setFont("Montserrat-ExtraBold", "normal");
         this.doc.setTextColor(this.conf.color.primary);
         this.doc.setFontSize(this.conf.text.name);
-        this.doc.text(name.toUpperCase(), this.contentMargin, this.heightRef, { charSpace: 1 });
+        this.doc.text(name.toUpperCase(), contentMargin, this.heightRef, { charSpace: 1 });
         this.heightRef += this.conf.height.name;
-        this.doc.text(lastname.toUpperCase(), this.contentMargin, this.heightRef, { charSpace: 1 });
+        this.doc.text(lastname.toUpperCase(), contentMargin, this.heightRef, { charSpace: 1 });
         this.heightRef += this.conf.height.tagline;
         this.doc.setFont("Montserrat-SemiBold", "normal");
         this.doc.setFontSize(this.conf.text.tagline);
         this.doc.setTextColor(this.conf.color.secondary);
-        this.doc.text(tagline.toUpperCase(), this.contentMargin, this.heightRef, { charSpace: 0.5 });
+        this.doc.text(tagline.toUpperCase(), contentMargin, this.heightRef, { charSpace: 0.5 });
         this.heightRef += this.conf.margin.between;
     }
 
@@ -415,191 +422,6 @@ export class ShineLikeDiamond {
         }
     }
 
-    _addAbout(content) {
-        this._addHeader("ABOUT ME");
-        this._printMultiLine(content, false);
-        this.heightRef -= this.conf.height.content; // normalize height
-        this.heightRef += this.conf.margin.between;
-    }
-
-    _addExperience(jobs) {
-        this._addHeader("EXPERIENCE");
-        console.log(jobs);
-        jobs.forEach((job, index) => {
-            this.doc.setFont("Montserrat-Medium", "normal");
-            this.doc.setTextColor(this.conf.color.primary);
-            this.doc.setFontSize(this.conf.text.subHeader);
-            this._isEnoughSpace(this.conf.height.subHeader);
-            this.doc.text(job.role, this.contentMargin, this.heightRef);
-            this.heightRef += this.conf.height.subHeader;
-            this.doc.setFont("Montserrat-Regular", "normal");
-            this.doc.setFontSize(this.conf.text.subHeader);
-            this._isEnoughSpace(this.conf.height.subHeader);
-            this.doc.text(`${job.time} | ${job.company}`, this.contentMargin, this.heightRef);
-            this.heightRef += this.conf.height.subHeader;
-            if (job.details) {
-                job.details.forEach(detail => {
-                    this._printMultiLine(detail, true);
-                });
-            } else {
-                this.heightRef -= (this.conf.height.subHeader - this.conf.height.content);  // normalize height
-            }
-
-            if (index != jobs.length - 1) {
-                this.heightRef += this.conf.height.content;
-            }
-        });
-        this.heightRef -= this.conf.height.content; // normalize height
-        this.heightRef += this.conf.margin.between;
-    }
-
-    _addProjects(projects) {
-        this._addHeader("PROJECTS");
-
-        if (projects.details) {
-            this._printMultiLine(projects.details, false);
-            this.heightRef += this.conf.height.content; //normalize height
-        }
-        projects.items.forEach((project, index) => {
-            this.doc.setFont("Montserrat-Medium", "normal");
-            this.doc.setTextColor(this.conf.color.primary);
-            this.doc.setFontSize(this.conf.text.subHeader);
-            this._isEnoughSpace(this.conf.height.subHeader);
-            if (project.link) {
-                this.doc.textWithLink(project.name, this.contentMargin, this.heightRef, {
-                    url: project.link,
-                });
-            } else {
-                this.doc.text(project.name, this.contentMargin, this.heightRef);
-            }
-            this.heightRef += this.conf.height.subHeader;
-            this.doc.setFont("Montserrat-Regular", "normal");
-            this.doc.setFontSize(this.conf.text.subHeader);
-            this._isEnoughSpace(this.conf.height.subHeader);
-            this.doc.text(project.tagline, this.contentMargin, this.heightRef);
-            this.heightRef += this.conf.height.subHeader;
-            this._printMultiLine(project.details, true);
-            if (index != projects.items.length - 1) {
-                this.heightRef += this.conf.height.content; //normalize height
-            }
-        });
-        this.heightRef -= this.conf.height.content; // normalize height
-        this.heightRef += this.conf.margin.between;
-    }
-
-    _addSkills(skills, twoRows) {
-        this._addHeader("SKILLS");
-        const initHeightRef = this.heightRef;
-        const initPage = this.currentPage;
-
-        if (twoRows) {
-            const half = Math.ceil(skills.length / 2);
-
-            const firstRow = skills.slice(0, half);
-            const secondRow = skills.slice(-half);
-            this._addSkillsRow(firstRow, this.contentMargin);
-            if (initPage != this.currentPage) {
-                this._setPage(initPage);
-            }
-            this.heightRef = initHeightRef;
-            const secondRowOfset = ((this.doc.internal.pageSize.width - this.conf.margin.right - this.contentMargin) / 2) + this.contentMargin;
-            this._addSkillsRow(secondRow, secondRowOfset);
-        } else {
-            this._addSkillsRow(skills, this.contentMargin);
-        }
-        this.heightRef -= this.conf.height.content; //normalize height
-        this.heightRef += this.conf.margin.between;
-    }
-
-    _addSkillsRow(skills, offset) {
-        this.doc.setFont("Montserrat-Regular", "normal");
-        this.doc.setTextColor(this.conf.color.primary);
-        this.doc.setFontSize(this.conf.text.content);
-
-        var fullCircleIcon = new Image();
-        fullCircleIcon.src = require("../assets/icons/circle.png");
-        var halfCircleIcon = new Image();
-        halfCircleIcon.src = require("../assets/icons/circle-half-full.png");
-        var emptyCircleIcon = new Image();
-        emptyCircleIcon.src = require("../assets/icons/circle-outline.png");
-        var maxNameWidth = 0;
-
-        skills.forEach(skill => {
-            var widthNedeed = this.doc.getTextWidth(skill.name);
-            if (widthNedeed > maxNameWidth) {
-                maxNameWidth = widthNedeed;
-            }
-        });
-
-        skills.forEach(skill => {
-            this.doc.setTextColor(this.conf.color.primary);
-            this._isEnoughSpace(this.conf.height.content);
-            this.doc.text(skill.name, offset, this.heightRef);
-
-
-            var fullCircles = Math.floor(skill.level);
-            var halfCircle = ((skill.level % fullCircles) == 0.0) ? false : true;
-            var emptyCircles = 5 - Math.ceil(skill.level);
-
-            var startX = maxNameWidth + 5 + offset;
-            for (let i = 0; i < fullCircles; i++) {
-                this.doc.addImage(fullCircleIcon, startX, this.heightRef - 3, 4, 4);
-                startX += 5;
-            }
-            if (halfCircle) {
-                this.doc.addImage(halfCircleIcon, startX, this.heightRef - 3, 4, 4);
-                startX += 5;
-            }
-            for (let i = 0; i < emptyCircles; i++) {
-                this.doc.addImage(emptyCircleIcon, startX, this.heightRef - 3, 4, 4);
-                startX += 5;
-            }
-
-            this.heightRef += this.conf.height.content;
-        });
-    }
-
-    _addEducation(items) {
-        this._addHeader("EDUCATION");
-
-        items.forEach((item, index) => {
-            this.doc.setFont("Montserrat-Medium", "normal");
-            this.doc.setTextColor(this.conf.color.primary);
-            this.doc.setFontSize(this.conf.text.subHeader);
-            this._isEnoughSpace(this.conf.height.subHeader);
-            this.doc.text(item.degree, this.contentMargin, this.heightRef);
-            this.heightRef += this.conf.height.subHeader;
-            this.doc.setFont("Montserrat-Regular", "normal");
-            this.doc.setFontSize(this.conf.text.subHeader);
-            this._isEnoughSpace(this.conf.height.subHeader);
-            this.doc.text(`${item.time} | ${item.university}`, this.contentMargin, this.heightRef);
-            this.heightRef += this.conf.height.subHeader;
-            if (item.details) {
-                item.details.forEach(detail => {
-                    this._printMultiLine(detail, true);
-                });
-            } else {
-                this.heightRef -= (this.conf.height.subHeader - this.conf.height.content);  // normalize height
-            }
-
-            if (index != items.length - 1) {
-                this.heightRef += this.conf.height.content;
-            }
-        });
-        this.heightRef -= this.conf.height.content; // normalize height
-        this.heightRef += this.conf.margin.between;
-    }
-
-    _addCourses(courses) {
-        this._addHeader("COURSES");
-
-        courses.forEach(course => {
-            this._printMultiLine(course, true)
-        });
-        this.heightRef -= this.conf.height.content; // normalize height
-        this.heightRef += this.conf.margin.between;
-    }
-
     _addHeader(name) {
         this._isEnoughSpace(this.conf.height.header);
         this.doc.setFillColor("#1A1A1A");
@@ -615,74 +437,4 @@ export class ShineLikeDiamond {
         this.heightRef += this.conf.height.header;
     }
 
-    _printMultiLine(line, isListElement) {
-        const boldRegex = /(\*{2})+/g;
-        const splitRegex = /(\*{2}[^*]*\*{2})/g;
-        this.doc.setFont("Montserrat-Regular", "normal");
-        this.doc.setFontSize(this.conf.text.content);
-        this.doc.setTextColor(this.conf.color.primary);
-        var startPage = this.currentPage;
-        var initStartX = null;
-        var max_width = null;
-
-        if (isListElement) {
-            this.doc.text("\u2022", this.contentMargin + this.conf.margin.list - 2, this.heightRef)
-            max_width = this.doc.internal.pageSize.width - this.conf.margin.right;
-            initStartX = this.contentMargin + this.conf.margin.list;
-
-        } else {
-            max_width = this.doc.internal.pageSize.width - this.conf.margin.right;
-            initStartX = this.contentMargin;
-        }
-        var currentX = initStartX;
-        const splitByBolds = line.split(splitRegex);
-
-        splitByBolds.forEach(part => {
-            if (!part.startsWith(" ") && currentX != initStartX) {
-                currentX -= this.doc.getStringUnitWidth(" ") * 3;
-            }
-
-            if (part.startsWith("**") && part.endsWith("**")) {
-                part = part.replace(boldRegex, "");
-                this.doc.setFont("Montserrat-SemiBold", "normal");
-            } else {
-                this.doc.setFont("Montserrat-Regular", "normal");
-            }
-            var words = part.split(" ");
-            words.forEach(word => {
-                var widthNedeed = this.doc.getTextWidth(word);
-
-                if ((widthNedeed + currentX) > max_width) {
-                    currentX = initStartX;
-                    this._isEnoughSpace(this.conf.height.content);
-                    if (this.currentPage == startPage) {
-                        this.heightRef += this.conf.height.content;
-                    } else {
-                        startPage++;
-                    }
-                }
-                this.doc.text(word, currentX, this.heightRef);
-                currentX += widthNedeed;
-                currentX += this.doc.getStringUnitWidth(" ") * 3;
-            });
-        });
-        this.heightRef += this.conf.height.content;
-    }
-
-    _isEnoughSpace(heightNedeed) {
-        if ((this.heightRef + heightNedeed) > (this.doc.internal.pageSize.height - this.conf.margin.bottom)) {
-            this._setPage(this.currentPage + 1);
-        }
-    }
-
-    _setPage(page) {
-        const pages = this.doc.getNumberOfPages();
-        if (pages >= page) {
-            this.doc.setPage(page);
-        } else {
-            this.doc.addPage();
-        }
-        this.currentPage = page;
-        this.heightRef = this.conf.margin.top;
-    }
 }
