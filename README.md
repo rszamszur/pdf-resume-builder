@@ -19,7 +19,7 @@ Adjust the template or play with items order if you're not entirely happy with t
 
 NOTE! Some templates may provide more adjusting options than others.
 
-### Margis
+### Margins
 
 ![margins](https://github.com/rszamszur/pdf-resume-builder/blob/assets/margins.png?raw=true)
 ![margins](https://github.com/rszamszur/pdf-resume-builder/blob/assets/margins2.png?raw=true)
