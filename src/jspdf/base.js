@@ -7,6 +7,7 @@ export class BaseTemplate {
         }
 
         this.doc = new jsPDF();
+        this.initConf = conf;
         this.conf = conf;
         this.heightRef = this.conf.margin.top;
         this.currentPage = 1;
@@ -422,5 +423,12 @@ export class BaseTemplate {
         }
         this.currentPage = page;
         this.heightRef = this.conf.margin.top;
+    }
+
+    _reset() {
+        this.doc = new jsPDF();
+        this.conf = this.initConf;
+        this.heightRef = this.config.margin.top;
+        this.currentPage = 1;
     }
 }
