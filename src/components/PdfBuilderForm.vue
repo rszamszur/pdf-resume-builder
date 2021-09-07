@@ -35,6 +35,11 @@
     </v-slide-group>
     <div class="text-subtitle-1">
       Chosen template: <strong>{{ templates[chosen].name }}</strong>
+      <span v-if="templates[chosen].link != null">
+        (
+        <a :href="templates[chosen].link" target="_blan">Example</a>
+        )
+      </span>
     </div>
     <p>
       <v-icon color="info">mdi-information</v-icon> In case chosen template
@@ -48,7 +53,7 @@
         text
         small
         @click="
-          templates[chosen].options = templates[chosen].class.defaultOptions()
+          templates[chosen].options = templates[chosen].class.editableOptions()
         "
         >Reset</v-btn
       >
@@ -56,8 +61,9 @@
     <div v-if="showOptions">
       <v-row>
         <v-col cols="12" md="6">
-          <div class="text-overline">Margins</div>
+          <div class="text-overline">Margin</div>
           <v-slider
+            v-if="templates[chosen].options.margin.left"
             v-model="templates[chosen].options.margin.left"
             color="primary"
             label="Left"
@@ -66,6 +72,16 @@
             max="30"
           ></v-slider>
           <v-slider
+            v-if="templates[chosen].options.margin.right"
+            v-model="templates[chosen].options.margin.right"
+            color="primary"
+            label="Right"
+            thumb-label
+            min="5"
+            max="30"
+          ></v-slider>
+          <v-slider
+            v-if="templates[chosen].options.margin.top"
             v-model="templates[chosen].options.margin.top"
             color="primary"
             label="Top"
@@ -74,6 +90,7 @@
             max="30"
           ></v-slider>
           <v-slider
+            v-if="templates[chosen].options.margin.bottom"
             v-model="templates[chosen].options.margin.bottom"
             color="primary"
             label="Bottom"
@@ -82,14 +99,16 @@
             max="30"
           ></v-slider>
           <v-slider
-            v-model="templates[chosen].options.margin.inner"
+            v-if="templates[chosen].options.margin.sidebar"
+            v-model="templates[chosen].options.margin.sidebar"
             color="primary"
-            label="Inner"
+            label="Sidebar"
             thumb-label
             min="1"
             max="20"
           ></v-slider>
           <v-slider
+            v-if="templates[chosen].options.margin.list"
             v-model="templates[chosen].options.margin.list"
             color="primary"
             label="List"
@@ -98,6 +117,7 @@
             max="10"
           ></v-slider>
           <v-slider
+            v-if="templates[chosen].options.margin.between"
             v-model="templates[chosen].options.margin.between"
             color="primary"
             label="Between"
@@ -107,8 +127,9 @@
           ></v-slider>
         </v-col>
         <v-col cols="12" md="6">
-          <div class="text-overline">Fonts</div>
+          <div class="text-overline">Text size</div>
           <v-slider
+            v-if="templates[chosen].options.text.name"
             v-model="templates[chosen].options.text.name"
             color="primary"
             label="Name"
@@ -117,6 +138,7 @@
             max="45"
           ></v-slider>
           <v-slider
+            v-if="templates[chosen].options.text.tagline"
             v-model="templates[chosen].options.text.tagline"
             color="primary"
             label="Tagline"
@@ -125,6 +147,7 @@
             max="25"
           ></v-slider>
           <v-slider
+            v-if="templates[chosen].options.text.header"
             v-model="templates[chosen].options.text.header"
             color="primary"
             label="Header"
@@ -133,22 +156,34 @@
             max="25"
           ></v-slider>
           <v-slider
-            v-model="templates[chosen].options.text.sidebarContent"
-            color="primary"
-            label="Sidebar content"
-            thumb-label
-            min="8"
-            max="14"
-          ></v-slider>
-          <v-slider
+            v-if="templates[chosen].options.text.subHeader"
             v-model="templates[chosen].options.text.subHeader"
             color="primary"
             label="Subheader"
             thumb-label
             min="8"
-            max="14"
+            max="20"
           ></v-slider>
           <v-slider
+            v-if="templates[chosen].options.text.sidebarHeader"
+            v-model="templates[chosen].options.text.sidebarHeader"
+            color="primary"
+            label="Sidebar header"
+            thumb-label
+            min="10"
+            max="20"
+          ></v-slider>
+          <v-slider
+            v-if="templates[chosen].options.text.sidebarContent"
+            v-model="templates[chosen].options.text.sidebarContent"
+            color="primary"
+            label="Sidebar content"
+            thumb-label
+            min="8"
+            max="16"
+          ></v-slider>
+          <v-slider
+            v-if="templates[chosen].options.text.content"
             v-model="templates[chosen].options.text.content"
             color="primary"
             label="Content"
@@ -158,7 +193,73 @@
           ></v-slider>
         </v-col>
         <v-col cols="12" md="12">
-          <div class="text-overline">Misc</div>
+          <div class="text-overline">Line height</div>
+          <v-slider
+            v-if="templates[chosen].options.height.name"
+            v-model="templates[chosen].options.height.name"
+            color="primary"
+            label="Name"
+            thumb-label
+            min="8"
+            max="16"
+          ></v-slider>
+          <v-slider
+            v-if="templates[chosen].options.height.tagline"
+            v-model="templates[chosen].options.height.tagline"
+            color="primary"
+            label="Tagline"
+            thumb-label
+            min="6"
+            max="12"
+          ></v-slider>
+          <v-slider
+            v-if="templates[chosen].options.height.header"
+            v-model="templates[chosen].options.height.header"
+            color="primary"
+            label="Header"
+            thumb-label
+            min="6"
+            max="12"
+          ></v-slider>
+          <v-slider
+            v-if="templates[chosen].options.height.subHeader"
+            v-model="templates[chosen].options.height.subHeader"
+            color="primary"
+            label="Subheader"
+            thumb-label
+            min="4"
+            max="10"
+          ></v-slider>
+          <v-slider
+            v-if="templates[chosen].options.height.sidebarHeader"
+            v-model="templates[chosen].options.height.sidebarHeader"
+            color="primary"
+            label="Sidebar header"
+            thumb-label
+            min="4"
+            max="12"
+          ></v-slider>
+          <v-slider
+            v-if="templates[chosen].options.height.sidebarContent"
+            v-model="templates[chosen].options.height.sidebarContent"
+            color="primary"
+            label="Sidebar content"
+            thumb-label
+            min="6"
+            max="12"
+          ></v-slider>
+          <v-slider
+            v-if="templates[chosen].options.height.content"
+            v-model="templates[chosen].options.height.content"
+            color="primary"
+            label="Content"
+            thumb-label
+            min="3"
+            max="6"
+          ></v-slider>
+        </v-col>
+        <v-col cols="12" md="12" v-if="templates[chosen].options.sidebarWidth">
+          <div class="text-overline">Sidebar width</div>
           <v-slider
             v-model="templates[chosen].options.sidebarWidth"
             color="primary"
@@ -166,30 +267,6 @@
             thumb-label
             min="60"
             max="80"
-          ></v-slider>
-          <v-slider
-            v-model="templates[chosen].options.headerLineHeight"
-            color="primary"
-            label="Header line height"
-            thumb-label
-            min="6"
-            max="12"
-          ></v-slider>
-          <v-slider
-            v-model="templates[chosen].options.lineHeight"
-            color="primary"
-            label="Line height"
-            thumb-label
-            min="4"
-            max="10"
-          ></v-slider>
-          <v-slider
-            v-model="templates[chosen].options.subLineHeight"
-            color="primary"
-            label="Subline height"
-            thumb-label
-            min="2"
-            max="6"
           ></v-slider>
         </v-col>
       </v-row>
@@ -211,6 +288,7 @@
     </p>
     <v-file-input
       ref="input"
+      v-model="input"
       :rules="rules"
       accept="application/json"
       outlined
@@ -219,7 +297,7 @@
       :show-size="1000"
       :error-messages="inputErrors"
       :loading="loading"
-      :disabled="chosen != 0 || disabled"
+      :disabled="chosen > 1 || disabled"
       @change="loadJSON"
     ></v-file-input>
     <div v-if="schemaErrors">
@@ -245,6 +323,7 @@
 <script>
 import Ajv from "ajv";
 import { LessIsBetter } from "../jspdf/less-is-better.js";
+import { ShineLikeDiamond } from "../jspdf/shine-like-diamond.js";
 
 export default {
   name: "PdfBuilderForm",
@@ -257,25 +336,26 @@ export default {
         {
           name: "LessIsBetter",
           thumbnail: require("../assets/LessIsBetter.png"),
-          link: null,
+          link: "https://github.com/rszamszur/pdf-resume-builder/blob/assets/LessIsBetter_example.pdf",
           class: LessIsBetter,
-          options: LessIsBetter.defaultOptions(),
+          options: LessIsBetter.editableOptions(),
         },
         {
           name: "ShineLikeDiamond",
-          thumbnail: require("../assets/ShineLikeDiamond-cs.png"),
-          link: null,
-          class: LessIsBetter,
-          options: LessIsBetter.defaultOptions(),
+          thumbnail: require("../assets/ShineLikeDiamond.png"),
+          link: "https://github.com/rszamszur/pdf-resume-builder/blob/assets/ShineLikeDiamond_example.pdf",
+          class: ShineLikeDiamond,
+          options: ShineLikeDiamond.editableOptions(),
         },
         {
           name: "WebGyver",
           thumbnail: require("../assets/WebGyver-cs.png"),
           link: null,
           class: LessIsBetter,
-          options: LessIsBetter.defaultOptions(),
+          options: LessIsBetter.editableOptions(),
         },
       ],
+      input: null,
       rules: [
         (v) => !!v || "JSON is required!",
         (v) => !v || v.type == "application/json" || "Not a JSON file!",
@@ -298,19 +378,19 @@ export default {
       this.showAfter = false;
       this.data = null;
       if (this.$refs.form.validate()) {
-        console.log(file);
         const reader = new FileReader();
 
         reader.addEventListener("load", (event) => {
+          var data = null;
           try {
-            const data = JSON.parse(event.target.result);
-            this.validateJSON(data);
+            data = JSON.parse(event.target.result);
           } catch {
             this.inputErrors.push(
-              "Coudlnt parse provided JSON file, most likely it is malformed."
+              "Couldn't parse provided JSON file, most likely it is malformed."
             );
             return;
           }
+          this.validateJSON(data);
         });
         reader.readAsText(file);
       }
@@ -319,14 +399,20 @@ export default {
       this.loading = false;
     },
     validateJSON(data) {
-      console.log(data);
       const validate = this.ajv.compile(
         this.templates[this.chosen].class.schema()
       );
       var valid = validate(data);
       if (valid) {
         this.data = data;
-        this.generatePDF();
+        try {
+          this.generatePDF();
+        } catch {
+          this.inputErrors.push(
+            "Couldn't generate PDF, feel free to submit an issue on GitHub."
+          );
+          return;
+        }
         this.showAfter = true;
       } else {
         this.inputErrors.push("Provided JSON file doesn't pass schema.");
@@ -345,9 +431,10 @@ export default {
       this.loading = false;
       this.showAfter = false;
       this.templates.forEach((template) => {
-        template.options = template.class.defaultOptions();
+        template.options = template.class.editableOptions();
       });
-      this.$refs.input.reset();
+      this.input = null;
+      this.$refs.input.resetValidation();
     },
   },
 };

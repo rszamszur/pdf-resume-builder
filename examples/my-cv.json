@@ -2,11 +2,13 @@
     "name":"Radosław",
     "lastname":"Szamszur",
     "tagline":"DevOps Engineer",
-    "email":"hire@rsdev.pl",
-    "phone":"XXX XXX XXX",
-    "linkedin":"rszamszur",
-    "github":"rszamszur",
-    "stackoverflow":"https://stackoverflow.com/users/10566747/raoslaw-szamszur",
+    "contact": {
+      "email":"hire@rsdev.pl",
+      "phone":"XXX XXX XXX",
+      "linkedin":"rszamszur",
+      "github":"rszamszur",
+      "stackoverflow":"https://stackoverflow.com/users/10566747/raoslaw-szamszur"
+    },
     "education":[
        {
           "degree":"Bachelors of Biomedical Engineering",
