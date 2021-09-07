@@ -170,6 +170,10 @@ export class BaseTemplate {
         throw new Error("Method 'generate(data, options = null)' must be implemented.");
     }
 
+    _addHeader() {
+        throw new Error("Method '_addHeader(name)' must be implemented.");
+    }
+
     _addAbout(content) {
         this._addHeader("ABOUT ME");
         this._printMultiLine(content, false);
