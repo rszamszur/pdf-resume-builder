@@ -63,14 +63,44 @@ export class ShineLikeDiamond extends BaseTemplate {
     }
 
     static defaultOptions() {
-        return {}
+        return {
+            text: {
+                subHeader: 12,
+                sidebarHeader: 16,
+                sidebarContent: 10,
+                content: 10,
+            },
+            margin: {
+                top: 20,
+                bottom: 20,
+                left: 15,
+                right: 15,
+                sidebar: 12,
+                between: 8,
+                list: 5,
+            },
+            height: {
+                subHeader: 5,
+                sidebarHeader: 6,
+                sidebarContent: 8,
+                content: 4,
+            },
+        }
     }
 
     generatePDF(data, options = null) {
         if (options) {
-            this.conf = {
-                ...this.conf,
-                ...options,
+            this.conf.text = {
+                ...this.conf.text,
+                ...options.text,
+            }
+            this.conf.margin = {
+                ...this.conf.margin,
+                ...options.margin,
+            }
+            this.conf.height = {
+                ...this.conf.height,
+                ...options.height,
             }
             this.heightRef = this.conf.margin.top;
         }

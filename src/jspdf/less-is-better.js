@@ -68,29 +68,45 @@ export class LessIsBetter extends BaseTemplate {
                 name: 35,
                 tagline: 16,
                 header: 18,
+                subHeader: 12,
+                sidebarHeader: 18,
                 sidebarContent: 12,
-                subHeader: 10,
                 content: 9,
             },
             margin: {
                 top: 20,
                 bottom: 20,
                 left: 15,
-                inner: 15,
+                right: 15,
+                sidebar: 15,
                 between: 10,
                 list: 5,
             },
-            headerLineHeight: 8,
-            lineHeight: 6,
-            subLineHeight: 4,
+            height: {
+                name: 12,
+                tagline: 8,
+                header: 8,
+                subHeader: 5,
+                sidebarHeader: 8,
+                sidebarContent: 8,
+                content: 4,
+            },
         }
     }
 
     generatePDF(data, options = null) {
         if (options) {
-            this.conf = {
-                ...this.conf,
-                ...options,
+            this.conf.text = {
+                ...this.conf.text,
+                ...options.text,
+            }
+            this.conf.margin = {
+                ...this.conf.margin,
+                ...options.margin,
+            }
+            this.conf.height = {
+                ...this.conf.height,
+                ...options.height,
             }
             this.heightRef = this.conf.margin.top;
         }
@@ -270,7 +286,7 @@ export class LessIsBetter extends BaseTemplate {
             this.doc.setFont("Roboto-Bold", "normal");
             this.doc.setFontSize(this.conf.text.sidebarHeader);
             this.doc.text("CONTACT", sidebarMargin, sidebarHeightRef);
-            sidebarHeightRef -= this.conf.height.sidebarHeader;
+            sidebarHeightRef -= this.conf.height.sidebarHeader * 2;
         }
 
         if (withExtras) {
@@ -285,7 +301,7 @@ export class LessIsBetter extends BaseTemplate {
                 this.doc.setFont("Roboto-Bold", "normal");
                 this.doc.setFontSize(this.conf.text.sidebarHeader);
                 this.doc.text("LANGUAGES", sidebarMargin, sidebarHeightRef);
-                sidebarHeightRef -= this.conf.height.sidebarHeader;
+                sidebarHeightRef -= this.conf.height.sidebarHeader * 2;
             }
 
             if (data.interests) {
@@ -305,7 +321,7 @@ export class LessIsBetter extends BaseTemplate {
                 this.doc.setFont("Roboto-Bold", "normal");
                 this.doc.setFontSize(this.conf.text.sidebarHeader);
                 this.doc.text("INTERESTS", sidebarMargin, sidebarHeightRef);
-                sidebarHeightRef -= this.conf.height.sidebarHeader;
+                sidebarHeightRef -= this.conf.height.sidebarHeader * 2;
             }
         }
     }
