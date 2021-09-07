@@ -39,13 +39,16 @@ export class ShineLikeDiamond {
                 white: "#ffffff",
                 black: "#000000",
                 gray: "#4d4e53",
+                secondary: "#8D8D8D",
                 primary: "#1A1A1A"
             },
-            nameLineHeight: 12,
-            tagLineHeight: 8,
-            headerLineHeight: 20,
-            lineHeight: 5,
-            subLineHeight: 4,
+            height: {
+                name: 12,
+                tagline: 8,
+                header: 20,
+                subHeader: 5,
+                content: 4,
+            },
         };
         this.heightRef = this.conf.margin.top;
         this.contentMargin = this.conf.margin.left + this.conf.sidebarWidth;
@@ -113,12 +116,12 @@ export class ShineLikeDiamond {
         this.doc.setTextColor(this.conf.color.primary);
         this.doc.setFontSize(this.conf.text.name);
         this.doc.text(name.toUpperCase(), this.contentMargin, this.heightRef, { charSpace: 1 });
-        this.heightRef += this.conf.nameLineHeight;
+        this.heightRef += this.conf.height.name;
         this.doc.text(lastname.toUpperCase(), this.contentMargin, this.heightRef, { charSpace: 1 });
-        this.heightRef += this.conf.tagLineHeight;
+        this.heightRef += this.conf.height.tagline;
         this.doc.setFont("Montserrat-SemiBold", "normal");
         this.doc.setFontSize(this.conf.text.tagline);
-        this.doc.setTextColor("#8D8D8D");
+        this.doc.setTextColor(this.conf.color.secondary);
         this.doc.text(tagline.toUpperCase(), this.contentMargin, this.heightRef, { charSpace: 0.5 });
         this.heightRef += this.conf.margin.between;
     }
@@ -415,7 +418,7 @@ export class ShineLikeDiamond {
     _addAbout(content) {
         this._addHeader("ABOUT ME");
         this._printMultiLine(content, false);
-        this.heightRef -= this.conf.subLineHeight; // normalize height
+        this.heightRef -= this.conf.height.content; // normalize height
         this.heightRef += this.conf.margin.between;
     }
 
@@ -426,27 +429,27 @@ export class ShineLikeDiamond {
             this.doc.setFont("Montserrat-Medium", "normal");
             this.doc.setTextColor(this.conf.color.primary);
             this.doc.setFontSize(this.conf.text.subHeader);
-            this._isEnoughSpace(this.conf.lineHeight);
+            this._isEnoughSpace(this.conf.height.subHeader);
             this.doc.text(job.role, this.contentMargin, this.heightRef);
-            this.heightRef += this.conf.lineHeight;
+            this.heightRef += this.conf.height.subHeader;
             this.doc.setFont("Montserrat-Regular", "normal");
             this.doc.setFontSize(this.conf.text.subHeader);
-            this._isEnoughSpace(this.conf.lineHeight);
+            this._isEnoughSpace(this.conf.height.subHeader);
             this.doc.text(`${job.time} | ${job.company}`, this.contentMargin, this.heightRef);
-            this.heightRef += this.conf.lineHeight;
+            this.heightRef += this.conf.height.subHeader;
             if (job.details) {
                 job.details.forEach(detail => {
                     this._printMultiLine(detail, true);
                 });
             } else {
-                this.heightRef -= (this.conf.lineHeight - this.conf.subLineHeight);  // normalize height
+                this.heightRef -= (this.conf.height.subHeader - this.conf.height.content);  // normalize height
             }
 
             if (index != jobs.length - 1) {
-                this.heightRef += this.conf.subLineHeight;
+                this.heightRef += this.conf.height.content;
             }
         });
-        this.heightRef -= this.conf.subLineHeight; // normalize height
+        this.heightRef -= this.conf.height.content; // normalize height
         this.heightRef += this.conf.margin.between;
     }
 
@@ -455,13 +458,13 @@ export class ShineLikeDiamond {
 
         if (projects.details) {
             this._printMultiLine(projects.details, false);
-            this.heightRef += this.conf.subLineHeight; //normalize height
+            this.heightRef += this.conf.height.content; //normalize height
         }
         projects.items.forEach((project, index) => {
             this.doc.setFont("Montserrat-Medium", "normal");
             this.doc.setTextColor(this.conf.color.primary);
             this.doc.setFontSize(this.conf.text.subHeader);
-            this._isEnoughSpace(this.conf.lineHeight);
+            this._isEnoughSpace(this.conf.height.subHeader);
             if (project.link) {
                 this.doc.textWithLink(project.name, this.contentMargin, this.heightRef, {
                     url: project.link,
@@ -469,18 +472,18 @@ export class ShineLikeDiamond {
             } else {
                 this.doc.text(project.name, this.contentMargin, this.heightRef);
             }
-            this.heightRef += this.conf.lineHeight;
+            this.heightRef += this.conf.height.subHeader;
             this.doc.setFont("Montserrat-Regular", "normal");
             this.doc.setFontSize(this.conf.text.subHeader);
-            this._isEnoughSpace(this.conf.lineHeight);
+            this._isEnoughSpace(this.conf.height.subHeader);
             this.doc.text(project.tagline, this.contentMargin, this.heightRef);
-            this.heightRef += this.conf.lineHeight;
+            this.heightRef += this.conf.height.subHeader;
             this._printMultiLine(project.details, true);
             if (index != projects.items.length - 1) {
-                this.heightRef += this.conf.subLineHeight; //normalize height
+                this.heightRef += this.conf.height.content; //normalize height
             }
         });
-        this.heightRef -= this.conf.subLineHeight; // normalize height
+        this.heightRef -= this.conf.height.content; // normalize height
         this.heightRef += this.conf.margin.between;
     }
 
@@ -504,7 +507,7 @@ export class ShineLikeDiamond {
         } else {
             this._addSkillsRow(skills, this.contentMargin);
         }
-        this.heightRef -= this.conf.subLineHeight; //normalize height
+        this.heightRef -= this.conf.height.content; //normalize height
         this.heightRef += this.conf.margin.between;
     }
 
@@ -530,7 +533,7 @@ export class ShineLikeDiamond {
 
         skills.forEach(skill => {
             this.doc.setTextColor(this.conf.color.primary);
-            this._isEnoughSpace(this.conf.subLineHeight);
+            this._isEnoughSpace(this.conf.height.content);
             this.doc.text(skill.name, offset, this.heightRef);
 
 
@@ -552,7 +555,7 @@ export class ShineLikeDiamond {
                 startX += 5;
             }
 
-            this.heightRef += this.conf.subLineHeight;
+            this.heightRef += this.conf.height.content;
         });
     }
 
@@ -563,27 +566,27 @@ export class ShineLikeDiamond {
             this.doc.setFont("Montserrat-Medium", "normal");
             this.doc.setTextColor(this.conf.color.primary);
             this.doc.setFontSize(this.conf.text.subHeader);
-            this._isEnoughSpace(this.conf.lineHeight);
+            this._isEnoughSpace(this.conf.height.subHeader);
             this.doc.text(item.degree, this.contentMargin, this.heightRef);
-            this.heightRef += this.conf.lineHeight;
+            this.heightRef += this.conf.height.subHeader;
             this.doc.setFont("Montserrat-Regular", "normal");
             this.doc.setFontSize(this.conf.text.subHeader);
-            this._isEnoughSpace(this.conf.lineHeight);
+            this._isEnoughSpace(this.conf.height.subHeader);
             this.doc.text(`${item.time} | ${item.university}`, this.contentMargin, this.heightRef);
-            this.heightRef += this.conf.lineHeight;
+            this.heightRef += this.conf.height.subHeader;
             if (item.details) {
                 item.details.forEach(detail => {
                     this._printMultiLine(detail, true);
                 });
             } else {
-                this.heightRef -= (this.conf.lineHeight - this.conf.subLineHeight);  // normalize height
+                this.heightRef -= (this.conf.height.subHeader - this.conf.height.content);  // normalize height
             }
 
             if (index != items.length - 1) {
-                this.heightRef += this.conf.subLineHeight;
+                this.heightRef += this.conf.height.content;
             }
         });
-        this.heightRef -= this.conf.subLineHeight; // normalize height
+        this.heightRef -= this.conf.height.content; // normalize height
         this.heightRef += this.conf.margin.between;
     }
 
@@ -593,12 +596,12 @@ export class ShineLikeDiamond {
         courses.forEach(course => {
             this._printMultiLine(course, true)
         });
-        this.heightRef -= this.conf.subLineHeight; // normalize height
+        this.heightRef -= this.conf.height.content; // normalize height
         this.heightRef += this.conf.margin.between;
     }
 
     _addHeader(name) {
-        this._isEnoughSpace(this.conf.headerLineHeight);
+        this._isEnoughSpace(this.conf.height.header);
         this.doc.setFillColor("#1A1A1A");
         this.doc.setDrawColor("#1A1A1A");
         this.doc.triangle(this.contentMargin, this.heightRef + 6, this.contentMargin + 6, this.heightRef + 9, this.contentMargin + 6, this.heightRef, "F");
@@ -609,7 +612,7 @@ export class ShineLikeDiamond {
         this.doc.setTextColor(this.conf.color.primary);
         this.doc.setFontSize(this.conf.text.header);
         this.doc.text(name, this.contentMargin + 10, this.heightRef + 7, { charSpace: 0.5 });
-        this.heightRef += this.conf.headerLineHeight;
+        this.heightRef += this.conf.height.header;
     }
 
     _printMultiLine(line, isListElement) {
@@ -651,9 +654,9 @@ export class ShineLikeDiamond {
 
                 if ((widthNedeed + currentX) > max_width) {
                     currentX = initStartX;
-                    this._isEnoughSpace(this.conf.subLineHeight);
+                    this._isEnoughSpace(this.conf.height.content);
                     if (this.currentPage == startPage) {
-                        this.heightRef += this.conf.subLineHeight;
+                        this.heightRef += this.conf.height.content;
                     } else {
                         startPage++;
                     }
@@ -663,7 +666,7 @@ export class ShineLikeDiamond {
                 currentX += this.doc.getStringUnitWidth(" ") * 3;
             });
         });
-        this.heightRef += this.conf.subLineHeight;
+        this.heightRef += this.conf.height.content;
     }
 
     _isEnoughSpace(heightNedeed) {
