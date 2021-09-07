@@ -183,7 +183,7 @@ export class BaseTemplate {
 
     _addExperience(jobs) {
         this._addHeader("EXPERIENCE");
-        console.log(jobs);
+
         jobs.forEach((job, index) => {
             this.doc.setFont(this.conf.font.subHeader, "normal");
             this.doc.setTextColor(this.conf.color.primary);
