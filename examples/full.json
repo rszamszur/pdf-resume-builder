@@ -1,0 +1,181 @@
+{
+    "name":"Name",
+    "lastname":"Surname",
+    "tagline":"Tagline",
+    "contact": {
+      "email":"hire@domain.com",
+      "phone":"123 456 789",
+      "linkedin":"username",
+      "github":"username",
+      "website": "example.com",
+      "twitter": "username",
+      "stackoverflow":"https://stackoverflow.com/users/..."
+    },
+    "about": "Lorem Ipsum is simply dummy text of the **print**ing and **typesetting industry**. Lorem Ipsum has been the **industry's standard dummy text ever since the 1500s**, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the **1960s** with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like **Aldus** **PageMaker** including versions of Lorem Ipsum.",
+    "education":[
+       {
+          "degree":"Degree of Lorem Ipsum",
+          "university":"University Name",
+          "time":"2012 - 2017",
+          "details":[
+             "Specialization: Lorem ipsum dolor sit amet, consectetur.",
+             "Thesis: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc.",
+             "Grade: **Very good**"
+          ]
+       }
+    ],
+    "experience":[
+       {
+          "role":"Role",
+          "company":"Another Company Name",
+          "time":"01.2020 - present",
+          "details":[
+            "Lorem ipsum **dolor** sit amet, consectetur **adipis**cing elit.",
+            "Fusce malesuada mauris **eu odio accumsan**, egestas elementum lacus aliquam.",
+            "**Integer** eget massa in nulla pharetra ultrices nec eget purus.",
+            "Nam sodales sem id ullamcorper **auctor**.",
+            "Lorem ipsum dolor sit amet, **consectetur** adipiscing **elit**, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation **ullamco laboris nisi ut aliquip ex ea** commodo consequat.",
+            "Nam ullamcorper quam quis augue aliquet, **sit amet** sodales urna venenatis."
+          ]
+       },
+       {
+          "role":"Associate Role",
+          "company":"Another Company Name",
+          "time":"03.2018 - 01.2020"
+       },
+       {
+          "role":"Student Role",
+          "company":"Another Company Name",
+          "time":"06.2017 - 03.2018"
+       },
+       {
+          "role":"Lorem Ipsum Role",
+          "company":"Company Name",
+          "time":"09.2016 - 01.2017",
+          "details":[
+             "Suspendisse venenatis sapien non pharetra scelerisque.",
+             "Donec fringilla mauris eu est elementum dictum.",
+             "Nulla consequat dui id porta euismod."
+          ]
+       }
+    ],
+    "projects":{
+       "details": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et sagittis eros. Morbi sit amet porta tellus. Donec commodo varius **massa**, eu sagittis velit. Maecenas a orci sit amet lacus porttitor finibus sit amet id lorem. Sed id urna nunc. Nulla laoreet nisi ac tincidunt mattis. ",
+       "items":[
+          {
+             "name":"my-awesome-project3",
+             "tagline":"[VueJS, Vuetify]",
+             "link":"https://project.link",
+             "details":"Sed a imperdiet erat. Curabitur porttitor ut augue sit amet luctus. Nam molestie, augue ac tempor tristique, neque enim blandit mi, id ultricies erat leo non lectus."
+          },
+          {
+             "name":"my-awesome-project",
+             "tagline":"[Kubernetes, Helm]",
+             "details":"Aliquam ultricies, nulla in convallis iaculis, arcu elit ultricies felis, vitae ullamcorper tortor odio id mauris. Vestibulum non euismod ligula. Duis condimentum condimentum magna, molestie imperdiet tellus finibus vitae."
+          },
+          {
+            "name":"my-awesome-project2",
+            "tagline":"[Python, FastAPI]",
+            "link":"https://project.link",
+            "details":"Pellentesque tempor dolor quam, in rhoncus leo ullamcorper eu. Donec vestibulum sapien metus, dapibus varius felis sollicitudin ac. Suspendisse finibus arcu diam, et lacinia dui fermentum eget. Etiam lacinia risus et tellus maximus, id sagittis odio pharetra. Proin vitae ex lacinia lorem dignissim convallis. Maecenas eu sem vitae tortor tincidunt sodales. Praesent vitae rhoncus mauris, non tincidunt magna. Curabitur finibus vestibulum nisl vitae consequat. Donec sagittis feugiat magna ac lacinia. Vestibulum auctor a nisi eget aliquam. Morbi posuere, orci vel fermentum pellentesque, ligula elit sagittis tellus, sagittis hendrerit leo dui vel nunc."
+         }
+       ]
+    },
+    "skills2Rows":true,
+    "skills":[
+       {
+          "name":"Python",
+          "level":4.5
+       },
+       {
+          "name":"Kubernetes",
+          "level":4
+       },
+       {
+          "name":"Bash",
+          "level":4
+       },
+       {
+          "name":"Containers",
+          "level":4.5
+       },
+       {
+          "name":"Ansible",
+          "level":4
+       },
+       {
+          "name":"Linux",
+          "level":4
+       },
+       {
+          "name":"AWS",
+          "level":3.5
+       },
+       {
+          "name":"GoLang",
+          "level":2
+       },
+       {
+          "name":"NixOS",
+          "level":1
+       },
+       {
+          "name":"CI/CD",
+          "level":4
+       },
+       {
+          "name":"Git",
+          "level":3
+       },
+       {
+          "name":"Helm",
+          "level":3
+       },
+       {
+          "name":"Ruby",
+          "level":3
+       },
+       {
+          "name":"Ruby On Rails",
+          "level":4
+       },
+       {
+          "name":"VueJS",
+          "level":4
+       },
+       {
+          "name":"Vagrant",
+          "level":3.5
+       }
+    ],
+    "languages":[
+       {
+          "name":"Polish",
+          "level":"Native"
+       },
+       {
+          "name":"English",
+          "level":"C1"
+       },
+       {
+          "name":"German",
+          "level":"B1"
+       }
+    ],
+    "courses":[
+       "Lorem Ipsum Workshop (Cloud Native Community)"
+    ],
+    "interests":[
+       {
+          "name":"Kitesurfing",
+          "link":"https://vimeo.com/374277514"
+       },
+       {
+          "name":"Crossfit"
+       },
+       {
+          "name":"Boxing"
+       }
+    ],
+    "numPages":true
+ }
