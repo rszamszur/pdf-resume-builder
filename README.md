@@ -15,9 +15,18 @@ For now, there is just one template that can still be a bit buggy. Unfortunately
 
 Adjust the template or play with items order if you're not entirely happy with the outcome. Last but not least, may the odds be in your favor.
 
-## Future development
+## Adjusting options
 
-Soon I'm planing to add two new templates, as well as some minor improvements and early bugs fixes.
+NOTE! Some templates may provide more adjusting options than others.
+
+### Margis
+
+![margins](https://github.com/rszamszur/pdf-resume-builder/blob/assets/margins.png?raw=true)
+![margins](https://github.com/rszamszur/pdf-resume-builder/blob/assets/margins2.png?raw=true)
+
+### How font size and line height works?
+
+![typography](https://github.com/rszamszur/pdf-resume-builder/blob/assets/typography.png?raw=true)
 
 ## Contributing
 
