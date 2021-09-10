@@ -43,7 +43,12 @@
     </div>
     <p>
       <v-icon color="info">mdi-information</v-icon> In case chosen template
-      isn't rendering as you'd like, you can further tweak some of its options:
+      isn't rendering as you'd like, you can further tweak some of its
+      <a
+        href="https://github.com/rszamszur/pdf-resume-builder#adjusting-options"
+        target="_blank"
+        >options</a
+      >:
       <v-btn text small @click="showOptions = !showOptions"
         ><span v-if="showOptions">Hide</span
         ><span v-else>MR Adjuster</span></v-btn
@@ -108,12 +113,30 @@
             max="20"
           ></v-slider>
           <v-slider
+            v-if="templates[chosen].options.margin.content"
+            v-model="templates[chosen].options.margin.content"
+            color="primary"
+            label="Content"
+            thumb-label
+            min="1"
+            max="20"
+          ></v-slider>
+          <v-slider
+            v-if="templates[chosen].options.margin.column"
+            v-model="templates[chosen].options.margin.column"
+            color="primary"
+            label="Column"
+            thumb-label
+            min="1"
+            max="10"
+          ></v-slider>
+          <v-slider
             v-if="templates[chosen].options.margin.list"
             v-model="templates[chosen].options.margin.list"
             color="primary"
             label="List"
             thumb-label
-            min="1"
+            min="2"
             max="10"
           ></v-slider>
           <v-slider
@@ -297,7 +320,6 @@
       :show-size="1000"
       :error-messages="inputErrors"
       :loading="loading"
-      :disabled="chosen > 1 || disabled"
       @change="loadJSON"
     ></v-file-input>
     <div v-if="schemaErrors">
@@ -308,7 +330,7 @@
         v-for="(error, i) in schemaErrors"
         :key="i"
       >
-        {{ error.message }}
+        {{ error.instancePath }} {{ error.message }}
       </v-alert>
     </div>
     <div v-if="showAfter">
@@ -324,6 +346,7 @@
 import Ajv from "ajv";
 import { LessIsBetter } from "../jspdf/less-is-better.js";
 import { ShineLikeDiamond } from "../jspdf/shine-like-diamond.js";
+import { LetsTalkAboutIt } from "../jspdf/lets-talk-about-it.js";
 
 export default {
   name: "PdfBuilderForm",
@@ -348,11 +371,11 @@ export default {
           options: ShineLikeDiamond.editableOptions(),
         },
         {
-          name: "WebGyver",
-          thumbnail: require("../assets/WebGyver-cs.png"),
-          link: null,
-          class: LessIsBetter,
-          options: LessIsBetter.editableOptions(),
+          name: "LetsTalkAboutIt",
+          thumbnail: require("../assets/LetsTalkAboutIt.png"),
+          link: "https://github.com/rszamszur/pdf-resume-builder/blob/assets/LetsTalkAboutIt_example.pdf",
+          class: LetsTalkAboutIt,
+          options: LetsTalkAboutIt.editableOptions(),
         },
       ],
       input: null,
@@ -384,9 +407,10 @@ export default {
           var data = null;
           try {
             data = JSON.parse(event.target.result);
-          } catch {
+          } catch (error) {
+             console.error(error);
             this.inputErrors.push(
-              "Couldn't parse provided JSON file, most likely it is malformed."
+              "Couldn't parse provided JSON file, most likely it is malformed. Details can be found in console."
             );
             return;
           }
@@ -407,9 +431,10 @@ export default {
         this.data = data;
         try {
           this.generatePDF();
-        } catch {
+        } catch (error) {
+          console.error(error);
           this.inputErrors.push(
-            "Couldn't generate PDF, feel free to submit an issue on GitHub."
+            "Couldn't generate PDF, details can be found in console. Feel free to submit an issue on GitHub."
           );
           return;
         }
