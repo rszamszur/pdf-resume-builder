@@ -9,10 +9,10 @@ export class LetsTalkAboutIt extends BaseTemplate {
         const conf = {
             text: {
                 name: 35,
-                title: 16,
-                header: 16,
-                subHeader: 14,
-                tagline: 11,
+                tagline: 16,
+                section: 16,
+                header: 14,
+                subheader: 11,
                 iconline: 10,
                 content: 10,
             },
@@ -26,26 +26,26 @@ export class LetsTalkAboutIt extends BaseTemplate {
                 bottom: 15,
                 left: 10,
                 right: 10,
-                between: 4,
+                section: 4,
                 list: 2,
-                column: 5,
+                inner: 5,
                 content: 10,
             },
             color: {
                 white: "#ffffff",
                 black: "#000000",
                 pageNum: "#4d4e53",
-                subHeader: "#000000",
+                subheader: "#000000",
                 content: "#3D3D3D",
                 secondary: "#A7A9AC",
                 primary: "#0462F6",
             },
             height: {
                 name: 8,
-                title: 8,
-                header: 18,
-                subHeader: 5,
-                tagline: 5,
+                tagline: 8,
+                section: 18,
+                header: 5,
+                subheader: 5,
                 iconline: 5,
                 content: 4,
                 normalize: -4,
@@ -58,10 +58,10 @@ export class LetsTalkAboutIt extends BaseTemplate {
         this.center = this.doc.internal.pageSize.width / 2;
         this.y = this.conf.margin.top;
         this.x = this.conf.margin.left + this.conf.margin.content;
-        this.max_x = this.center - this.conf.margin.column;
+        this.max_x = this.center - this.conf.margin.inner;
         this.rowLeft = true;
         this.currentPage = 1;
-        this.currentHeader = null;
+        this.currentSection = null;
         this.currentIcon = null;
     }
 
@@ -71,7 +71,7 @@ export class LetsTalkAboutIt extends BaseTemplate {
             properties: {
                 name: { type: "string" },
                 lastname: { type: "string" },
-                title: { type: "string" },
+                tagline: { type: "string" },
                 contact: {
                     type: "object",
                     properties: {
@@ -86,9 +86,9 @@ export class LetsTalkAboutIt extends BaseTemplate {
                     type: "object",
                     properties: {
                         displayName: { type: "string" },
-                        content: { type: "string" },
+                        details: { type: "string" },
                     },
-                    required: ["displayName", "content"],
+                    required: ["displayName", "details"],
                 },
                 education: {
                     type: "object",
@@ -226,7 +226,8 @@ export class LetsTalkAboutIt extends BaseTemplate {
             model: {
                 text: {
                     name: 35,
-                    subHeader: 14,
+                    header: 14,
+                    subheader: 11,
                     content: 10,
                 },
                 margin: {
@@ -234,14 +235,15 @@ export class LetsTalkAboutIt extends BaseTemplate {
                     bottom: 15,
                     left: 10,
                     right: 10,
-                    between: 4,
+                    section: 4,
                     list: 2,
                     column: 5,
                     content: 10,
                 },
                 height: {
                     name: 8,
-                    subHeader: 5,
+                    header: 5,
+                    subheader: 5,
                     content: 4,
                 },
             },
@@ -253,10 +255,16 @@ export class LetsTalkAboutIt extends BaseTemplate {
                     max: 45,
                 },
                 {
-                    label: "Subheader",
-                    key: "subHeader",
+                    label: "Header",
+                    key: "header",
                     min: 10,
                     max: 15,
+                },
+                {
+                    label: "Subheader",
+                    key: "subheader",
+                    min: 9,
+                    max: 14,
                 },
                 {
                     label: "Content",
@@ -297,8 +305,8 @@ export class LetsTalkAboutIt extends BaseTemplate {
                     max: 20,
                 },
                 {
-                    label: "Between",
-                    key: "between",
+                    label: "Section",
+                    key: "section",
                     min: 1,
                     max: 15,
                 },
@@ -317,10 +325,16 @@ export class LetsTalkAboutIt extends BaseTemplate {
                     max: 14,
                 },
                 {
-                    label: "Subheader",
-                    key: "subHeader",
+                    label: "Header",
+                    key: "header",
                     min: 3,
                     max: 8,
+                },
+                {
+                    label: "Subheader",
+                    key: "subheader",
+                    min: 3,
+                    max: 7,
                 },
                 {
                     label: "Content",
@@ -348,13 +362,13 @@ export class LetsTalkAboutIt extends BaseTemplate {
             }
             this.y = this.conf.margin.top;
             this.x = this.conf.margin.left + this.conf.margin.content;
-            this.max_x = this.center - this.conf.margin.column;
+            this.max_x = this.center - this.conf.margin.inner;
         }
 
         this._addTitle(data);
         this.row_1_start_y = this.y;
         if (data.about) {
-            this._addAbout(data.about.content, data.about.displayName);
+            this._addAbout(data.about.details, data.about.displayName);
         }
         this._addExperience(data.experience.items, data.experience.displayName);
         if (data.projects) {
@@ -426,11 +440,11 @@ export class LetsTalkAboutIt extends BaseTemplate {
         const rectHeight = 10;
         this.y -= (rectHeight + 4);
         this.doc.setFont("Roboto-Bold", "normal");
-        this.doc.setFontSize(this.conf.text.title);
+        this.doc.setFontSize(this.conf.text.tagline);
         this.doc.setTextColor(this.conf.color.white);
         var len;
-        if (data.title) {
-            len = this.doc.getTextWidth(data.title);
+        if (data.tagline) {
+            len = this.doc.getTextWidth(data.tagline);
         } else {
             len = 15;
         }
@@ -448,18 +462,18 @@ export class LetsTalkAboutIt extends BaseTemplate {
             rectWidth, rectHeight,
             3, 3, "F"
         );
-        if (data.title) {
-            this.doc.text(data.title, x + 3, this.y + 7);
+        if (data.tagline) {
+            this.doc.text(data.tagline, x + 3, this.y + 7);
         }
 
         this.y += rectHeight + 4;
-        this.y += this.conf.height.title;
+        this.y += this.conf.height.tagline;
     }
 
-    _addHeader(name, icon, left) {
-        this.currentHeader = name;
+    _addSectionHeader(name, icon, left) {
+        this.currentSection = name;
         this.currentIcon = icon;
-        if (!this._isEnoughSpace(this.conf.height.header)) {
+        if (!this._isEnoughSpace(this.conf.height.section)) {
             return
         }
 
@@ -469,7 +483,7 @@ export class LetsTalkAboutIt extends BaseTemplate {
 
         if (left) {
             this.doc.setFillColor(this.conf.color.primary);
-            rectWidth = this.center - this.conf.margin.column - this.conf.margin.left;
+            rectWidth = this.center - this.conf.margin.inner - this.conf.margin.left;
             x = this.conf.margin.left;
             this.doc.triangle(
                 x + 5, this.y + rectHeight - 1,
@@ -479,8 +493,8 @@ export class LetsTalkAboutIt extends BaseTemplate {
             );
         } else {
             this.doc.setFillColor(this.conf.color.secondary);
-            rectWidth = this.center - this.conf.margin.column - this.conf.margin.right;
-            x = this.center + this.conf.margin.column;
+            rectWidth = this.center - this.conf.margin.inner - this.conf.margin.right;
+            x = this.center + this.conf.margin.inner;
             this.doc.triangle(
                 x + rectWidth - 5, this.y + rectHeight - 1,
                 x + rectWidth - 10, this.y + rectHeight - 1,
@@ -496,27 +510,27 @@ export class LetsTalkAboutIt extends BaseTemplate {
         );
 
         this.doc.setFont("Roboto-Bold", "normal");
-        this.doc.setFontSize(this.conf.text.header);
+        this.doc.setFontSize(this.conf.text.section);
         this.doc.setTextColor(this.conf.color.white);
         this.doc.text(name, x + 10, this.y + 7);
         this.doc.addImage(icon, x + 2, this.y + 2, 6, 6);
 
-        this.y += this.conf.height.header;
+        this.y += this.conf.height.section;
     }
 
     _addAbout(content, name = "Profile") {
         var icon = new Image();
         icon.src = require("../assets/icons/account-white.png");
-        this._addHeader(name, icon, this.rowLeft);
+        this._addSectionHeader(name, icon, this.rowLeft);
         this._printMultiLine(content, false);
         this.y += this.conf.height.normalize; // normalize height
-        this.y += this.conf.margin.between;
+        this.y += this.conf.margin.section;
     }
 
     _addExperience(jobs, name = "Experience") {
         var icon = new Image();
         icon.src = require("../assets/icons/briefcase-white.png");
-        this._addHeader(name, icon, this.rowLeft);
+        this._addSectionHeader(name, icon, this.rowLeft);
 
         var calendar = new Image();
         calendar.src = require("../assets/icons/calendar-range.png");
@@ -533,7 +547,7 @@ export class LetsTalkAboutIt extends BaseTemplate {
 
             if (splitLine) {
                 this._isEnoughSpace(
-                    (this.conf.height.iconline * 2) + this.conf.height.subHeader
+                    (this.conf.height.iconline * 2) + this.conf.height.header
                 )
                 this.doc.addImage(calendar, this.x - 0.5, this.y - 3.75, 5, 5);
                 this.doc.text(job.time, this.x + 5.5, this.y);
@@ -542,7 +556,7 @@ export class LetsTalkAboutIt extends BaseTemplate {
                 this.doc.text(job.company.toUpperCase(), this.x + 5.5, this.y);
             } else {
                 this._isEnoughSpace(
-                    this.conf.height.iconline + this.conf.height.subHeader
+                    this.conf.height.iconline + this.conf.height.header
                 )
                 this.doc.addImage(calendar, this.x - 0.5, this.y - 3.75, 5, 5);
                 this.doc.text(job.time, this.x + 5.5, this.y);
@@ -552,15 +566,15 @@ export class LetsTalkAboutIt extends BaseTemplate {
             this.y += this.conf.height.iconline;
             this.y += 1; // normalize height
             this.doc.setFont("Roboto-Bold", "normal");
-            this.doc.setFontSize(this.conf.text.subHeader);
+            this.doc.setFontSize(this.conf.text.header);
             this.doc.text(job.role, this.x, this.y);
-            this.y += this.conf.height.subHeader;
+            this.y += this.conf.height.header;
             if (job.details) {
                 job.details.forEach(detail => {
                     this._printMultiLine(detail, true);
                 });
             } else {
-                this.y -= (this.conf.height.subHeader - this.conf.height.content);  // normalize height
+                this.y -= (this.conf.height.header - this.conf.height.content);  // normalize height
             }
 
             if (index != jobs.length - 1) {
@@ -568,13 +582,13 @@ export class LetsTalkAboutIt extends BaseTemplate {
             }
         });
         this.y += this.conf.height.normalize; // normalize height
-        this.y += this.conf.margin.between;
+        this.y += this.conf.margin.section;
     }
 
     _addEducation(items, name = "Education") {
         var icon = new Image();
         icon.src = require("../assets/icons/school-white.png");
-        this._addHeader(name, icon, this.rowLeft);
+        this._addSectionHeader(name, icon, this.rowLeft);
 
         var calendar = new Image();
         calendar.src = require("../assets/icons/calendar-range.png");
@@ -590,7 +604,7 @@ export class LetsTalkAboutIt extends BaseTemplate {
 
             if (splitLine) {
                 this._isEnoughSpace(
-                    (this.conf.height.iconline * 2) + this.conf.height.subHeader
+                    (this.conf.height.iconline * 2) + this.conf.height.header
                 );
                 this.doc.addImage(calendar, this.x - 0.5, this.y - 3.75, 5, 5);
                 this.doc.text(item.time, this.x + 5.5, this.y);
@@ -599,7 +613,7 @@ export class LetsTalkAboutIt extends BaseTemplate {
                 this.doc.text(item.university.toUpperCase(), this.x + 5.5, this.y);
             } else {
                 this._isEnoughSpace(
-                    this.conf.height.iconline + this.conf.height.subHeader
+                    this.conf.height.iconline + this.conf.height.header
                 );
                 this.doc.addImage(calendar, this.x - 0.5, this.y - 3.75, 5, 5);
                 this.doc.text(item.time, this.x + 5.5, this.y);
@@ -609,15 +623,15 @@ export class LetsTalkAboutIt extends BaseTemplate {
             this.y += this.conf.height.iconline;
             this.y += 1; // normalize height
             this.doc.setFont("Roboto-Bold", "normal");
-            this.doc.setFontSize(this.conf.text.subHeader);
+            this.doc.setFontSize(this.conf.text.header);
             this.doc.text(item.degree, this.x, this.y);
-            this.y += this.conf.height.subHeader;
+            this.y += this.conf.height.header;
             if (item.details) {
                 item.details.forEach(detail => {
                     this._printMultiLine(detail, true);
                 });
             } else {
-                this.y -= (this.conf.height.subHeader - this.conf.height.content);  // normalize height
+                this.y -= (this.conf.height.header - this.conf.height.content);  // normalize height
             }
 
             if (index != items.length - 1) {
@@ -625,13 +639,13 @@ export class LetsTalkAboutIt extends BaseTemplate {
             }
         });
         this.y += this.conf.height.normalize; // normalize height
-        this.y += this.conf.margin.between;
+        this.y += this.conf.margin.section;
     }
 
     _addProjects(projects, name = "Projects") {
         var icon = new Image();
         icon.src = require("../assets/icons/console-white.png");
-        this._addHeader(name, icon, this.rowLeft);
+        this._addSectionHeader(name, icon, this.rowLeft);
 
         if (projects.details) {
             this._printMultiLine(projects.details, false);
@@ -645,11 +659,11 @@ export class LetsTalkAboutIt extends BaseTemplate {
 
         projects.items.forEach((project, index) => {
             this._isEnoughSpace(
-                this.conf.height.subHeader + this.conf.height.tagline
+                this.conf.height.header + this.conf.height.subheader
             );
             this.doc.setFont("Roboto-Bold", "normal");
             this.doc.setTextColor(this.conf.color.black);
-            this.doc.setFontSize(this.conf.text.subHeader);
+            this.doc.setFontSize(this.conf.text.header);
             if (project.link) {
                 if (project.link.startsWith("https://github.com")) {
                     this.doc.addImage(github, this.x - 0.5, this.y - 3.75, 5, 5);
@@ -663,12 +677,12 @@ export class LetsTalkAboutIt extends BaseTemplate {
             } else {
                 this.doc.text(project.name, this.x, this.y);
             }
-            this.y += this.conf.height.subHeader;
+            this.y += this.conf.height.header;
 
             this.doc.setFont("Montserrat-Medium", "normal");
-            this.doc.setFontSize(this.conf.text.tagline);
+            this.doc.setFontSize(this.conf.text.subheader);
             this.doc.text(project.tagline, this.x, this.y);
-            this.y += this.conf.height.tagline
+            this.y += this.conf.height.subheader
 
             this._printMultiLine(project.details, false);
             if (index != projects.items.length - 1) {
@@ -676,13 +690,13 @@ export class LetsTalkAboutIt extends BaseTemplate {
             }
         });
         this.y += this.conf.height.normalize; // normalize height
-        this.y += this.conf.margin.between;
+        this.y += this.conf.margin.section;
     }
 
     _addSkills(skills, name = "Skills") {
         var icon = new Image();
         icon.src = require("../assets/icons/toolbox-white.png");
-        this._addHeader(name, icon, this.rowLeft);
+        this._addSectionHeader(name, icon, this.rowLeft);
 
         var info = new Image();
         info.src = require("../assets/icons/info.png");
@@ -713,13 +727,13 @@ export class LetsTalkAboutIt extends BaseTemplate {
         });
 
         this.y += this.conf.height.normalize; // normalize height
-        this.y += this.conf.margin.between;
+        this.y += this.conf.margin.section;
     }
 
     _addCourses(items, name = "Courses") {
         var icon = new Image();
         icon.src = require("../assets/icons/book-education-white.png");
-        this._addHeader(name, icon, this.rowLeft);
+        this._addSectionHeader(name, icon, this.rowLeft);
 
         items.forEach(item => {
             this._printMultiLine(item, true);
@@ -739,7 +753,7 @@ export class LetsTalkAboutIt extends BaseTemplate {
             var font = this.doc.getFont();
             var size = this.doc.getFontSize();
             var color = this.doc.getTextColor();
-            this._addHeader(this.currentHeader, this.currentIcon, this.rowLeft);
+            this._addSectionHeader(this.currentSection, this.currentIcon, this.rowLeft);
             this.doc.setFont(font.fontName, font.fontStyle);
             this.doc.setFontSize(size);
             this.doc.setTextColor(color);
@@ -759,7 +773,7 @@ export class LetsTalkAboutIt extends BaseTemplate {
         this.currentPage = page;
         this.y = this.conf.margin.top;
         this.x = this.conf.margin.left + this.conf.margin.content;
-        this.max_x = this.center - this.conf.margin.column;
+        this.max_x = this.center - this.conf.margin.inner;
         this.rowLeft = true;
         this.row_1_start_y = this.conf.margin.top;
     }
@@ -769,10 +783,10 @@ export class LetsTalkAboutIt extends BaseTemplate {
         this.conf = this.initConf;
         this.y = this.conf.margin.top;
         this.x = this.conf.margin.left + this.conf.margin.content;
-        this.max_x = this.center - this.conf.margin.column;
+        this.max_x = this.center - this.conf.margin.inner;
         this.rowLeft = true;
         this.currentPage = 1;
-        this.currentHeader = null;
+        this.currentSection = null;
         this.currentIcon = null;
     }
 }

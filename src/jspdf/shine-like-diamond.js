@@ -14,16 +14,17 @@ export class ShineLikeDiamond extends BaseTemplate {
             text: {
                 name: 35,
                 tagline: 18,
-                header: 16,
-                subHeader: 12,
+                section: 16,
+                header: 12,
+                subheader: 12,
+                content: 10,
                 sidebarHeader: 16,
                 sidebarContent: 10,
-                content: 10,
             },
             font: {
                 pageNumber: "Roboto-Regular",
-                subHeader: "Montserrat-Medium",
-                subHeaderTagline: "Montserrat-Regular",
+                header: "Montserrat-Medium",
+                subheader: "Montserrat-Regular",
                 content: "Montserrat-Regular",
                 contentBold: "Montserrat-SemiBold",
             },
@@ -33,7 +34,7 @@ export class ShineLikeDiamond extends BaseTemplate {
                 left: 15,
                 right: 15,
                 sidebar: 12,
-                between: 8,
+                section: 8,
                 list: 5,
             },
             color: {
@@ -41,18 +42,20 @@ export class ShineLikeDiamond extends BaseTemplate {
                 black: "#000000",
                 pageNum: "#4d4e53",
                 content: "#1A1A1A",
-                subHeader: "#1A1A1A",
+                header: "#1A1A1A",
+                subheader: "#1A1A1A",
                 secondary: "#8D8D8D",
                 primary: "#1A1A1A"
             },
             height: {
                 name: 12,
                 tagline: 8,
-                header: 20,
-                subHeader: 5,
+                section: 20,
+                header: 5,
+                subheader: 5,
+                content: 4,
                 sidebarHeader: 6,
                 sidebarContent: 8,
-                content: 4,
                 normalize: -4,
             },
         };
@@ -70,10 +73,11 @@ export class ShineLikeDiamond extends BaseTemplate {
         return {
             model: {
                 text: {
-                    subHeader: 12,
+                    header: 12,
+                    subheader: 12,
+                    content: 10,
                     sidebarHeader: 16,
                     sidebarContent: 10,
-                    content: 10,
                 },
                 margin: {
                     top: 20,
@@ -81,22 +85,35 @@ export class ShineLikeDiamond extends BaseTemplate {
                     left: 15,
                     right: 15,
                     sidebar: 12,
-                    between: 8,
+                    section: 8,
                     list: 5,
                 },
                 height: {
-                    subHeader: 5,
+                    header: 5,
+                    subheader: 5,
+                    content: 4,
                     sidebarHeader: 6,
                     sidebarContent: 8,
-                    content: 4,
                 },
             },
             text: [
                 {
-                    label: "Subheader",
-                    key: "subHeader",
+                    label: "Header",
+                    key: "Header",
                     min: 8,
                     max: 20,
+                },
+                {
+                    label: "Subheader",
+                    key: "subheader",
+                    min: 8,
+                    max: 20,
+                },
+                {
+                    label: "Content",
+                    key: "content",
+                    min: 8,
+                    max: 12,
                 },
                 {
                     label: "Sidebar Header",
@@ -110,12 +127,6 @@ export class ShineLikeDiamond extends BaseTemplate {
                     min: 8,
                     max: 16,
                 },
-                {
-                    label: "Content",
-                    key: "content",
-                    min: 8,
-                    max: 12,
-                }
             ],
             margin: [
                 {
@@ -149,8 +160,8 @@ export class ShineLikeDiamond extends BaseTemplate {
                     max: 20,
                 },
                 {
-                    label: "Between",
-                    key: "between",
+                    label: "Section",
+                    key: "section",
                     min: 1,
                     max: 15,
                 },
@@ -158,15 +169,27 @@ export class ShineLikeDiamond extends BaseTemplate {
                     label: "List",
                     key: "list",
                     min: 2,
-                    max: 10,
+                    max: 8,
                 },
             ],
             height: [
                 {
-                    label: "Subheader",
-                    key: "subHeader",
+                    label: "Header",
+                    key: "Header",
                     min: 4,
                     max: 10,
+                },
+                {
+                    label: "Subheader",
+                    key: "subheader",
+                    min: 4,
+                    max: 10,
+                },
+                {
+                    label: "Content",
+                    key: "content",
+                    min: 3,
+                    max: 6,
                 },
                 {
                     label: "Sidebar Header",
@@ -180,12 +203,6 @@ export class ShineLikeDiamond extends BaseTemplate {
                     min: 6,
                     max: 12,
                 },
-                {
-                    label: "Content",
-                    key: "content",
-                    min: 3,
-                    max: 6,
-                }
             ],
         }
     }
@@ -254,7 +271,7 @@ export class ShineLikeDiamond extends BaseTemplate {
         this.doc.setFontSize(this.conf.text.tagline);
         this.doc.setTextColor(this.conf.color.secondary);
         this.doc.text(tagline.toUpperCase(), this.x, this.y, { charSpace: 0.5 });
-        this.y += this.conf.margin.between;
+        this.y += this.conf.margin.section;
     }
 
     _addSidebar(data) {
@@ -546,8 +563,8 @@ export class ShineLikeDiamond extends BaseTemplate {
         }
     }
 
-    _addHeader(name) {
-        this._isEnoughSpace(this.conf.height.header);
+    _addSectionHeader(name) {
+        this._isEnoughSpace(this.conf.height.section);
         this.doc.setFillColor("#1A1A1A");
         this.doc.setDrawColor("#1A1A1A");
         this.doc.triangle(this.x, this.y + 6, this.x + 6, this.y + 9, this.x + 6, this.y, "F");
@@ -556,9 +573,9 @@ export class ShineLikeDiamond extends BaseTemplate {
 
         this.doc.setFont("Montserrat-Medium", "normal");
         this.doc.setTextColor(this.conf.color.primary);
-        this.doc.setFontSize(this.conf.text.header);
+        this.doc.setFontSize(this.conf.text.section);
         this.doc.text(name, this.x + 10, this.y + 7, { charSpace: 0.5 });
-        this.y += this.conf.height.header;
+        this.y += this.conf.height.section;
     }
 
 }

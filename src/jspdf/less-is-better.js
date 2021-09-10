@@ -14,16 +14,17 @@ export class LessIsBetter extends BaseTemplate {
             text: {
                 name: 35,
                 tagline: 16,
-                header: 18,
-                subHeader: 12,
+                section: 18,
+                header: 12,
+                subheader: 12,
+                content: 9,
                 sidebarHeader: 18,
                 sidebarContent: 12,
-                content: 9,
             },
             font: {
                 pageNumber: "Roboto-Regular",
-                subHeader: "HKGrotesk-Bold",
-                subHeaderTagline: "HKGrotesk-Regular",
+                header: "HKGrotesk-Bold",
+                subheader: "HKGrotesk-Regular",
                 content: "Poppins-Light",
                 contentBold: "Poppins-Bold",
             },
@@ -33,7 +34,7 @@ export class LessIsBetter extends BaseTemplate {
                 left: 15,
                 right: 15,
                 sidebar: 15,
-                between: 10,
+                section: 10,
                 list: 5,
             },
             color: {
@@ -41,17 +42,19 @@ export class LessIsBetter extends BaseTemplate {
                 black: "#000000",
                 pageNum: "#4d4e53",
                 content: "#000000",
-                subHeader: "#000000",
+                subheader: "#000000",
+                header: "#000000",
                 primary: "#000000",
             },
             height: {
                 name: 12,
                 tagline: 8,
-                header: 8,
-                subHeader: 5,
-                sidebarHeader: 16,
-                sidebarContent: 8,
+                section: 8,
+                header: 5,
+                subheader: 5,
                 content: 4,
+                sidebarHeader: 8,
+                sidebarContent: 8,
                 normalize: 1,
             },
         }
@@ -72,11 +75,12 @@ export class LessIsBetter extends BaseTemplate {
                 text: {
                     name: 35,
                     tagline: 16,
-                    header: 18,
-                    subHeader: 12,
+                    section: 18,
+                    header: 12,
+                    subheader: 12,
+                    content: 9,
                     sidebarHeader: 18,
                     sidebarContent: 12,
-                    content: 9,
                 },
                 margin: {
                     top: 20,
@@ -84,17 +88,18 @@ export class LessIsBetter extends BaseTemplate {
                     left: 15,
                     right: 15,
                     sidebar: 15,
-                    between: 10,
+                    section: 10,
                     list: 5,
                 },
                 height: {
                     name: 12,
                     tagline: 8,
-                    header: 8,
-                    subHeader: 5,
+                    section: 8,
+                    header: 5,
+                    subheader: 5,
+                    content: 4,
                     sidebarHeader: 8,
                     sidebarContent: 8,
-                    content: 4,
                 },
             },
             text: [
@@ -111,16 +116,28 @@ export class LessIsBetter extends BaseTemplate {
                     max: 25,
                 },
                 {
-                    label: "Header",
-                    key: "header",
+                    label: "Section",
+                    key: "seader",
                     min: 12,
                     max: 25,
                 },
                 {
-                    label: "Subheader",
-                    key: "subHeader",
+                    label: "Header",
+                    key: "header",
                     min: 8,
                     max: 20,
+                },
+                {
+                    label: "Subheader",
+                    key: "subheader",
+                    min: 8,
+                    max: 20,
+                },
+                {
+                    label: "Content",
+                    key: "content",
+                    min: 8,
+                    max: 12,
                 },
                 {
                     label: "Sidebar Header",
@@ -134,12 +151,6 @@ export class LessIsBetter extends BaseTemplate {
                     min: 8,
                     max: 16,
                 },
-                {
-                    label: "Content",
-                    key: "content",
-                    min: 8,
-                    max: 12,
-                }
             ],
             margin: [
                 {
@@ -173,8 +184,8 @@ export class LessIsBetter extends BaseTemplate {
                     max: 20,
                 },
                 {
-                    label: "Between",
-                    key: "between",
+                    label: "Section",
+                    key: "section",
                     min: 1,
                     max: 15,
                 },
@@ -182,7 +193,7 @@ export class LessIsBetter extends BaseTemplate {
                     label: "List",
                     key: "list",
                     min: 2,
-                    max: 10,
+                    max: 8,
                 },
             ],
             height: [
@@ -199,21 +210,33 @@ export class LessIsBetter extends BaseTemplate {
                     max: 12,
                 },
                 {
-                    label: "Header",
-                    key: "header",
+                    label: "Section",
+                    key: "Section",
                     min: 6,
                     max: 12,
                 },
                 {
-                    label: "Subheader",
-                    key: "subHeader",
+                    label: "Header",
+                    key: "header",
                     min: 4,
                     max: 10,
                 },
                 {
+                    label: "Subheader",
+                    key: "subheader",
+                    min: 4,
+                    max: 10,
+                },
+                {
+                    label: "Content",
+                    key: "content",
+                    min: 3,
+                    max: 6,
+                },
+                {
                     label: "Sidebar Header",
                     key: "sidebarHeader",
-                    min: 4,
+                    min: 6,
                     max: 12,
                 },
                 {
@@ -222,12 +245,6 @@ export class LessIsBetter extends BaseTemplate {
                     min: 6,
                     max: 12,
                 },
-                {
-                    label: "Content",
-                    key: "content",
-                    min: 3,
-                    max: 6,
-                }
             ],
             sidebarWidth: {
                 label: "Width",
@@ -461,13 +478,13 @@ export class LessIsBetter extends BaseTemplate {
         }
     }
 
-    _addHeader(name) {
+    _addSectionHeader(name) {
         this.doc.setFont("HKGrotesk-Bold", "normal");
         this.doc.setTextColor(this.conf.color.black);
-        this.doc.setFontSize(this.conf.text.header);
-        this._isEnoughSpace(this.conf.height.header);
+        this.doc.setFontSize(this.conf.text.section);
+        this._isEnoughSpace(this.conf.height.section);
         this.doc.text(name, this.x, this.y);
-        this.y += this.conf.height.header;
+        this.y += this.conf.height.section;
     }
 
 }
