@@ -2,6 +2,15 @@
 
 This file documents changes to [pdf-resume-builder](https://github.com/rszamszur/pdf-resume-builder). The release numbering uses [semantic versioning](http://semver.org).
 
+### 0.1.2
+
+- [x] Update examples.
+- [x] Add new configurable options in PdfBuilderForm component.
+- [x] Log errors to console in try catch blocks in PdfBuilderForm component.
+- [x] Refactor templates width and height variables naming.
+- [x] Refactor base template class to be more generic.
+- [x] Add LetsTalkAboutIt template.
+
 ### 0.1.1
 
 - [x] Add more examples.
