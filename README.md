@@ -15,6 +15,8 @@ For now, there are just three templates that can still be a bit buggy. Unfortuna
 
 Adjust the template or play with items order if you're not entirely happy with the outcome. Last but not least, may the odds be in your favor.
 
+NOTE! Some templates may provide more adjusting options than others. 
+
 ## Templates
 
 | [LessIsBetter](https://github.com/rszamszur/pdf-resume-builder/tree/master/examples/LessIsBetter) | [ShineLikeDiamond](https://github.com/rszamszur/pdf-resume-builder/tree/master/examples/ShineLikeDiamond) | [LetsTalkAboutIt](https://github.com/rszamszur/pdf-resume-builder/tree/master/examples/LetsTalkAboutIt) |
