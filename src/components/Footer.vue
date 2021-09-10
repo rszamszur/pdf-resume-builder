@@ -31,7 +31,7 @@
             </a></strong
           >
           | PDFResumeBuilder Version:
-          <strong>0.1.2</strong>
+          <strong>0.1.3</strong>
         </div>
       </v-card-text>
     </v-card>
