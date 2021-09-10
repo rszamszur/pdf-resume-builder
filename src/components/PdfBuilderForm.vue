@@ -7,7 +7,7 @@
       center-active
       mandatory
       show-arrows
-      @change="updateTemplate"
+      @change="templateChanged"
     >
       <v-slide-item
         v-for="(template, i) in templates"
@@ -123,7 +123,7 @@
             thumb-label
             :min="item.min"
             :max="item.max"
-            @change="loadJSON(input)"
+            @change="triggerRerender"
           ></v-slider>
         </v-col>
         <v-col cols="12" md="6">
@@ -137,7 +137,7 @@
             thumb-label
             :min="item.min"
             :max="item.max"
-            @change="loadJSON(input)"
+            @change="triggerRerender"
           ></v-slider>
         </v-col>
         <v-col cols="12" md="12">
@@ -151,7 +151,7 @@
             thumb-label
             :min="item.min"
             :max="item.max"
-            @change="loadJSON(input)"
+            @change="triggerRerender"
           ></v-slider>
         </v-col>
         <v-col cols="12" md="12" v-if="templates[chosen].options.sidebarWidth">
@@ -163,7 +163,7 @@
             thumb-label
             :min="templates[chosen].options.sidebarWidth.min"
             :max="templates[chosen].options.sidebarWidth.max"
-            @change="loadJSON(input)"
+            @change="triggerRerender"
           ></v-slider>
         </v-col>
       </v-row>
@@ -221,6 +221,7 @@ export default {
       loading: false,
       showAfter: false,
       data: null,
+      timer: 0,
     };
   },
   methods: {
@@ -292,7 +293,16 @@ export default {
       );
       this.reset();
     },
-    updateTemplate() {
+    triggerRerender() {
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = null;
+      }
+      this.timer = setTimeout(() => {
+        this.loadJSON(this.input);
+      }, 1500);
+    },
+    templateChanged() {
       this.input = null;
       this.data = null;
       this.inputErrors = [];
