@@ -14,16 +14,17 @@ export class LessIsBetter extends BaseTemplate {
             text: {
                 name: 35,
                 tagline: 16,
-                header: 18,
-                subHeader: 12,
+                section: 18,
+                header: 12,
+                subheader: 12,
+                content: 9,
                 sidebarHeader: 18,
                 sidebarContent: 12,
-                content: 9,
             },
             font: {
                 pageNumber: "Roboto-Regular",
-                subHeader: "HKGrotesk-Bold",
-                subHeaderTagline: "HKGrotesk-Regular",
+                header: "HKGrotesk-Bold",
+                subheader: "HKGrotesk-Regular",
                 content: "Poppins-Light",
                 contentBold: "Poppins-Bold",
             },
@@ -33,7 +34,7 @@ export class LessIsBetter extends BaseTemplate {
                 left: 15,
                 right: 15,
                 sidebar: 15,
-                between: 10,
+                section: 10,
                 list: 5,
             },
             color: {
@@ -41,17 +42,19 @@ export class LessIsBetter extends BaseTemplate {
                 black: "#000000",
                 pageNum: "#4d4e53",
                 content: "#000000",
-                subHeader: "#000000",
+                subheader: "#000000",
+                header: "#000000",
                 primary: "#000000",
             },
             height: {
                 name: 12,
                 tagline: 8,
-                header: 8,
-                subHeader: 5,
-                sidebarHeader: 16,
-                sidebarContent: 8,
+                section: 8,
+                header: 5,
+                subheader: 5,
                 content: 4,
+                sidebarHeader: 8,
+                sidebarContent: 8,
                 normalize: 1,
             },
         }
@@ -67,38 +70,191 @@ export class LessIsBetter extends BaseTemplate {
 
     static editableOptions() {
         return {
-            sidebarWidth: 70,
-            text: {
-                name: 35,
-                tagline: 16,
-                header: 18,
-                subHeader: 12,
-                sidebarHeader: 18,
-                sidebarContent: 12,
-                content: 9,
+            model: {
+                sidebarWidth: 70,
+                text: {
+                    name: 35,
+                    tagline: 16,
+                    section: 18,
+                    header: 12,
+                    subheader: 12,
+                    content: 9,
+                    sidebarHeader: 18,
+                    sidebarContent: 12,
+                },
+                margin: {
+                    top: 20,
+                    bottom: 20,
+                    left: 15,
+                    right: 15,
+                    sidebar: 15,
+                    section: 10,
+                    list: 5,
+                },
+                height: {
+                    name: 12,
+                    tagline: 8,
+                    section: 8,
+                    header: 5,
+                    subheader: 5,
+                    content: 4,
+                    sidebarHeader: 8,
+                    sidebarContent: 8,
+                },
             },
-            margin: {
-                top: 20,
-                bottom: 20,
-                left: 15,
-                right: 15,
-                sidebar: 15,
-                between: 10,
-                list: 5,
-            },
-            height: {
-                name: 12,
-                tagline: 8,
-                header: 8,
-                subHeader: 5,
-                sidebarHeader: 8,
-                sidebarContent: 8,
-                content: 4,
-            },
+            text: [
+                {
+                    label: "Name",
+                    key: "name",
+                    min: 20,
+                    max: 45,
+                },
+                {
+                    label: "Tagline",
+                    key: "tagline",
+                    min: 10,
+                    max: 25,
+                },
+                {
+                    label: "Section",
+                    key: "section",
+                    min: 12,
+                    max: 25,
+                },
+                {
+                    label: "Header",
+                    key: "header",
+                    min: 8,
+                    max: 20,
+                },
+                {
+                    label: "Subheader",
+                    key: "subheader",
+                    min: 8,
+                    max: 20,
+                },
+                {
+                    label: "Content",
+                    key: "content",
+                    min: 8,
+                    max: 12,
+                },
+                {
+                    label: "Sidebar Header",
+                    key: "sidebarHeader",
+                    min: 10,
+                    max: 20,
+                },
+                {
+                    label: "Sidebar Content",
+                    key: "sidebarContent",
+                    min: 8,
+                    max: 16,
+                },
+            ],
+            margin: [
+                {
+                    label: "Top",
+                    key: "top",
+                    min: 5,
+                    max: 30,
+                },
+                {
+                    label: "Bottom",
+                    key: "bottom",
+                    min: 5,
+                    max: 30,
+                },
+                {
+                    label: "Left",
+                    key: "left",
+                    min: 5,
+                    max: 25,
+                },
+                {
+                    label: "Right",
+                    key: "right",
+                    min: 5,
+                    max: 25,
+                },
+                {
+                    label: "Sidebar",
+                    key: "sidebar",
+                    min: 1,
+                    max: 20,
+                },
+                {
+                    label: "Section",
+                    key: "section",
+                    min: 1,
+                    max: 15,
+                },
+                {
+                    label: "List",
+                    key: "list",
+                    min: 2,
+                    max: 8,
+                },
+            ],
+            height: [
+                {
+                    label: "Name",
+                    key: "name",
+                    min: 8,
+                    max: 16,
+                },
+                {
+                    label: "Tagline",
+                    key: "tagline",
+                    min: 6,
+                    max: 12,
+                },
+                {
+                    label: "Section",
+                    key: "section",
+                    min: 6,
+                    max: 12,
+                },
+                {
+                    label: "Header",
+                    key: "header",
+                    min: 4,
+                    max: 10,
+                },
+                {
+                    label: "Subheader",
+                    key: "subheader",
+                    min: 4,
+                    max: 10,
+                },
+                {
+                    label: "Content",
+                    key: "content",
+                    min: 3,
+                    max: 6,
+                },
+                {
+                    label: "Sidebar Header",
+                    key: "sidebarHeader",
+                    min: 6,
+                    max: 12,
+                },
+                {
+                    label: "Sidebar Content",
+                    key: "sidebarContent",
+                    min: 6,
+                    max: 12,
+                },
+            ],
+            sidebarWidth: {
+                label: "Width",
+                min: 60,
+                max: 80,
+            }
         }
     }
 
-    generatePDF(data, options = null) {
+    generatePDF(data, options = null, preview = true) {
         if (options) {
             this.conf.text = {
                 ...this.conf.text,
@@ -112,6 +268,8 @@ export class LessIsBetter extends BaseTemplate {
                 ...this.conf.height,
                 ...options.height,
             }
+            this.conf.sidebarWidth = options.sidebarWidth;
+            this.x = this.conf.margin.left;
             this.y = this.conf.margin.top;
             this.max_x = this.doc.internal.pageSize.width - this.conf.sidebarWidth - this.conf.margin.right;
         }
@@ -145,7 +303,15 @@ export class LessIsBetter extends BaseTemplate {
                 }
             }
         }
-        this._numberPages(false);
+        if (data.numerPages) {
+            this._numberPages(false);
+        }
+
+        if (preview) {
+            var pdf = this.doc.output('datauristring');
+            this._reset();
+            return pdf;
+        } 
         this.doc.save("resume.pdf");
         this._reset();
     }
@@ -321,13 +487,13 @@ export class LessIsBetter extends BaseTemplate {
         }
     }
 
-    _addHeader(name) {
+    _addSectionHeader(name) {
         this.doc.setFont("HKGrotesk-Bold", "normal");
         this.doc.setTextColor(this.conf.color.black);
-        this.doc.setFontSize(this.conf.text.header);
-        this._isEnoughSpace(this.conf.height.header);
+        this.doc.setFontSize(this.conf.text.section);
+        this._isEnoughSpace(this.conf.height.section);
         this.doc.text(name, this.x, this.y);
-        this.y += this.conf.height.header;
+        this.y += this.conf.height.section;
     }
 
 }

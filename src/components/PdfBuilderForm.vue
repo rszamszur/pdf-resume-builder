@@ -7,6 +7,7 @@
       center-active
       mandatory
       show-arrows
+      @change="templateChanged"
     >
       <v-slide-item
         v-for="(template, i) in templates"
@@ -37,268 +38,15 @@
       Chosen template: <strong>{{ templates[chosen].name }}</strong>
       <span v-if="templates[chosen].link != null">
         (
-        <a :href="templates[chosen].link" target="_blan">Example</a>
+        <a :href="templates[chosen].link" target="_blan">example.pdf</a>
         )
       </span>
-    </div>
-    <p>
-      <v-icon color="info">mdi-information</v-icon> In case chosen template
-      isn't rendering as you'd like, you can further tweak some of its
-      <a
-        href="https://github.com/rszamszur/pdf-resume-builder#adjusting-options"
-        target="_blank"
-        >options</a
-      >:
-      <v-btn text small @click="showOptions = !showOptions"
-        ><span v-if="showOptions">Hide</span
-        ><span v-else>MR Adjuster</span></v-btn
-      >
-      <v-btn
-        v-if="showOptions"
-        text
-        small
-        @click="
-          templates[chosen].options = templates[chosen].class.editableOptions()
-        "
-        >Reset</v-btn
-      >
-    </p>
-    <div v-if="showOptions">
-      <v-row>
-        <v-col cols="12" md="6">
-          <div class="text-overline">Margin</div>
-          <v-slider
-            v-if="templates[chosen].options.margin.left"
-            v-model="templates[chosen].options.margin.left"
-            color="primary"
-            label="Left"
-            thumb-label
-            min="5"
-            max="30"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.margin.right"
-            v-model="templates[chosen].options.margin.right"
-            color="primary"
-            label="Right"
-            thumb-label
-            min="5"
-            max="30"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.margin.top"
-            v-model="templates[chosen].options.margin.top"
-            color="primary"
-            label="Top"
-            thumb-label
-            min="5"
-            max="30"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.margin.bottom"
-            v-model="templates[chosen].options.margin.bottom"
-            color="primary"
-            label="Bottom"
-            thumb-label
-            min="5"
-            max="30"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.margin.sidebar"
-            v-model="templates[chosen].options.margin.sidebar"
-            color="primary"
-            label="Sidebar"
-            thumb-label
-            min="1"
-            max="20"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.margin.content"
-            v-model="templates[chosen].options.margin.content"
-            color="primary"
-            label="Content"
-            thumb-label
-            min="1"
-            max="20"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.margin.column"
-            v-model="templates[chosen].options.margin.column"
-            color="primary"
-            label="Column"
-            thumb-label
-            min="1"
-            max="10"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.margin.list"
-            v-model="templates[chosen].options.margin.list"
-            color="primary"
-            label="List"
-            thumb-label
-            min="2"
-            max="10"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.margin.between"
-            v-model="templates[chosen].options.margin.between"
-            color="primary"
-            label="Between"
-            thumb-label
-            min="1"
-            max="15"
-          ></v-slider>
-        </v-col>
-        <v-col cols="12" md="6">
-          <div class="text-overline">Text size</div>
-          <v-slider
-            v-if="templates[chosen].options.text.name"
-            v-model="templates[chosen].options.text.name"
-            color="primary"
-            label="Name"
-            thumb-label
-            min="20"
-            max="45"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.text.tagline"
-            v-model="templates[chosen].options.text.tagline"
-            color="primary"
-            label="Tagline"
-            thumb-label
-            min="10"
-            max="25"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.text.header"
-            v-model="templates[chosen].options.text.header"
-            color="primary"
-            label="Header"
-            thumb-label
-            min="12"
-            max="25"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.text.subHeader"
-            v-model="templates[chosen].options.text.subHeader"
-            color="primary"
-            label="Subheader"
-            thumb-label
-            min="8"
-            max="20"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.text.sidebarHeader"
-            v-model="templates[chosen].options.text.sidebarHeader"
-            color="primary"
-            label="Sidebar header"
-            thumb-label
-            min="10"
-            max="20"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.text.sidebarContent"
-            v-model="templates[chosen].options.text.sidebarContent"
-            color="primary"
-            label="Sidebar content"
-            thumb-label
-            min="8"
-            max="16"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.text.content"
-            v-model="templates[chosen].options.text.content"
-            color="primary"
-            label="Content"
-            thumb-label
-            min="8"
-            max="12"
-          ></v-slider>
-        </v-col>
-        <v-col cols="12" md="12">
-          <div class="text-overline">Line height</div>
-          <v-slider
-            v-if="templates[chosen].options.height.name"
-            v-model="templates[chosen].options.height.name"
-            color="primary"
-            label="Name"
-            thumb-label
-            min="8"
-            max="16"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.height.tagline"
-            v-model="templates[chosen].options.height.tagline"
-            color="primary"
-            label="Tagline"
-            thumb-label
-            min="6"
-            max="12"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.height.header"
-            v-model="templates[chosen].options.height.header"
-            color="primary"
-            label="Header"
-            thumb-label
-            min="6"
-            max="12"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.height.subHeader"
-            v-model="templates[chosen].options.height.subHeader"
-            color="primary"
-            label="Subheader"
-            thumb-label
-            min="4"
-            max="10"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.height.sidebarHeader"
-            v-model="templates[chosen].options.height.sidebarHeader"
-            color="primary"
-            label="Sidebar header"
-            thumb-label
-            min="4"
-            max="12"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.height.sidebarContent"
-            v-model="templates[chosen].options.height.sidebarContent"
-            color="primary"
-            label="Sidebar content"
-            thumb-label
-            min="6"
-            max="12"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.height.content"
-            v-model="templates[chosen].options.height.content"
-            color="primary"
-            label="Content"
-            thumb-label
-            min="3"
-            max="6"
-          ></v-slider>
-        </v-col>
-        <v-col cols="12" md="12" v-if="templates[chosen].options.sidebarWidth">
-          <div class="text-overline">Sidebar width</div>
-          <v-slider
-            v-model="templates[chosen].options.sidebarWidth"
-            color="primary"
-            label="Sidebar width"
-            thumb-label
-            min="60"
-            max="80"
-          ></v-slider>
-        </v-col>
-      </v-row>
     </div>
     <v-divider class="mb-4 mt-2"></v-divider>
     <h2 class="text-h5 text-sm-h3 text-md-h2 mb-4">Step 2: Load JSON Data</h2>
     <p>
-      <v-icon color="info">mdi-information</v-icon> If you don't know what
-      data?!, then have a look at
+      <v-icon color="info">mdi-information</v-icon> If you don't know what data?
+      Have a look at:
       <a
         href="https://github.com/rszamszur/pdf-resume-builder/tree/master/examples"
         target="_blank"
@@ -334,8 +82,91 @@
       </v-alert>
     </div>
     <div v-if="showAfter">
-      <v-btn text color="primary" @click="generatePDF">Generate Again</v-btn>
+      <v-btn text color="primary" @click="savePDF">Save PDF</v-btn>
       <v-btn text color="error" @click="reset">Reset</v-btn>
+    </div>
+    <p>
+      <v-icon color="info">mdi-information</v-icon> In case chosen template
+      isn't rendering as you'd like, you can further tweak some of its
+      <a
+        :href="
+          'https://github.com/rszamszur/pdf-resume-builder/blob/master/examples/' +
+          templates[chosen].name
+        "
+        target="_blank"
+        >options</a
+      >:
+      <v-btn text small @click="showOptions = !showOptions"
+        ><span v-if="showOptions">Hide</span
+        ><span v-else>MR Adjuster</span></v-btn
+      >
+      <v-btn
+        v-if="showOptions"
+        text
+        small
+        @click="
+          templates[chosen].options = templates[chosen].class.editableOptions()
+        "
+        >Reset</v-btn
+      >
+    </p>
+    <div v-if="showOptions">
+      <v-row>
+        <v-col cols="12" md="6">
+          <div class="text-overline">Font size</div>
+          <v-slider
+            v-for="(item, i) in templates[chosen].options.text"
+            :key="i"
+            v-model="templates[chosen].options.model.text[item.key]"
+            color="primary"
+            :label="item.label"
+            thumb-label
+            :min="item.min"
+            :max="item.max"
+            @change="triggerRerender"
+          ></v-slider>
+        </v-col>
+        <v-col cols="12" md="6">
+          <div class="text-overline">Line height</div>
+          <v-slider
+            v-for="(item, i) in templates[chosen].options.height"
+            :key="i"
+            v-model="templates[chosen].options.model.height[item.key]"
+            color="primary"
+            :label="item.label"
+            thumb-label
+            :min="item.min"
+            :max="item.max"
+            @change="triggerRerender"
+          ></v-slider>
+        </v-col>
+        <v-col cols="12" md="12">
+          <div class="text-overline">Margin</div>
+          <v-slider
+            v-for="(item, i) in templates[chosen].options.margin"
+            :key="i"
+            v-model="templates[chosen].options.model.margin[item.key]"
+            color="primary"
+            :label="item.label"
+            thumb-label
+            :min="item.min"
+            :max="item.max"
+            @change="triggerRerender"
+          ></v-slider>
+        </v-col>
+        <v-col cols="12" md="12" v-if="templates[chosen].options.sidebarWidth">
+          <div class="text-overline">Sidebar</div>
+          <v-slider
+            v-model="templates[chosen].options.model.sidebarWidth"
+            color="primary"
+            :label="templates[chosen].options.sidebarWidth.label"
+            thumb-label
+            :min="templates[chosen].options.sidebarWidth.min"
+            :max="templates[chosen].options.sidebarWidth.max"
+            @change="triggerRerender"
+          ></v-slider>
+        </v-col>
+      </v-row>
     </div>
     <v-divider class="mb-4 mt-2"></v-divider>
     <h2 class="text-h5 text-sm-h3 text-md-h2">Step 3: Get hired</h2>
@@ -359,21 +190,21 @@ export default {
         {
           name: "LessIsBetter",
           thumbnail: require("../assets/LessIsBetter.png"),
-          link: "https://github.com/rszamszur/pdf-resume-builder/blob/assets/LessIsBetter_example.pdf",
+          link: "https://github.com/rszamszur/pdf-resume-builder/blob/master/examples/LessIsBetter/example.pdf",
           class: LessIsBetter,
           options: LessIsBetter.editableOptions(),
         },
         {
           name: "ShineLikeDiamond",
           thumbnail: require("../assets/ShineLikeDiamond.png"),
-          link: "https://github.com/rszamszur/pdf-resume-builder/blob/assets/ShineLikeDiamond_example.pdf",
+          link: "https://github.com/rszamszur/pdf-resume-builder/blob/master/examples/ShineLikeDiamond/example.pdf",
           class: ShineLikeDiamond,
           options: ShineLikeDiamond.editableOptions(),
         },
         {
           name: "LetsTalkAboutIt",
           thumbnail: require("../assets/LetsTalkAboutIt.png"),
-          link: "https://github.com/rszamszur/pdf-resume-builder/blob/assets/LetsTalkAboutIt_example.pdf",
+          link: "https://github.com/rszamszur/pdf-resume-builder/blob/master/examples/LetsTalkAboutIt/example.pdf",
           class: LetsTalkAboutIt,
           options: LetsTalkAboutIt.editableOptions(),
         },
@@ -390,6 +221,7 @@ export default {
       loading: false,
       showAfter: false,
       data: null,
+      timer: 0,
     };
   },
   methods: {
@@ -408,7 +240,7 @@ export default {
           try {
             data = JSON.parse(event.target.result);
           } catch (error) {
-             console.error(error);
+            console.error(error);
             this.inputErrors.push(
               "Couldn't parse provided JSON file, most likely it is malformed. Details can be found in console."
             );
@@ -446,7 +278,40 @@ export default {
     },
     generatePDF() {
       const cv = new this.templates[this.chosen].class();
-      cv.generatePDF(this.data, this.templates[this.chosen].options);
+      var preview = cv.generatePDF(
+        this.data,
+        this.templates[this.chosen].options.model
+      );
+      this.$emit("update-preview", preview);
+    },
+    savePDF() {
+      const cv = new this.templates[this.chosen].class();
+      cv.generatePDF(
+        this.data,
+        this.templates[this.chosen].options.model,
+        false
+      );
+      this.reset();
+    },
+    triggerRerender() {
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = null;
+      }
+      this.timer = setTimeout(() => {
+        this.loadJSON(this.input);
+      }, 1500);
+    },
+    templateChanged() {
+      this.input = null;
+      this.data = null;
+      this.inputErrors = [];
+      this.schemaErrors = null;
+      this.disabled = false;
+      this.loading = false;
+      this.showAfter = false;
+      this.showOptions = false;
+      this.$emit("update-preview", null);
     },
     reset() {
       this.data = null;

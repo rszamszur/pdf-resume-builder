@@ -142,7 +142,7 @@ export class BaseTemplate {
                         required: ["name"],
                     },
                 },
-                numPages: {
+                numerPages: {
                     type: "boolean",
                     default: true,
                 },
@@ -164,41 +164,41 @@ export class BaseTemplate {
     }
 
     generatePDF() {
-        throw new Error("Method 'generate(data, options = null)' must be implemented.");
+        throw new Error("Method 'generate(data, options = null, preview = true)' must be implemented.");
     }
 
-    _addHeader() {
-        throw new Error("Method '_addHeader(name)' must be implemented.");
+    _addSectionHeader() {
+        throw new Error("Method '_addSectionHeader(name)' must be implemented.");
     }
 
     _addAbout(content) {
-        this._addHeader("ABOUT ME");
+        this._addSectionHeader("ABOUT ME");
         this._printMultiLine(content, false);
         this.y += this.conf.height.normalize; // normalize height
-        this.y += this.conf.margin.between;
+        this.y += this.conf.margin.section;
     }
 
     _addExperience(jobs) {
-        this._addHeader("EXPERIENCE");
+        this._addSectionHeader("EXPERIENCE");
 
         jobs.forEach((job, index) => {
-            this.doc.setFont(this.conf.font.subHeader, "normal");
-            this.doc.setTextColor(this.conf.color.subHeader);
-            this.doc.setFontSize(this.conf.text.subHeader);
-            this._isEnoughSpace(this.conf.height.subHeader);
+            this.doc.setFont(this.conf.font.header, "normal");
+            this.doc.setTextColor(this.conf.color.header);
+            this.doc.setFontSize(this.conf.text.header);
+            this._isEnoughSpace(this.conf.height.header);
             this.doc.text(job.role, this.x, this.y);
-            this.y += this.conf.height.subHeader;
-            this.doc.setFont(this.conf.font.subHeaderTagline, "normal");
-            this.doc.setFontSize(this.conf.text.subHeader);
-            this._isEnoughSpace(this.conf.height.subHeader);
+            this.y += this.conf.height.header;
+            this.doc.setFont(this.conf.font.subheader, "normal");
+            this.doc.setFontSize(this.conf.text.subheader);
+            this._isEnoughSpace(this.conf.height.subheader);
             this.doc.text(`${job.time} | ${job.company}`, this.x, this.y);
-            this.y += this.conf.height.subHeader;
+            this.y += this.conf.height.subheader;
             if (job.details) {
                 job.details.forEach(detail => {
                     this._printMultiLine(detail, true);
                 });
             } else {
-                this.y -= (this.conf.height.subHeader - this.conf.height.content);  // normalize height
+                this.y -= (this.conf.height.subheader - this.conf.height.content);  // normalize height
             }
 
             if (index != jobs.length - 1) {
@@ -206,21 +206,21 @@ export class BaseTemplate {
             }
         });
         this.y += this.conf.height.normalize; // normalize height
-        this.y += this.conf.margin.between;
+        this.y += this.conf.margin.section;
     }
 
     _addProjects(projects) {
-        this._addHeader("PROJECTS");
+        this._addSectionHeader("PROJECTS");
 
         if (projects.details) {
             this._printMultiLine(projects.details, false);
             this.y += this.conf.height.content; //normalize height
         }
         projects.items.forEach((project, index) => {
-            this.doc.setFont(this.conf.font.subHeader, "normal");
-            this.doc.setTextColor(this.conf.color.subHeader);
-            this.doc.setFontSize(this.conf.text.subHeader);
-            this._isEnoughSpace(this.conf.height.subHeader);
+            this.doc.setFont(this.conf.font.header, "normal");
+            this.doc.setTextColor(this.conf.color.header);
+            this.doc.setFontSize(this.conf.text.header);
+            this._isEnoughSpace(this.conf.height.header);
             if (project.link) {
                 this.doc.textWithLink(project.name, this.x, this.y, {
                     url: project.link,
@@ -228,23 +228,23 @@ export class BaseTemplate {
             } else {
                 this.doc.text(project.name, this.x, this.y);
             }
-            this.y += this.conf.height.subHeader;
-            this.doc.setFont(this.conf.font.subHeaderTagline, "normal");
-            this.doc.setFontSize(this.conf.text.subHeader);
-            this._isEnoughSpace(this.conf.height.subHeader);
+            this.y += this.conf.height.header;
+            this.doc.setFont(this.conf.font.subheader, "normal");
+            this.doc.setFontSize(this.conf.text.subheader);
+            this._isEnoughSpace(this.conf.height.subheader);
             this.doc.text(project.tagline, this.x, this.y);
-            this.y += this.conf.height.subHeader;
+            this.y += this.conf.height.subheader;
             this._printMultiLine(project.details, true);
             if (index != projects.items.length - 1) {
                 this.y += this.conf.height.content; //normalize height
             }
         });
         this.y += this.conf.height.normalize; // normalize height
-        this.y += this.conf.margin.between;
+        this.y += this.conf.margin.section;
     }
 
     _addSkills(skills, twoRows) {
-        this._addHeader("SKILLS");
+        this._addSectionHeader("SKILLS");
         const initHeightRef = this.y;
         const initPage = this.currentPage;
 
@@ -264,7 +264,7 @@ export class BaseTemplate {
             this._addSkillsRow(skills, this.x);
         }
         this.y += this.conf.height.normalize; //normalize height
-        this.y += this.conf.margin.between;
+        this.y += this.conf.margin.section;
     }
 
     _addSkillsRow(skills, offset) {
@@ -316,26 +316,26 @@ export class BaseTemplate {
     }
 
     _addEducation(items) {
-        this._addHeader("EDUCATION");
+        this._addSectionHeader("EDUCATION");
 
         items.forEach((item, index) => {
-            this.doc.setFont(this.conf.font.subHeader, "normal");
-            this.doc.setTextColor(this.conf.color.subHeader);
-            this.doc.setFontSize(this.conf.text.subHeader);
-            this._isEnoughSpace(this.conf.height.subHeader);
+            this.doc.setFont(this.conf.font.header, "normal");
+            this.doc.setTextColor(this.conf.color.header);
+            this.doc.setFontSize(this.conf.text.header);
+            this._isEnoughSpace(this.conf.height.header);
             this.doc.text(item.degree, this.x, this.y);
-            this.y += this.conf.height.subHeader;
-            this.doc.setFont(this.conf.font.subHeaderTagline, "normal");
-            this.doc.setFontSize(this.conf.text.subHeader);
-            this._isEnoughSpace(this.conf.height.subHeader);
+            this.y += this.conf.height.header;
+            this.doc.setFont(this.conf.font.subheader, "normal");
+            this.doc.setFontSize(this.conf.text.subheader);
+            this._isEnoughSpace(this.conf.height.subheader);
             this.doc.text(`${item.time} | ${item.university}`, this.x, this.y);
-            this.y += this.conf.height.subHeader;
+            this.y += this.conf.height.subheader;
             if (item.details) {
                 item.details.forEach(detail => {
                     this._printMultiLine(detail, true);
                 });
             } else {
-                this.y -= (this.conf.height.subHeader - this.conf.height.content);  // normalize height
+                this.y -= (this.conf.height.subheader - this.conf.height.content);  // normalize height
             }
 
             if (index != items.length - 1) {
@@ -343,17 +343,17 @@ export class BaseTemplate {
             }
         });
         this.y += this.conf.height.normalize; // normalize height
-        this.y += this.conf.margin.between;
+        this.y += this.conf.margin.section;
     }
 
     _addCourses(courses) {
-        this._addHeader("COURSES");
+        this._addSectionHeader("COURSES");
 
         courses.forEach(course => {
             this._printMultiLine(course, true)
         });
         this.y += this.conf.height.normalize; // normalize height
-        this.y += this.conf.margin.between;
+        this.y += this.conf.margin.section;
     }
 
     _printMultiLine(line, isListElement) {
