@@ -4,6 +4,13 @@
 |---------|---------|---------|
 | <img src="https://github.com/rszamszur/pdf-resume-builder/blob/master/src/assets/LessIsBetter.png?raw=true" width="300"/> | <img src="https://github.com/rszamszur/pdf-resume-builder/blob/master/src/assets/ShineLikeDiamond.png?raw=true" width="300"/> | <img src="https://github.com/rszamszur/pdf-resume-builder/blob/master/src/assets/LetsTalkAboutIt.png?raw=true" width="300"/> |
 
+## Text bolding
+
+To bold part of text, wrap it with ** (identical as in markdown), for example:
+`regular text **this will be in bold** regular text **bold**regular text` 
+
+NOTE! You can bold any part of text **ONLY** under key `details`, regardless if it's a list of strings or plain string.
+
 ## Common adjusting options
 
 ### Margins
