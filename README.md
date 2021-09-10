@@ -11,22 +11,15 @@ For now, there are just three templates that can still be a bit buggy. Unfortuna
 1. Choose JSON from [examples](https://github.com/rszamszur/pdf-resume-builder/tree/master/examples)
 2. Fill it with your data
 3. Go to [Github Pages](https://rszamszur.github.io/pdf-resume-builder/)
-4. Generate your template
+4. Generate your resume from chosen template
 
 Adjust the template or play with items order if you're not entirely happy with the outcome. Last but not least, may the odds be in your favor.
 
-## Adjusting options
+## Templates
 
-NOTE! Some templates may provide more adjusting options than others.
-
-### Margins
-
-![margins](https://github.com/rszamszur/pdf-resume-builder/blob/assets/margins.png?raw=true)
-![margins](https://github.com/rszamszur/pdf-resume-builder/blob/assets/margins2.png?raw=true)
-
-### How font size and line height works?
-
-![typography](https://github.com/rszamszur/pdf-resume-builder/blob/assets/typography.png?raw=true)
+| [LessIsBetter](https://github.com/rszamszur/pdf-resume-builder/tree/master/examples/LessIsBetter) | [ShineLikeDiamond](https://github.com/rszamszur/pdf-resume-builder/tree/master/examples/ShineLikeDiamond) | [LetsTalkAboutIt](https://github.com/rszamszur/pdf-resume-builder/tree/master/examples/LetsTalkAboutIt) |
+|---------|---------|---------|
+| <img src="https://github.com/rszamszur/pdf-resume-builder/blob/master/src/assets/LessIsBetter.png?raw=true" width="300"/> | <img src="https://github.com/rszamszur/pdf-resume-builder/blob/master/src/assets/ShineLikeDiamond.png?raw=true" width="300"/> | <img src="https://github.com/rszamszur/pdf-resume-builder/blob/master/src/assets/LetsTalkAboutIt.png?raw=true" width="300"/> |
 
 ## Contributing
 
