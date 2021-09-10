@@ -59,6 +59,144 @@ export class LetsTalkAboutIt {
         this.currentIcon = null;
     }
 
+    static schema() {
+        return {
+            type: "object",
+            properties: {
+                name: { type: "string" },
+                lastname: { type: "string" },
+                title: { type: "string" },
+                contact: {
+                    type: "object",
+                    properties: {
+                        email: { type: "string" },
+                        phone: { type: "string" },
+                        github: { type: "string" },
+                        website: { type: "string" },
+                    },
+                    required: ["email", "phone"],
+                },
+                about: { type: "string" },
+                education: {
+                    type: "object",
+                    properties: {
+                        displayName: { type: "string" },
+                        items: {
+                            type: "array",
+                            minItems: 1,
+                            items: {
+                                type: "object",
+                                properties: {
+                                    degree: { type: "string" },
+                                    university: { type: "string" },
+                                    time: { type: "string" },
+                                    details: {
+                                        type: "array",
+                                        minItems: 1,
+                                        items: { type: "string" },
+                                    },
+                                },
+                                required: ["degree", "university", "time"],
+                            },
+                        },
+                    },
+                    required: ["displayName", "items"],
+                },
+                experience: {
+                    type: "object",
+                    properties: {
+                        displayName: { type: "string" },
+                        items: {
+                            type: "array",
+                            minItems: 1,
+                            items: {
+                                type: "object",
+                                properties: {
+                                    role: { type: "string" },
+                                    company: { type: "string" },
+                                    time: { type: "string" },
+                                    details: {
+                                        type: "array",
+                                        minItems: 1,
+                                        items: { type: "string" },
+                                    },
+                                },
+                                required: ["role", "company", "time"],
+                            },
+                        },
+                    },
+                    required: ["displayName", "items"],
+                },
+                projects: {
+                    type: "object",
+                    properties: {
+                        displayName: { type: "string" },
+                        details: { type: "string" },
+                        items: {
+                            type: "array",
+                            minItems: 1,
+                            items: {
+                                type: "object",
+                                properties: {
+                                    name: { type: "string" },
+                                    tagline: { type: "string" },
+                                    link: { type: "string" },
+                                    details: { type: "string" },
+                                },
+                                required: ["name", "details"],
+                            },
+                        },
+                    },
+                    required: ["displayName", "items"],
+                },
+                skills: {
+                    type: "object",
+                    properties: {
+                        displayName: { type: "string" },
+                        items: {
+                            type: "array",
+                            minItems: 1,
+                            items: {
+                                type: "object",
+                                properties: {
+                                    name: { type: "string" },
+                                    level: { type: "string" },
+                                },
+                                required: ["name", "level"],
+                            },
+                        },
+                    },
+                    required: ["displayName", "items"],
+                },
+                courses: {
+                    type: "object",
+                    properties: {
+                        displayName: { type: "string" },
+                        items: {
+                            type: "array",
+                            minItems: 1,
+                            items: { type: "string" },
+                        },
+                    },
+                    required: ["displayName", "items"],
+                },
+                numerPages: {
+                    type: "boolean",
+                    default: true,
+                },
+            },
+            required: [
+                "name",
+                "lastname",
+                "contact",
+                "education",
+                "experience",
+                "skills",
+            ],
+            additionalProperties: false,
+        };
+    }
+
     static editabeOptions() {
         return {}
     }
@@ -109,12 +247,45 @@ export class LetsTalkAboutIt {
         this.doc.setTextColor(this.conf.color.content);
         this.doc.text(data.contact.email, this.x + temp_x, this.y);
 
+        if (data.contact.github) {
+            this.y += this.conf.height.content;
+            this.doc.setFont("Roboto-Bold", "normal");
+            this.doc.setTextColor(this.conf.color.black);
+            this.doc.text("GitHub:", this.x, this.y);
+            temp_x = this.doc.getTextWidth("GitHub: ")
+            this.doc.setFont("Roboto-Regular", "normal");
+            this.doc.setTextColor(this.conf.color.content);
+            this.doc.textWithLink(
+                data.contact.github, this.x + temp_x, this.y,
+                { url: `https://github.com/${data.contact.github}`, }
+            );
+        }
+
+        if (data.contact.website) {
+            this.y += this.conf.height.content;
+            this.doc.setFont("Roboto-Bold", "normal");
+            this.doc.setTextColor(this.conf.color.black);
+            this.doc.text("Website:", this.x, this.y);
+            temp_x = this.doc.getTextWidth("Website: ")
+            this.doc.setFont("Roboto-Regular", "normal");
+            this.doc.setTextColor(this.conf.color.content);
+            this.doc.textWithLink(
+                data.contact.website, this.x + temp_x, this.y,
+                { url: `https://${data.contact.website}`, }
+            );
+        }
+
         const rectHeight = 10;
         this.y -= (rectHeight + 4);
         this.doc.setFont("Roboto-Bold", "normal");
         this.doc.setFontSize(this.conf.text.title);
         this.doc.setTextColor(this.conf.color.white);
-        const len = this.doc.getTextWidth(data.title);
+        var len;
+        if (data.title) {
+            len = this.doc.getTextWidth(data.title);
+        } else {
+            len = 15;
+        }
         const rectWidth = len + 6;
         const x = this.doc.internal.pageSize.width - this.conf.margin.right - rectWidth;
         this.doc.setFillColor("#0462F6");
@@ -129,8 +300,10 @@ export class LetsTalkAboutIt {
             rectWidth, rectHeight,
             3, 3, "F"
         );
-        this.doc.text(data.title, x + 3, this.y + 7);
-
+        if (data.title) {
+            this.doc.text(data.title, x + 3, this.y + 7);
+        }
+        
         this.y += rectHeight + 4;
         this.y += this.conf.height.title;
     }
@@ -504,8 +677,9 @@ export class LetsTalkAboutIt {
             this.doc.text(
                 `${j} / ${pages}`,
                 this.doc.internal.pageSize.width - this.conf.margin.right,
-                this.doc.internal.pageSize.height - 6
-            ); 1
+                this.doc.internal.pageSize.height - 6,
+                "right"
+            );
         }
     }
 
