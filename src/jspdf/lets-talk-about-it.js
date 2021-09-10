@@ -1,12 +1,12 @@
 import { jsPDF } from "jspdf";
+import { BaseTemplate } from "./base.js";
 import Roboto from "../assets/fonts/Roboto-Regular-normal.js";
 import RobotoBold from "../assets/fonts/Roboto-Bold-normal.js";
 import MontserratMedium from "../assets/fonts/Montserrat-Medium-normal.js";
 
-export class LetsTalkAboutIt {
+export class LetsTalkAboutIt extends BaseTemplate {
     constructor() {
-        this.doc = new jsPDF();
-        this.conf = {
+        const conf = {
             text: {
                 name: 35,
                 title: 16,
@@ -16,9 +16,14 @@ export class LetsTalkAboutIt {
                 iconline: 10,
                 content: 10,
             },
+            font: {
+                pageNumber: "Roboto-Regular",
+                content: "Roboto-Regular",
+                contentBold: "Roboto-Bold",
+            },
             margin: {
                 top: 20,
-                bottom: 20,
+                bottom: 15,
                 left: 10,
                 right: 10,
                 between: 4,
@@ -46,7 +51,7 @@ export class LetsTalkAboutIt {
                 normalize: -4,
             },
         }
-        this.initConf = this.conf;
+        super(conf);
         this.doc.addFileToVFS("Roboto-Regular.ttf", Roboto);
         this.doc.addFileToVFS("Roboto-Bold.ttf", RobotoBold);
         this.doc.addFileToVFS("Montserrat-Medium.ttf", MontserratMedium);
@@ -77,7 +82,14 @@ export class LetsTalkAboutIt {
                     },
                     required: ["email", "phone"],
                 },
-                about: { type: "string" },
+                about: { 
+                    type: "object",
+                    properties: {
+                        displayName: { type: "string" },
+                        content: { type: "string" },
+                    },
+                    required: ["displayName", "content"],
+                },
                 education: {
                     type: "object",
                     properties: {
@@ -159,11 +171,22 @@ export class LetsTalkAboutIt {
                             minItems: 1,
                             items: {
                                 type: "object",
-                                properties: {
-                                    name: { type: "string" },
-                                    level: { type: "string" },
+                                properties:{
+                                    displayName: { type: "string" },
+                                    items: {
+                                        type: "array",
+                                        minItems: 1,
+                                        items: {
+                                            type: "object",
+                                            properties: {
+                                                name: { type: "string" },
+                                                level: { type: "string" },
+                                            },
+                                            required: ["name", "level"],
+                                        },
+                                    },
                                 },
-                                required: ["name", "level"],
+                                required: ["displayName", "items"],
                             },
                         },
                     },
@@ -198,11 +221,50 @@ export class LetsTalkAboutIt {
         };
     }
 
-    static editabeOptions() {
-        return {}
+    static editableOptions() {
+        return {
+            text: {
+                name: 35,
+                subHeader: 14,
+                content: 10,
+            },
+            margin: {
+                top: 20,
+                bottom: 15,
+                left: 10,
+                right: 10,
+                between: 4,
+                list: 2,
+                column: 5,
+                content: 10,
+            },
+            height: {
+                name: 8,
+                subHeader: 5,
+                content: 4,
+            },
+        }
     }
 
-    generatePDF(data) {
+    generatePDF(data, options = null) {
+        if (options) {
+            this.conf.text = {
+                ...this.conf.text,
+                ...options.text,
+            }
+            this.conf.margin = {
+                ...this.conf.margin,
+                ...options.margin,
+            }
+            this.conf.height = {
+                ...this.conf.height,
+                ...options.height,
+            }
+            this.y = this.conf.margin.top;
+            this.x = this.conf.margin.left + this.conf.margin.content;
+            this.max_x = this.center - this.conf.margin.column;
+        }
+
         this._addTitle(data);
         this.row_1_start_y = this.y;
         if (data.about) {
@@ -218,9 +280,8 @@ export class LetsTalkAboutIt {
             this._addCourses(data.courses.items, data.courses.displayName);
         }
         if (data.numerPages) {
-            this._numerPages();
+            this._numberPages();
         }
-
         this.doc.save("resume.pdf");
         this._reset();
     }
@@ -579,55 +640,6 @@ export class LetsTalkAboutIt {
         });
     }
 
-    _printMultiLine(line, isListElement) {
-        const boldRegex = /(\*{2})+/g;
-        const splitRegex = /(\*{2}[^*]*\*{2})/g;
-        this.doc.setFont("Roboto-Regular", "normal");
-        this.doc.setFontSize(this.conf.text.content);
-        this.doc.setTextColor(this.conf.color.content);
-        var init_x = this.x;
-        var max_x = this.max_x;
-
-        if (isListElement) {
-            this.doc.text("\u2022", init_x + this.conf.margin.list - 2, this.y)
-            init_x += this.conf.margin.list;
-        }
-
-        var currentX = init_x;
-        const splitByBolds = line.split(splitRegex);
-
-        splitByBolds.forEach(part => {
-            if (!part.startsWith(" ") && currentX != init_x) {
-                currentX -= this.doc.getStringUnitWidth(" ") * 3;
-            }
-
-            if (part.startsWith("**") && part.endsWith("**")) {
-                part = part.replace(boldRegex, "");
-                this.doc.setFont("Roboto-Bold", "normal");
-            } else {
-                this.doc.setFont("Roboto-Regular", "normal");
-            }
-            var words = part.split(" ");
-            words.forEach(word => {
-                var widthNedeed = this.doc.getTextWidth(word);
-
-                if ((widthNedeed + currentX) > max_x) {
-                    if (this._isEnoughSpace(this.conf.height.content)) {
-                        this.y += this.conf.height.content;
-                    } else {
-                        init_x = this.x;
-                        max_x = this.max_x;
-                    }
-                    currentX = init_x;
-                }
-                this.doc.text(word, currentX, this.y);
-                currentX += widthNedeed;
-                currentX += this.doc.getStringUnitWidth(" ") * 3;
-            });
-        });
-        this.y += this.conf.height.content;
-    }
-
     _isEnoughSpace(heightNedeed) {
         if ((this.y + heightNedeed) > (this.doc.internal.pageSize.height - this.conf.margin.bottom)) {
             if (this.rowLeft) {
@@ -664,24 +676,6 @@ export class LetsTalkAboutIt {
         this.max_x = this.center - this.conf.margin.column;
         this.rowLeft = true;
         this.row_1_start_y = this.conf.margin.top;
-    }
-
-    _numerPages() {
-        const pages = this.doc.getNumberOfPages();
-
-        for (let j = 1; j < pages + 1; j++) {
-            this._setPage(j);
-
-            this.doc.setFont("Roboto-Regular", "normal");
-            this.doc.setFontSize(8);
-            this.doc.setTextColor(this.conf.color.pageNum);
-            this.doc.text(
-                `${j} / ${pages}`,
-                this.doc.internal.pageSize.width - this.conf.margin.right,
-                this.doc.internal.pageSize.height - 6,
-                "right"
-            );
-        }
     }
 
     _reset() {
