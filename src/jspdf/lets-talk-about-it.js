@@ -46,6 +46,7 @@ export class LetsTalkAboutIt {
                 normalize: -4,
             },
         }
+        this.initConf = this.conf;
         this.doc.addFileToVFS("Roboto-Regular.ttf", Roboto);
         this.doc.addFileToVFS("Roboto-Bold.ttf", RobotoBold);
         this.doc.addFileToVFS("Montserrat-Medium.ttf", MontserratMedium);
@@ -685,7 +686,7 @@ export class LetsTalkAboutIt {
 
     _reset() {
         this.doc = new jsPDF();
-        this.conf = {};
+        this.conf = this.initConf;
         this.y = this.conf.margin.top;
         this.x = this.conf.margin.left + this.conf.margin.content;
         this.max_x = this.center - this.conf.margin.column;
