@@ -9,12 +9,9 @@ export class BaseTemplate {
         this.doc = new jsPDF();
         this.initConf = conf;
         this.conf = conf;
-        this.heightRef = this.conf.margin.top;
-        if (this.conf.sidebarRight) {
-            this.totalLeftMargin = this.conf.margin.left;
-        } else {
-            this.totalLeftMargin = this.conf.margin.left + this.conf.sidebarWidth;
-        }
+        this.y = this.conf.margin.top;
+        this.x = this.conf.margin.left;
+        this.max_x = this.doc.internal.pageSize.width - this.conf.margin.right;
         this.currentPage = 1;
     }
 
@@ -177,8 +174,8 @@ export class BaseTemplate {
     _addAbout(content) {
         this._addHeader("ABOUT ME");
         this._printMultiLine(content, false);
-        this.heightRef += this.conf.height.normalize; // normalize height
-        this.heightRef += this.conf.margin.between;
+        this.y += this.conf.height.normalize; // normalize height
+        this.y += this.conf.margin.between;
     }
 
     _addExperience(jobs) {
@@ -186,30 +183,30 @@ export class BaseTemplate {
 
         jobs.forEach((job, index) => {
             this.doc.setFont(this.conf.font.subHeader, "normal");
-            this.doc.setTextColor(this.conf.color.primary);
+            this.doc.setTextColor(this.conf.color.subHeader);
             this.doc.setFontSize(this.conf.text.subHeader);
             this._isEnoughSpace(this.conf.height.subHeader);
-            this.doc.text(job.role, this.totalLeftMargin, this.heightRef);
-            this.heightRef += this.conf.height.subHeader;
+            this.doc.text(job.role, this.x, this.y);
+            this.y += this.conf.height.subHeader;
             this.doc.setFont(this.conf.font.subHeaderTagline, "normal");
             this.doc.setFontSize(this.conf.text.subHeader);
             this._isEnoughSpace(this.conf.height.subHeader);
-            this.doc.text(`${job.time} | ${job.company}`, this.totalLeftMargin, this.heightRef);
-            this.heightRef += this.conf.height.subHeader;
+            this.doc.text(`${job.time} | ${job.company}`, this.x, this.y);
+            this.y += this.conf.height.subHeader;
             if (job.details) {
                 job.details.forEach(detail => {
                     this._printMultiLine(detail, true);
                 });
             } else {
-                this.heightRef -= (this.conf.height.subHeader - this.conf.height.content);  // normalize height
+                this.y -= (this.conf.height.subHeader - this.conf.height.content);  // normalize height
             }
 
             if (index != jobs.length - 1) {
-                this.heightRef += this.conf.height.content;
+                this.y += this.conf.height.content;
             }
         });
-        this.heightRef += this.conf.height.normalize; // normalize height
-        this.heightRef += this.conf.margin.between;
+        this.y += this.conf.height.normalize; // normalize height
+        this.y += this.conf.margin.between;
     }
 
     _addProjects(projects) {
@@ -217,38 +214,38 @@ export class BaseTemplate {
 
         if (projects.details) {
             this._printMultiLine(projects.details, false);
-            this.heightRef += this.conf.height.content; //normalize height
+            this.y += this.conf.height.content; //normalize height
         }
         projects.items.forEach((project, index) => {
             this.doc.setFont(this.conf.font.subHeader, "normal");
-            this.doc.setTextColor(this.conf.color.primary);
+            this.doc.setTextColor(this.conf.color.subHeader);
             this.doc.setFontSize(this.conf.text.subHeader);
             this._isEnoughSpace(this.conf.height.subHeader);
             if (project.link) {
-                this.doc.textWithLink(project.name, this.totalLeftMargin, this.heightRef, {
+                this.doc.textWithLink(project.name, this.x, this.y, {
                     url: project.link,
                 });
             } else {
-                this.doc.text(project.name, this.totalLeftMargin, this.heightRef);
+                this.doc.text(project.name, this.x, this.y);
             }
-            this.heightRef += this.conf.height.subHeader;
+            this.y += this.conf.height.subHeader;
             this.doc.setFont(this.conf.font.subHeaderTagline, "normal");
             this.doc.setFontSize(this.conf.text.subHeader);
             this._isEnoughSpace(this.conf.height.subHeader);
-            this.doc.text(project.tagline, this.totalLeftMargin, this.heightRef);
-            this.heightRef += this.conf.height.subHeader;
+            this.doc.text(project.tagline, this.x, this.y);
+            this.y += this.conf.height.subHeader;
             this._printMultiLine(project.details, true);
             if (index != projects.items.length - 1) {
-                this.heightRef += this.conf.height.content; //normalize height
+                this.y += this.conf.height.content; //normalize height
             }
         });
-        this.heightRef += this.conf.height.normalize; // normalize height
-        this.heightRef += this.conf.margin.between;
+        this.y += this.conf.height.normalize; // normalize height
+        this.y += this.conf.margin.between;
     }
 
     _addSkills(skills, twoRows) {
         this._addHeader("SKILLS");
-        const initHeightRef = this.heightRef;
+        const initHeightRef = this.y;
         const initPage = this.currentPage;
 
         if (twoRows) {
@@ -256,23 +253,23 @@ export class BaseTemplate {
 
             const firstRow = skills.slice(0, half);
             const secondRow = skills.slice(-half);
-            this._addSkillsRow(firstRow, this.totalLeftMargin);
+            this._addSkillsRow(firstRow, this.x);
             if (initPage != this.currentPage) {
                 this._setPage(initPage);
             }
-            this.heightRef = initHeightRef;
-            const secondRowOfset = ((this.doc.internal.pageSize.width - this.conf.margin.right - this.conf.margin.left - this.conf.sidebarWidth) / 2) + this.totalLeftMargin;
+            this.y = initHeightRef;
+            const secondRowOfset = ((this.doc.internal.pageSize.width - this.conf.margin.right - this.conf.margin.left - this.conf.sidebarWidth) / 2) + this.x;
             this._addSkillsRow(secondRow, secondRowOfset);
         } else {
-            this._addSkillsRow(skills, this.totalLeftMargin);
+            this._addSkillsRow(skills, this.x);
         }
-        this.heightRef += this.conf.height.normalize; //normalize height
-        this.heightRef += this.conf.margin.between;
+        this.y += this.conf.height.normalize; //normalize height
+        this.y += this.conf.margin.between;
     }
 
     _addSkillsRow(skills, offset) {
         this.doc.setFont(this.conf.font.content, "normal");
-        this.doc.setTextColor(this.conf.color.primary);
+        this.doc.setTextColor(this.conf.color.content);
         this.doc.setFontSize(this.conf.text.content);
 
         var fullCircleIcon = new Image();
@@ -291,9 +288,9 @@ export class BaseTemplate {
         });
 
         skills.forEach(skill => {
-            this.doc.setTextColor(this.conf.color.primary);
+            this.doc.setTextColor(this.conf.color.content);
             this._isEnoughSpace(this.conf.height.content);
-            this.doc.text(skill.name, offset, this.heightRef);
+            this.doc.text(skill.name, offset, this.y);
 
 
             var fullCircles = Math.floor(skill.level);
@@ -302,19 +299,19 @@ export class BaseTemplate {
 
             var startX = maxNameWidth + 5 + offset;
             for (let i = 0; i < fullCircles; i++) {
-                this.doc.addImage(fullCircleIcon, startX, this.heightRef - 3, 4, 4);
+                this.doc.addImage(fullCircleIcon, startX, this.y - 3, 4, 4);
                 startX += 5;
             }
             if (halfCircle) {
-                this.doc.addImage(halfCircleIcon, startX, this.heightRef - 3, 4, 4);
+                this.doc.addImage(halfCircleIcon, startX, this.y - 3, 4, 4);
                 startX += 5;
             }
             for (let i = 0; i < emptyCircles; i++) {
-                this.doc.addImage(emptyCircleIcon, startX, this.heightRef - 3, 4, 4);
+                this.doc.addImage(emptyCircleIcon, startX, this.y - 3, 4, 4);
                 startX += 5;
             }
 
-            this.heightRef += this.conf.height.content;
+            this.y += this.conf.height.content;
         });
     }
 
@@ -323,30 +320,30 @@ export class BaseTemplate {
 
         items.forEach((item, index) => {
             this.doc.setFont(this.conf.font.subHeader, "normal");
-            this.doc.setTextColor(this.conf.color.primary);
+            this.doc.setTextColor(this.conf.color.subHeader);
             this.doc.setFontSize(this.conf.text.subHeader);
             this._isEnoughSpace(this.conf.height.subHeader);
-            this.doc.text(item.degree, this.totalLeftMargin, this.heightRef);
-            this.heightRef += this.conf.height.subHeader;
+            this.doc.text(item.degree, this.x, this.y);
+            this.y += this.conf.height.subHeader;
             this.doc.setFont(this.conf.font.subHeaderTagline, "normal");
             this.doc.setFontSize(this.conf.text.subHeader);
             this._isEnoughSpace(this.conf.height.subHeader);
-            this.doc.text(`${item.time} | ${item.university}`, this.totalLeftMargin, this.heightRef);
-            this.heightRef += this.conf.height.subHeader;
+            this.doc.text(`${item.time} | ${item.university}`, this.x, this.y);
+            this.y += this.conf.height.subHeader;
             if (item.details) {
                 item.details.forEach(detail => {
                     this._printMultiLine(detail, true);
                 });
             } else {
-                this.heightRef -= (this.conf.height.subHeader - this.conf.height.content);  // normalize height
+                this.y -= (this.conf.height.subHeader - this.conf.height.content);  // normalize height
             }
 
             if (index != items.length - 1) {
-                this.heightRef += this.conf.height.content;
+                this.y += this.conf.height.content;
             }
         });
-        this.heightRef += this.conf.height.normalize; // normalize height
-        this.heightRef += this.conf.margin.between;
+        this.y += this.conf.height.normalize; // normalize height
+        this.y += this.conf.margin.between;
     }
 
     _addCourses(courses) {
@@ -355,8 +352,8 @@ export class BaseTemplate {
         courses.forEach(course => {
             this._printMultiLine(course, true)
         });
-        this.heightRef += this.conf.height.normalize; // normalize height
-        this.heightRef += this.conf.margin.between;
+        this.y += this.conf.height.normalize; // normalize height
+        this.y += this.conf.margin.between;
     }
 
     _printMultiLine(line, isListElement) {
@@ -364,27 +361,20 @@ export class BaseTemplate {
         const splitRegex = /(\*{2}[^*]*\*{2})/g;
         this.doc.setFont(this.conf.font.content, "normal");
         this.doc.setFontSize(this.conf.text.content);
-        this.doc.setTextColor(this.conf.color.primary);
-        var startPage = this.currentPage;
-        var initStartX = this.totalLeftMargin;
-        var max_X = null;
-
-        if (this.conf.sidebarRight) {
-            max_X = this.doc.internal.pageSize.width - this.conf.sidebarWidth - this.conf.margin.right;
-        } else {
-            max_X = this.doc.internal.pageSize.width - this.conf.margin.right;
-        }
+        this.doc.setTextColor(this.conf.color.content);
+        var init_x = this.x;
+        var max_x = this.max_x;
 
         if (isListElement) {
-            this.doc.text("\u2022", this.totalLeftMargin + this.conf.margin.list - 2, this.heightRef)
-            initStartX += this.conf.margin.list;
+            this.doc.text("\u2022", init_x + this.conf.margin.list - 2, this.y)
+            init_x += this.conf.margin.list;
         }
 
-        var currentX = initStartX;
+        var currentX = init_x;
         const splitByBolds = line.split(splitRegex);
 
         splitByBolds.forEach(part => {
-            if (!part.startsWith(" ") && currentX != initStartX) {
+            if (!part.startsWith(" ") && currentX != init_x) {
                 currentX -= this.doc.getStringUnitWidth(" ") * 3;
             }
 
@@ -398,27 +388,29 @@ export class BaseTemplate {
             words.forEach(word => {
                 var widthNedeed = this.doc.getTextWidth(word);
 
-                if ((widthNedeed + currentX) > max_X) {
-                    currentX = initStartX;
-                    this._isEnoughSpace(this.conf.height.content);
-                    if (this.currentPage == startPage) {
-                        this.heightRef += this.conf.height.content;
+                if ((widthNedeed + currentX) > max_x) {
+                    if (this._isEnoughSpace(this.conf.height.content)) {
+                        this.y += this.conf.height.content;
                     } else {
-                        startPage++;
+                        init_x = this.x;
+                        max_x = this.max_x;
                     }
+                    currentX = init_x;
                 }
-                this.doc.text(word, currentX, this.heightRef);
+                this.doc.text(word, currentX, this.y);
                 currentX += widthNedeed;
                 currentX += this.doc.getStringUnitWidth(" ") * 3;
             });
         });
-        this.heightRef += this.conf.height.content;
+        this.y += this.conf.height.content;
     }
 
     _isEnoughSpace(heightNedeed) {
-        if ((this.heightRef + heightNedeed) > (this.doc.internal.pageSize.height - this.conf.margin.bottom)) {
+        if ((this.y + heightNedeed) > (this.doc.internal.pageSize.height - this.conf.margin.bottom)) {
             this._setPage(this.currentPage + 1);
+            return false;
         }
+        return true;
     }
 
     _setPage(page) {
@@ -429,13 +421,38 @@ export class BaseTemplate {
             this.doc.addPage();
         }
         this.currentPage = page;
-        this.heightRef = this.conf.margin.top;
+        this.y = this.conf.margin.top;
+    }
+
+    _numberPages(right = true) {
+        const pages = this.doc.getNumberOfPages();
+        var aligin = "left"
+        var x = this.conf.margin.left;
+
+        if (right) {
+            aligin = "right"
+            x = this.doc.internal.pageSize.width - this.conf.margin.right;
+        }
+
+        for (let j = 1; j < pages + 1; j++) {
+            this._setPage(j);
+
+            this.doc.setFont(this.conf.font.pageNumber, "normal");
+            this.doc.setFontSize(8);
+            this.doc.setTextColor(this.conf.color.pageNum);
+            this.doc.text(
+                `${j} / ${pages}`,
+                x,
+                this.doc.internal.pageSize.height - 6,
+                aligin
+            );
+        }
     }
 
     _reset() {
         this.doc = new jsPDF();
         this.conf = this.initConf;
-        this.heightRef = this.conf.margin.top;
+        this.y = this.conf.margin.top;
         this.currentPage = 1;
     }
 }

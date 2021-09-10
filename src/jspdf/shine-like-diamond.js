@@ -21,6 +21,7 @@ export class ShineLikeDiamond extends BaseTemplate {
                 content: 10,
             },
             font: {
+                pageNumber: "Roboto-Regular",
                 subHeader: "Montserrat-Medium",
                 subHeaderTagline: "Montserrat-Regular",
                 content: "Montserrat-Regular",
@@ -38,7 +39,9 @@ export class ShineLikeDiamond extends BaseTemplate {
             color: {
                 white: "#ffffff",
                 black: "#000000",
-                gray: "#4d4e53",
+                pageNum: "#4d4e53",
+                content: "#1A1A1A",
+                subHeader: "#1A1A1A",
                 secondary: "#8D8D8D",
                 primary: "#1A1A1A"
             },
@@ -60,6 +63,7 @@ export class ShineLikeDiamond extends BaseTemplate {
         this.doc.addFileToVFS("Montserrat-SemiBold.ttf", MontserratSemiBold);
         this.doc.addFileToVFS("Montserrat-Medium.ttf", MontserratMedium);
         this.doc.addFileToVFS("Montserrat-Regular.ttf", MontserratRegular);
+        this.x = this.conf.margin.left + this.conf.sidebarWidth;
     }
 
     static editableOptions() {
@@ -102,7 +106,8 @@ export class ShineLikeDiamond extends BaseTemplate {
                 ...this.conf.height,
                 ...options.height,
             }
-            this.heightRef = this.conf.margin.top;
+            this.y = this.conf.margin.top;
+            this.x = this.conf.margin.left + this.conf.sidebarWidth;
         }
 
         this._addTitle(data.name, data.lastname, data.tagline);
@@ -131,44 +136,32 @@ export class ShineLikeDiamond extends BaseTemplate {
                 } else {
                     this._addSidebarInverse(data);
                 }
-
-                if (data.numPages) {
-                    this.doc.setFont("Montserrat-Regular", "normal");
-                    this.doc.setFontSize(8);
-                    this.doc.setTextColor(this.conf.color.gray);
-                    this.doc.text(
-                        `${j} / ${pages}`,
-                        this.doc.internal.pageSize.width - this.conf.margin.right,
-                        this.doc.internal.pageSize.height - 6,
-                        "right"
-                    ); 1
-                }
             }
         }
-        this._addSidebarInverse(data);
+        this._numberPages();
         this.doc.save("resume.pdf");
         this._reset();
     }
 
     _addTitle(name, lastname, tagline) {
-        this.heightRef = 33;
+        this.y = 33;
         this.doc.setFont("Montserrat-ExtraBold", "normal");
         this.doc.setTextColor(this.conf.color.primary);
         this.doc.setFontSize(this.conf.text.name);
-        this.doc.text(name.toUpperCase(), this.totalLeftMargin, this.heightRef, { charSpace: 1 });
-        this.heightRef += this.conf.height.name;
-        this.doc.text(lastname.toUpperCase(), this.totalLeftMargin, this.heightRef, { charSpace: 1 });
-        this.heightRef += this.conf.height.tagline;
+        this.doc.text(name.toUpperCase(), this.x, this.y, { charSpace: 1 });
+        this.y += this.conf.height.name;
+        this.doc.text(lastname.toUpperCase(), this.x, this.y, { charSpace: 1 });
+        this.y += this.conf.height.tagline;
         this.doc.setFont("Montserrat-SemiBold", "normal");
         this.doc.setFontSize(this.conf.text.tagline);
         this.doc.setTextColor(this.conf.color.secondary);
-        this.doc.text(tagline.toUpperCase(), this.totalLeftMargin, this.heightRef, { charSpace: 0.5 });
-        this.heightRef += this.conf.margin.between;
+        this.doc.text(tagline.toUpperCase(), this.x, this.y, { charSpace: 0.5 });
+        this.y += this.conf.margin.between;
     }
 
     _addSidebar(data) {
         const docHeight = this.doc.internal.pageSize.height;
-        var sidebarHeightRef = 111;
+        var sidebar_y = 111;
 
         this.doc.triangle(0, 70, 60, 60, 0, 111, "F");
         this.doc.triangle(0, 70, 60, 60, 60, 19, "F");
@@ -184,8 +177,8 @@ export class ShineLikeDiamond extends BaseTemplate {
         this.doc.setFont("Montserrat-Medium", "normal");
         this.doc.setTextColor(this.conf.color.primary);
         this.doc.setFontSize(this.conf.text.sidebarHeader);
-        this.doc.text("CONTACT", this.conf.margin.sidebar, sidebarHeightRef, { charSpace: 0.5 });
-        sidebarHeightRef += 6;
+        this.doc.text("CONTACT", this.conf.margin.sidebar, sidebar_y, { charSpace: 0.5 });
+        sidebar_y += 6;
 
         this.doc.setFont("Montserrat-Regular", "normal");
         this.doc.setFontSize(this.conf.text.sidebarContent);
@@ -193,171 +186,171 @@ export class ShineLikeDiamond extends BaseTemplate {
 
         var email = new Image();
         email.src = require("../assets/icons/email.png");
-        this.doc.addImage(email, this.conf.margin.sidebar, sidebarHeightRef, 6, 6);
-        this.doc.text(data.contact.email, this.conf.margin.sidebar + 8, sidebarHeightRef + 4);
-        sidebarHeightRef += this.conf.height.sidebarContent;
+        this.doc.addImage(email, this.conf.margin.sidebar, sidebar_y, 6, 6);
+        this.doc.text(data.contact.email, this.conf.margin.sidebar + 8, sidebar_y + 4);
+        sidebar_y += this.conf.height.sidebarContent;
 
         var phone = new Image();
         phone.src = require("../assets/icons/phone.png");
-        this.doc.addImage(phone, this.conf.margin.sidebar, sidebarHeightRef, 6, 6);
-        this.doc.text(data.contact.phone, this.conf.margin.sidebar + 8, sidebarHeightRef + 4);
-        sidebarHeightRef += this.conf.height.sidebarContent;
+        this.doc.addImage(phone, this.conf.margin.sidebar, sidebar_y, 6, 6);
+        this.doc.text(data.contact.phone, this.conf.margin.sidebar + 8, sidebar_y + 4);
+        sidebar_y += this.conf.height.sidebarContent;
 
         if (data.contact.github) {
             var github = new Image();
             github.src = require("../assets/icons/github.png");
-            this.doc.addImage(github, this.conf.margin.sidebar, sidebarHeightRef, 6, 6);
+            this.doc.addImage(github, this.conf.margin.sidebar, sidebar_y, 6, 6);
             this.doc.textWithLink(
                 data.contact.github,
                 this.conf.margin.sidebar + 8,
-                sidebarHeightRef + 4,
+                sidebar_y + 4,
                 {
                     url: `https://github.com/${data.contact.github}`,
                 }
             );
 
-            sidebarHeightRef += this.conf.height.sidebarContent;
+            sidebar_y += this.conf.height.sidebarContent;
         }
 
         if (data.contact.linkedin) {
             var linkedin = new Image();
             linkedin.src = require("../assets/icons/linkedin.png");
-            this.doc.addImage(linkedin, this.conf.margin.sidebar, sidebarHeightRef, 6, 6);
+            this.doc.addImage(linkedin, this.conf.margin.sidebar, sidebar_y, 6, 6);
             this.doc.textWithLink(
                 data.contact.linkedin,
                 this.conf.margin.sidebar + 8,
-                sidebarHeightRef + 4,
+                sidebar_y + 4,
                 {
                     url: `https://linkedin.com/in/${data.contact.linkedin}`,
                 }
             );
 
-            sidebarHeightRef += this.conf.height.sidebarContent;
+            sidebar_y += this.conf.height.sidebarContent;
         }
 
         if (data.contact.website) {
             var website = new Image();
             website.src = require("../assets/icons/web.png");
-            this.doc.addImage(website, this.conf.margin.sidebar, sidebarHeightRef, 6, 6);
+            this.doc.addImage(website, this.conf.margin.sidebar, sidebar_y, 6, 6);
             this.doc.textWithLink(
                 data.contact.website,
                 this.conf.margin.sidebar + 8,
-                sidebarHeightRef + 4,
+                sidebar_y + 4,
                 {
                     url: `https://${data.contact.website}`,
                 }
             );
 
-            sidebarHeightRef += this.conf.height.sidebarContent;
+            sidebar_y += this.conf.height.sidebarContent;
         }
 
         if (data.contact.twitter) {
             var twitter = new Image();
             twitter.src = require("../assets/icons/twitter.png");
-            this.doc.addImage(twitter, this.conf.margin.sidebar, sidebarHeightRef, 6, 6);
+            this.doc.addImage(twitter, this.conf.margin.sidebar, sidebar_y, 6, 6);
             this.doc.textWithLink(
                 data.contact.twitter,
                 this.conf.margin.sidebar + 8,
-                sidebarHeightRef + 4,
+                sidebar_y + 4,
                 {
                     url: `https://twitter.com/${data.contact.twitter}`,
                 }
             );
 
-            sidebarHeightRef += this.conf.height.sidebarContent;
+            sidebar_y += this.conf.height.sidebarContent;
         }
 
         if (data.contact.stackoverflow) {
             var stackOverflow = new Image();
             stackOverflow.src = require("../assets/icons/stack-overflow.png");
-            this.doc.addImage(stackOverflow, this.conf.margin.sidebar, sidebarHeightRef, 6, 6);
+            this.doc.addImage(stackOverflow, this.conf.margin.sidebar, sidebar_y, 6, 6);
             this.doc.textWithLink(
                 "stackoverflow",
                 this.conf.margin.sidebar + 8,
-                sidebarHeightRef + 4,
+                sidebar_y + 4,
                 {
                     url: data.contact.stackoverflow,
                 }
             );
         }
 
-        sidebarHeightRef = 200;
+        sidebar_y = 200;
         const count = Object.keys(data.contact).length - 1;
 
         if (count > 4) {
-            sidebarHeightRef += (count - 4) * this.conf.height.sidebarContent;
+            sidebar_y += (count - 4) * this.conf.height.sidebarContent;
         }
 
         //calculated line equation
-        const y = ((-(6 / 7) * this.conf.sidebarWidth) + sidebarHeightRef);
+        const y = ((-(6 / 7) * this.conf.sidebarWidth) + sidebar_y);
 
         this.doc.setFillColor("#1A1A1A");
         this.doc.setDrawColor("#1A1A1A");
-        this.doc.triangle(0, sidebarHeightRef, 60, docHeight, 60, y, "F");
-        this.doc.rect(0, sidebarHeightRef, 60, docHeight, "F");
+        this.doc.triangle(0, sidebar_y, 60, docHeight, 60, y, "F");
+        this.doc.rect(0, sidebar_y, 60, docHeight, "F");
 
         if (data.languages) {
             this.doc.setFont("Montserrat-Medium", "normal");
             this.doc.setTextColor(this.conf.color.white);
             this.doc.setFontSize(this.conf.text.sidebarHeader);
-            this.doc.text("LANGUAGES", this.conf.margin.sidebar, sidebarHeightRef, { charSpace: 0.5 });
-            sidebarHeightRef += this.conf.height.sidebarHeader;
+            this.doc.text("LANGUAGES", this.conf.margin.sidebar, sidebar_y, { charSpace: 0.5 });
+            sidebar_y += this.conf.height.sidebarHeader;
 
             this.doc.setFontSize(this.conf.text.sidebarContent);
             data.languages.forEach(lang => {
-                this.doc.text(`${lang.name} (${lang.level})`, this.conf.margin.sidebar, sidebarHeightRef);
-                sidebarHeightRef += 6;
+                this.doc.text(`${lang.name} (${lang.level})`, this.conf.margin.sidebar, sidebar_y);
+                sidebar_y += 6;
             });
 
-            sidebarHeightRef += 6;
+            sidebar_y += 6;
         }
 
         if (data.interests) {
             this.doc.setFont("Montserrat-Medium", "normal");
             this.doc.setTextColor(this.conf.color.white);
             this.doc.setFontSize(this.conf.text.sidebarHeader);
-            this.doc.text("INTERESTS", this.conf.margin.sidebar, sidebarHeightRef, { charSpace: 0.5 });
-            sidebarHeightRef += this.conf.height.sidebarHeader;
+            this.doc.text("INTERESTS", this.conf.margin.sidebar, sidebar_y, { charSpace: 0.5 });
+            sidebar_y += this.conf.height.sidebarHeader;
 
             this.doc.setFontSize(this.conf.text.sidebarContent);
             data.interests.forEach(item => {
                 if (item.link) {
-                    this.doc.textWithLink(item.name, this.conf.margin.sidebar, sidebarHeightRef, {
+                    this.doc.textWithLink(item.name, this.conf.margin.sidebar, sidebar_y, {
                         url: item.link,
                     });
                 } else {
-                    this.doc.text(item.name, this.conf.margin.sidebar, sidebarHeightRef);
+                    this.doc.text(item.name, this.conf.margin.sidebar, sidebar_y);
                 }
-                sidebarHeightRef += 6;
+                sidebar_y += 6;
             });
 
         }
     }
 
     _addSidebarInverse(data) {
-        var sidebarHeightRef = 200;
+        var sidebar_y = 200;
         const count = Object.keys(data.contact).length - 1;
 
         if (count > 4) {
-            sidebarHeightRef += (count - 4) * this.conf.height.sidebarContent;
+            sidebar_y += (count - 4) * this.conf.height.sidebarContent;
         }
 
         //calculated line equation
-        const y = ((-(6 / 7) * this.conf.sidebarWidth) + sidebarHeightRef);
+        const y = ((-(6 / 7) * this.conf.sidebarWidth) + sidebar_y);
 
         this.doc.setFillColor(this.conf.color.primary);
         this.doc.setDrawColor(this.conf.color.primary);
         this.doc.triangle(0, 111, 60, y, 60, 60, "F");
-        this.doc.triangle(0, 111, 60, y, 0, sidebarHeightRef, "F");
+        this.doc.triangle(0, 111, 60, y, 0, sidebar_y, "F");
         this.doc.line(0, 111, 60, y, "F");
 
-        sidebarHeightRef = 111;
+        sidebar_y = 111;
 
         this.doc.setFont("Montserrat-Medium", "normal");
         this.doc.setTextColor(this.conf.color.white);
         this.doc.setFontSize(this.conf.text.sidebarHeader);
-        this.doc.text("CONTACT", this.conf.margin.sidebar, sidebarHeightRef, { charSpace: 0.5 });
-        sidebarHeightRef += this.conf.height.sidebarHeader;
+        this.doc.text("CONTACT", this.conf.margin.sidebar, sidebar_y, { charSpace: 0.5 });
+        sidebar_y += this.conf.height.sidebarHeader;
 
         this.doc.setFont("Montserrat-Regular", "normal");
         this.doc.setFontSize(this.conf.text.sidebarContent);
@@ -365,88 +358,88 @@ export class ShineLikeDiamond extends BaseTemplate {
 
         var email = new Image();
         email.src = require("../assets/icons/email-white.png");
-        this.doc.addImage(email, this.conf.margin.sidebar, sidebarHeightRef, 6, 6);
-        this.doc.text(data.contact.email, this.conf.margin.sidebar + 8, sidebarHeightRef + 4);
-        sidebarHeightRef += this.conf.height.sidebarContent;
+        this.doc.addImage(email, this.conf.margin.sidebar, sidebar_y, 6, 6);
+        this.doc.text(data.contact.email, this.conf.margin.sidebar + 8, sidebar_y + 4);
+        sidebar_y += this.conf.height.sidebarContent;
 
         var phone = new Image();
         phone.src = require("../assets/icons/phone-white.png");
-        this.doc.addImage(phone, this.conf.margin.sidebar, sidebarHeightRef, 6, 6);
-        this.doc.text(data.contact.phone, this.conf.margin.sidebar + 8, sidebarHeightRef + 4);
-        sidebarHeightRef += this.conf.height.sidebarContent;
+        this.doc.addImage(phone, this.conf.margin.sidebar, sidebar_y, 6, 6);
+        this.doc.text(data.contact.phone, this.conf.margin.sidebar + 8, sidebar_y + 4);
+        sidebar_y += this.conf.height.sidebarContent;
 
         if (data.contact.github) {
             var github = new Image();
             github.src = require("../assets/icons/github-white.png");
-            this.doc.addImage(github, this.conf.margin.sidebar, sidebarHeightRef, 6, 6);
+            this.doc.addImage(github, this.conf.margin.sidebar, sidebar_y, 6, 6);
             this.doc.textWithLink(
                 data.contact.github,
                 this.conf.margin.sidebar + 8,
-                sidebarHeightRef + 4,
+                sidebar_y + 4,
                 {
                     url: `https://github.com/${data.contact.github}`,
                 }
             );
 
-            sidebarHeightRef += this.conf.height.sidebarContent;
+            sidebar_y += this.conf.height.sidebarContent;
         }
 
         if (data.contact.linkedin) {
             var linkedin = new Image();
             linkedin.src = require("../assets/icons/linkedin-white.png");
-            this.doc.addImage(linkedin, this.conf.margin.sidebar, sidebarHeightRef, 6, 6);
+            this.doc.addImage(linkedin, this.conf.margin.sidebar, sidebar_y, 6, 6);
             this.doc.textWithLink(
                 data.contact.linkedin,
                 this.conf.margin.sidebar + 8,
-                sidebarHeightRef + 4,
+                sidebar_y + 4,
                 {
                     url: `https://linkedin.com/in/${data.contact.linkedin}`,
                 }
             );
 
-            sidebarHeightRef += this.conf.height.sidebarContent;
+            sidebar_y += this.conf.height.sidebarContent;
         }
 
         if (data.contact.website) {
             var website = new Image();
             website.src = require("../assets/icons/web-white.png");
-            this.doc.addImage(website, this.conf.margin.sidebar, sidebarHeightRef, 6, 6);
+            this.doc.addImage(website, this.conf.margin.sidebar, sidebar_y, 6, 6);
             this.doc.textWithLink(
                 data.contact.website,
                 this.conf.margin.sidebar + 8,
-                sidebarHeightRef + 4,
+                sidebar_y + 4,
                 {
                     url: `https://${data.contact.website}`,
                 }
             );
 
-            sidebarHeightRef += this.conf.height.sidebarContent;
+            sidebar_y += this.conf.height.sidebarContent;
         }
 
         if (data.contact.twitter) {
             var twitter = new Image();
             twitter.src = require("../assets/icons/twitter-white.png");
-            this.doc.addImage(twitter, this.conf.margin.sidebar, sidebarHeightRef, 6, 6);
+            this.doc.addImage(twitter, this.conf.margin.sidebar, sidebar_y, 6, 6);
             this.doc.textWithLink(
                 data.contact.twitter,
                 this.conf.margin.sidebar + 8,
-                sidebarHeightRef + 4,
+                sidebar_y + 4,
                 {
                     url: `https://twitter.com/${data.contact.twitter}`,
                 }
             );
 
-            sidebarHeightRef += this.conf.height.sidebarContent;
+            sidebar_y += this.conf.height.sidebarContent;
         }
 
         if (data.contact.stackoverflow) {
             var stackOverflow = new Image();
             stackOverflow.src = require("../assets/icons/stack-overflow-white.png");
-            this.doc.addImage(stackOverflow, this.conf.margin.sidebar, sidebarHeightRef, 6, 6);
+            this.doc.addImage(stackOverflow, this.conf.margin.sidebar, sidebar_y, 6, 6);
             this.doc.textWithLink(
                 "stackoverflow",
                 this.conf.margin.sidebar + 8,
-                sidebarHeightRef + 4,
+                sidebar_y + 4,
                 {
                     url: data.contact.stackoverflow,
                 }
@@ -459,15 +452,15 @@ export class ShineLikeDiamond extends BaseTemplate {
         this._isEnoughSpace(this.conf.height.header);
         this.doc.setFillColor("#1A1A1A");
         this.doc.setDrawColor("#1A1A1A");
-        this.doc.triangle(this.totalLeftMargin, this.heightRef + 6, this.totalLeftMargin + 6, this.heightRef + 9, this.totalLeftMargin + 6, this.heightRef, "F");
-        this.doc.triangle(this.totalLeftMargin, this.heightRef + 6, this.totalLeftMargin + 6, this.heightRef + 9, this.totalLeftMargin, this.heightRef + 15, "F");
-        this.doc.line(this.totalLeftMargin, this.heightRef + 6, this.totalLeftMargin + 6, this.heightRef + 9, "F");
+        this.doc.triangle(this.x, this.y + 6, this.x + 6, this.y + 9, this.x + 6, this.y, "F");
+        this.doc.triangle(this.x, this.y + 6, this.x + 6, this.y + 9, this.x, this.y + 15, "F");
+        this.doc.line(this.x, this.y + 6, this.x + 6, this.y + 9, "F");
 
         this.doc.setFont("Montserrat-Medium", "normal");
         this.doc.setTextColor(this.conf.color.primary);
         this.doc.setFontSize(this.conf.text.header);
-        this.doc.text(name, this.totalLeftMargin + 10, this.heightRef + 7, { charSpace: 0.5 });
-        this.heightRef += this.conf.height.header;
+        this.doc.text(name, this.x + 10, this.y + 7, { charSpace: 0.5 });
+        this.y += this.conf.height.header;
     }
 
 }
