@@ -299,12 +299,6 @@ export class LetsTalkAboutIt extends BaseTemplate {
                     max: 25,
                 },
                 {
-                    label: "Sidebar",
-                    key: "sidebar",
-                    min: 1,
-                    max: 20,
-                },
-                {
                     label: "Section",
                     key: "section",
                     min: 1,
@@ -358,7 +352,7 @@ export class LetsTalkAboutIt extends BaseTemplate {
         }
     }
 
-    generatePDF(data, options = null) {
+    generatePDF(data, options = null, preview = true) {
         if (options) {
             this.conf.text = {
                 ...this.conf.text,
@@ -393,6 +387,12 @@ export class LetsTalkAboutIt extends BaseTemplate {
         }
         if (data.numerPages) {
             this._numberPages();
+        }
+        
+        if (preview) {
+            var pdf = this.doc.output('datauristring');
+            this._reset();
+            return pdf;
         }
         this.doc.save("resume.pdf");
         this._reset();

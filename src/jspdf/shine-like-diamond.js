@@ -99,7 +99,7 @@ export class ShineLikeDiamond extends BaseTemplate {
             text: [
                 {
                     label: "Header",
-                    key: "Header",
+                    key: "header",
                     min: 8,
                     max: 20,
                 },
@@ -175,7 +175,7 @@ export class ShineLikeDiamond extends BaseTemplate {
             height: [
                 {
                     label: "Header",
-                    key: "Header",
+                    key: "header",
                     min: 4,
                     max: 10,
                 },
@@ -207,7 +207,7 @@ export class ShineLikeDiamond extends BaseTemplate {
         }
     }
 
-    generatePDF(data, options = null) {
+    generatePDF(data, options = null, preview = true) {
         if (options) {
             this.conf.text = {
                 ...this.conf.text,
@@ -253,7 +253,15 @@ export class ShineLikeDiamond extends BaseTemplate {
                 }
             }
         }
-        this._numberPages();
+        if (data.numerPages) {
+            this._numberPages();
+        }
+        
+        if (preview) {
+            var pdf = this.doc.output('datauristring');
+            this._reset();
+            return pdf;
+        }
         this.doc.save("resume.pdf");
         this._reset();
     }

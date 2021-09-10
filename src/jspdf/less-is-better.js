@@ -117,7 +117,7 @@ export class LessIsBetter extends BaseTemplate {
                 },
                 {
                     label: "Section",
-                    key: "seader",
+                    key: "section",
                     min: 12,
                     max: 25,
                 },
@@ -211,7 +211,7 @@ export class LessIsBetter extends BaseTemplate {
                 },
                 {
                     label: "Section",
-                    key: "Section",
+                    key: "section",
                     min: 6,
                     max: 12,
                 },
@@ -254,7 +254,7 @@ export class LessIsBetter extends BaseTemplate {
         }
     }
 
-    generatePDF(data, options = null) {
+    generatePDF(data, options = null, preview = true) {
         if (options) {
             this.conf.text = {
                 ...this.conf.text,
@@ -302,7 +302,15 @@ export class LessIsBetter extends BaseTemplate {
                 }
             }
         }
-        this._numberPages(false);
+        if (data.numerPages) {
+            this._numberPages();
+        }
+
+        if (preview) {
+            var pdf = this.doc.output('datauristring');
+            this._reset();
+            return pdf;
+        } 
         this.doc.save("resume.pdf");
         this._reset();
     }

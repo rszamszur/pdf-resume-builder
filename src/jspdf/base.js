@@ -164,7 +164,7 @@ export class BaseTemplate {
     }
 
     generatePDF() {
-        throw new Error("Method 'generate(data, options = null)' must be implemented.");
+        throw new Error("Method 'generate(data, options = null, preview = true)' must be implemented.");
     }
 
     _addSectionHeader() {
