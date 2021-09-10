@@ -2,7 +2,6 @@ import { jsPDF } from "jspdf";
 import Roboto from "../assets/fonts/Roboto-Regular-normal.js";
 import RobotoBold from "../assets/fonts/Roboto-Bold-normal.js";
 import MontserratMedium from "../assets/fonts/Montserrat-Medium-normal.js";
-import MontserratRegular from "../assets/fonts/Montserrat-Regular-normal.js";
 
 export class LetsTalkAboutIt {
     constructor() {
@@ -50,7 +49,6 @@ export class LetsTalkAboutIt {
         this.doc.addFileToVFS("Roboto-Regular.ttf", Roboto);
         this.doc.addFileToVFS("Roboto-Bold.ttf", RobotoBold);
         this.doc.addFileToVFS("Montserrat-Medium.ttf", MontserratMedium);
-        this.doc.addFileToVFS("Montserrat-Regular.ttf", MontserratRegular);
         this.center = this.doc.internal.pageSize.width / 2;
         this.y = this.conf.margin.top;
         this.x = this.conf.margin.left + this.conf.margin.content;
