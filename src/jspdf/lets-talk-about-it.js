@@ -237,7 +237,7 @@ export class LetsTalkAboutIt extends BaseTemplate {
                     right: 10,
                     section: 4,
                     list: 2,
-                    column: 5,
+                    inner: 5,
                     content: 10,
                 },
                 height: {
@@ -314,7 +314,19 @@ export class LetsTalkAboutIt extends BaseTemplate {
                     label: "List",
                     key: "list",
                     min: 2,
+                    max: 8,
+                },
+                {
+                    label: "Inner",
+                    key: "inner",
+                    min: 2,
                     max: 10,
+                },
+                {
+                    label: "Content",
+                    key: "content",
+                    min: 2,
+                    max: 15,
                 },
             ],
             height: [
