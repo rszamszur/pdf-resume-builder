@@ -82,7 +82,7 @@ export class LetsTalkAboutIt extends BaseTemplate {
                     },
                     required: ["email", "phone"],
                 },
-                about: { 
+                about: {
                     type: "object",
                     properties: {
                         displayName: { type: "string" },
@@ -171,7 +171,7 @@ export class LetsTalkAboutIt extends BaseTemplate {
                             minItems: 1,
                             items: {
                                 type: "object",
-                                properties:{
+                                properties: {
                                     displayName: { type: "string" },
                                     items: {
                                         type: "array",
@@ -223,26 +223,112 @@ export class LetsTalkAboutIt extends BaseTemplate {
 
     static editableOptions() {
         return {
-            text: {
-                name: 35,
-                subHeader: 14,
-                content: 10,
+            model: {
+                text: {
+                    name: 35,
+                    subHeader: 14,
+                    content: 10,
+                },
+                margin: {
+                    top: 20,
+                    bottom: 15,
+                    left: 10,
+                    right: 10,
+                    between: 4,
+                    list: 2,
+                    column: 5,
+                    content: 10,
+                },
+                height: {
+                    name: 8,
+                    subHeader: 5,
+                    content: 4,
+                },
             },
-            margin: {
-                top: 20,
-                bottom: 15,
-                left: 10,
-                right: 10,
-                between: 4,
-                list: 2,
-                column: 5,
-                content: 10,
-            },
-            height: {
-                name: 8,
-                subHeader: 5,
-                content: 4,
-            },
+            text: [
+                {
+                    label: "Name",
+                    key: "name",
+                    min: 20,
+                    max: 45,
+                },
+                {
+                    label: "Subheader",
+                    key: "subHeader",
+                    min: 10,
+                    max: 15,
+                },
+                {
+                    label: "Content",
+                    key: "content",
+                    min: 8,
+                    max: 12,
+                }
+            ],
+            margin: [
+                {
+                    label: "Top",
+                    key: "top",
+                    min: 5,
+                    max: 30,
+                },
+                {
+                    label: "Bottom",
+                    key: "bottom",
+                    min: 5,
+                    max: 30,
+                },
+                {
+                    label: "Left",
+                    key: "left",
+                    min: 5,
+                    max: 25,
+                },
+                {
+                    label: "Right",
+                    key: "right",
+                    min: 5,
+                    max: 25,
+                },
+                {
+                    label: "Sidebar",
+                    key: "sidebar",
+                    min: 1,
+                    max: 20,
+                },
+                {
+                    label: "Between",
+                    key: "between",
+                    min: 1,
+                    max: 15,
+                },
+                {
+                    label: "List",
+                    key: "list",
+                    min: 2,
+                    max: 10,
+                },
+            ],
+            height: [
+                {
+                    label: "Name",
+                    key: "name",
+                    min: 6,
+                    max: 14,
+                },
+                {
+                    label: "Subheader",
+                    key: "subHeader",
+                    min: 3,
+                    max: 8,
+                },
+                {
+                    label: "Content",
+                    key: "content",
+                    min: 3,
+                    max: 6,
+                }
+            ]
         }
     }
 
@@ -365,7 +451,7 @@ export class LetsTalkAboutIt extends BaseTemplate {
         if (data.title) {
             this.doc.text(data.title, x + 3, this.y + 7);
         }
-        
+
         this.y += rectHeight + 4;
         this.y += this.conf.height.title;
     }

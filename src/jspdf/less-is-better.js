@@ -67,34 +67,173 @@ export class LessIsBetter extends BaseTemplate {
 
     static editableOptions() {
         return {
-            sidebarWidth: 70,
-            text: {
-                name: 35,
-                tagline: 16,
-                header: 18,
-                subHeader: 12,
-                sidebarHeader: 18,
-                sidebarContent: 12,
-                content: 9,
+            model: {
+                sidebarWidth: 70,
+                text: {
+                    name: 35,
+                    tagline: 16,
+                    header: 18,
+                    subHeader: 12,
+                    sidebarHeader: 18,
+                    sidebarContent: 12,
+                    content: 9,
+                },
+                margin: {
+                    top: 20,
+                    bottom: 20,
+                    left: 15,
+                    right: 15,
+                    sidebar: 15,
+                    between: 10,
+                    list: 5,
+                },
+                height: {
+                    name: 12,
+                    tagline: 8,
+                    header: 8,
+                    subHeader: 5,
+                    sidebarHeader: 8,
+                    sidebarContent: 8,
+                    content: 4,
+                },
             },
-            margin: {
-                top: 20,
-                bottom: 20,
-                left: 15,
-                right: 15,
-                sidebar: 15,
-                between: 10,
-                list: 5,
-            },
-            height: {
-                name: 12,
-                tagline: 8,
-                header: 8,
-                subHeader: 5,
-                sidebarHeader: 8,
-                sidebarContent: 8,
-                content: 4,
-            },
+            text: [
+                {
+                    label: "Name",
+                    key: "name",
+                    min: 20,
+                    max: 45,
+                },
+                {
+                    label: "Tagline",
+                    key: "tagline",
+                    min: 10,
+                    max: 25,
+                },
+                {
+                    label: "Header",
+                    key: "header",
+                    min: 12,
+                    max: 25,
+                },
+                {
+                    label: "Subheader",
+                    key: "subHeader",
+                    min: 8,
+                    max: 20,
+                },
+                {
+                    label: "Sidebar Header",
+                    key: "sidebarHeader",
+                    min: 10,
+                    max: 20,
+                },
+                {
+                    label: "Sidebar Content",
+                    key: "sidebarContent",
+                    min: 8,
+                    max: 16,
+                },
+                {
+                    label: "Content",
+                    key: "content",
+                    min: 8,
+                    max: 12,
+                }
+            ],
+            margin: [
+                {
+                    label: "Top",
+                    key: "top",
+                    min: 5,
+                    max: 30,
+                },
+                {
+                    label: "Bottom",
+                    key: "bottom",
+                    min: 5,
+                    max: 30,
+                },
+                {
+                    label: "Left",
+                    key: "left",
+                    min: 5,
+                    max: 25,
+                },
+                {
+                    label: "Right",
+                    key: "right",
+                    min: 5,
+                    max: 25,
+                },
+                {
+                    label: "Sidebar",
+                    key: "sidebar",
+                    min: 1,
+                    max: 20,
+                },
+                {
+                    label: "Between",
+                    key: "between",
+                    min: 1,
+                    max: 15,
+                },
+                {
+                    label: "List",
+                    key: "list",
+                    min: 2,
+                    max: 10,
+                },
+            ],
+            height: [
+                {
+                    label: "Name",
+                    key: "name",
+                    min: 8,
+                    max: 16,
+                },
+                {
+                    label: "Tagline",
+                    key: "tagline",
+                    min: 6,
+                    max: 12,
+                },
+                {
+                    label: "Header",
+                    key: "header",
+                    min: 6,
+                    max: 12,
+                },
+                {
+                    label: "Subheader",
+                    key: "subHeader",
+                    min: 4,
+                    max: 10,
+                },
+                {
+                    label: "Sidebar Header",
+                    key: "sidebarHeader",
+                    min: 4,
+                    max: 12,
+                },
+                {
+                    label: "Sidebar Content",
+                    key: "sidebarContent",
+                    min: 6,
+                    max: 12,
+                },
+                {
+                    label: "Content",
+                    key: "content",
+                    min: 3,
+                    max: 6,
+                }
+            ],
+            sidebarWidth: {
+                label: "Width",
+                min: 60,
+                max: 80,
+            }
         }
     }
 
@@ -112,6 +251,7 @@ export class LessIsBetter extends BaseTemplate {
                 ...this.conf.height,
                 ...options.height,
             }
+            this.conf.sidebarWidth = options.sidebarWidth;
             this.y = this.conf.margin.top;
             this.max_x = this.doc.internal.pageSize.width - this.conf.sidebarWidth - this.conf.margin.right;
         }

@@ -68,27 +68,125 @@ export class ShineLikeDiamond extends BaseTemplate {
 
     static editableOptions() {
         return {
-            text: {
-                subHeader: 12,
-                sidebarHeader: 16,
-                sidebarContent: 10,
-                content: 10,
+            model: {
+                text: {
+                    subHeader: 12,
+                    sidebarHeader: 16,
+                    sidebarContent: 10,
+                    content: 10,
+                },
+                margin: {
+                    top: 20,
+                    bottom: 20,
+                    left: 15,
+                    right: 15,
+                    sidebar: 12,
+                    between: 8,
+                    list: 5,
+                },
+                height: {
+                    subHeader: 5,
+                    sidebarHeader: 6,
+                    sidebarContent: 8,
+                    content: 4,
+                },
             },
-            margin: {
-                top: 20,
-                bottom: 20,
-                left: 15,
-                right: 15,
-                sidebar: 12,
-                between: 8,
-                list: 5,
-            },
-            height: {
-                subHeader: 5,
-                sidebarHeader: 6,
-                sidebarContent: 8,
-                content: 4,
-            },
+            text: [
+                {
+                    label: "Subheader",
+                    key: "subHeader",
+                    min: 8,
+                    max: 20,
+                },
+                {
+                    label: "Sidebar Header",
+                    key: "sidebarHeader",
+                    min: 10,
+                    max: 20,
+                },
+                {
+                    label: "Sidebar Content",
+                    key: "sidebarContent",
+                    min: 8,
+                    max: 16,
+                },
+                {
+                    label: "Content",
+                    key: "content",
+                    min: 8,
+                    max: 12,
+                }
+            ],
+            margin: [
+                {
+                    label: "Top",
+                    key: "top",
+                    min: 5,
+                    max: 30,
+                },
+                {
+                    label: "Bottom",
+                    key: "bottom",
+                    min: 5,
+                    max: 30,
+                },
+                {
+                    label: "Left",
+                    key: "left",
+                    min: 5,
+                    max: 25,
+                },
+                {
+                    label: "Right",
+                    key: "right",
+                    min: 5,
+                    max: 25,
+                },
+                {
+                    label: "Sidebar",
+                    key: "sidebar",
+                    min: 1,
+                    max: 20,
+                },
+                {
+                    label: "Between",
+                    key: "between",
+                    min: 1,
+                    max: 15,
+                },
+                {
+                    label: "List",
+                    key: "list",
+                    min: 2,
+                    max: 10,
+                },
+            ],
+            height: [
+                {
+                    label: "Subheader",
+                    key: "subHeader",
+                    min: 4,
+                    max: 10,
+                },
+                {
+                    label: "Sidebar Header",
+                    key: "sidebarHeader",
+                    min: 4,
+                    max: 12,
+                },
+                {
+                    label: "Sidebar Content",
+                    key: "sidebarContent",
+                    min: 6,
+                    max: 12,
+                },
+                {
+                    label: "Content",
+                    key: "content",
+                    min: 3,
+                    max: 6,
+                }
+            ],
         }
     }
 
