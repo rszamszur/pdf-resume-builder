@@ -7,6 +7,7 @@
       center-active
       mandatory
       show-arrows
+      @change="updateTemplate"
     >
       <v-slide-item
         v-for="(template, i) in templates"
@@ -40,6 +41,49 @@
         <a :href="templates[chosen].link" target="_blan">Example</a>
         )
       </span>
+    </div>
+    <v-divider class="mb-4 mt-2"></v-divider>
+    <h2 class="text-h5 text-sm-h3 text-md-h2 mb-4">Step 2: Load JSON Data</h2>
+    <p>
+      <v-icon color="info">mdi-information</v-icon> If you don't know what
+      data? Have a look at:
+      <a
+        href="https://github.com/rszamszur/pdf-resume-builder/tree/master/examples"
+        target="_blank"
+        >examples</a
+      >
+      and
+      <a href="https://github.com/rszamszur/pdf-resume-builder" target="_blank"
+        >README</a
+      >
+    </p>
+    <v-file-input
+      ref="input"
+      v-model="input"
+      :rules="rules"
+      accept="application/json"
+      outlined
+      prepend-icon="mdi-code-json"
+      label="JSON Data"
+      :show-size="1000"
+      :error-messages="inputErrors"
+      :loading="loading"
+      @change="loadJSON"
+    ></v-file-input>
+    <div v-if="schemaErrors">
+      <v-alert
+        dense
+        outlined
+        type="error"
+        v-for="(error, i) in schemaErrors"
+        :key="i"
+      >
+        {{ error.instancePath }} {{ error.message }}
+      </v-alert>
+    </div>
+    <div v-if="showAfter">
+      <v-btn text color="primary" @click="savePDF">Save PDF</v-btn>
+      <v-btn text color="error" @click="reset">Reset</v-btn>
     </div>
     <p>
       <v-icon color="info">mdi-information</v-icon> In case chosen template
@@ -76,6 +120,7 @@
             thumb-label
             :min="item.min"
             :max="item.max"
+            @change="loadJSON(input)"
           ></v-slider>
         </v-col>
         <v-col cols="12" md="6">
@@ -89,6 +134,7 @@
             thumb-label
             :min="item.min"
             :max="item.max"
+            @change="loadJSON(input)"
           ></v-slider>
         </v-col>
         <v-col cols="12" md="12">
@@ -102,6 +148,7 @@
             thumb-label
             :min="item.min"
             :max="item.max"
+            @change="loadJSON(input)"
           ></v-slider>
         </v-col>
         <v-col cols="12" md="12" v-if="templates[chosen].options.sidebarWidth">
@@ -113,52 +160,10 @@
             thumb-label
             :min="templates[chosen].options.sidebarWidth.min"
             :max="templates[chosen].options.sidebarWidth.max"
+            @change="loadJSON(input)"
           ></v-slider>
         </v-col>
       </v-row>
-    </div>
-    <v-divider class="mb-4 mt-2"></v-divider>
-    <h2 class="text-h5 text-sm-h3 text-md-h2 mb-4">Step 2: Load JSON Data</h2>
-    <p>
-      <v-icon color="info">mdi-information</v-icon> If you don't know what
-      data?!, then have a look at
-      <a
-        href="https://github.com/rszamszur/pdf-resume-builder/tree/master/examples"
-        target="_blank"
-        >examples</a
-      >
-      and
-      <a href="https://github.com/rszamszur/pdf-resume-builder" target="_blank"
-        >README</a
-      >
-    </p>
-    <v-file-input
-      ref="input"
-      v-model="input"
-      :rules="rules"
-      accept="application/json"
-      outlined
-      prepend-icon="mdi-code-json"
-      label="JSON Data"
-      :show-size="1000"
-      :error-messages="inputErrors"
-      :loading="loading"
-      @change="loadJSON"
-    ></v-file-input>
-    <div v-if="schemaErrors">
-      <v-alert
-        dense
-        outlined
-        type="error"
-        v-for="(error, i) in schemaErrors"
-        :key="i"
-      >
-        {{ error.instancePath }} {{ error.message }}
-      </v-alert>
-    </div>
-    <div v-if="showAfter">
-      <v-btn text color="primary" @click="generatePDF">Generate Again</v-btn>
-      <v-btn text color="error" @click="reset">Reset</v-btn>
     </div>
     <v-divider class="mb-4 mt-2"></v-divider>
     <h2 class="text-h5 text-sm-h3 text-md-h2">Step 3: Get hired</h2>
@@ -185,11 +190,6 @@ export default {
           link: "https://github.com/rszamszur/pdf-resume-builder/blob/assets/LessIsBetter_example.pdf",
           class: LessIsBetter,
           options: LessIsBetter.editableOptions(),
-          conf: {
-            margin: {},
-            text: {},
-            height: {}
-          }
         },
         {
           name: "ShineLikeDiamond",
@@ -236,7 +236,7 @@ export default {
           try {
             data = JSON.parse(event.target.result);
           } catch (error) {
-             console.error(error);
+            console.error(error);
             this.inputErrors.push(
               "Couldn't parse provided JSON file, most likely it is malformed. Details can be found in console."
             );
@@ -274,7 +274,31 @@ export default {
     },
     generatePDF() {
       const cv = new this.templates[this.chosen].class();
-      cv.generatePDF(this.data, this.templates[this.chosen].options.model);
+      var preview = cv.generatePDF(
+        this.data,
+        this.templates[this.chosen].options.model
+      );
+      this.$emit("update-preview", preview);
+    },
+    savePDF() {
+      const cv = new this.templates[this.chosen].class();
+      cv.generatePDF(
+        this.data,
+        this.templates[this.chosen].options.model,
+        false
+      );
+      this.reset();
+    },
+    updateTemplate() {
+      this.input = null;
+      this.data = null;
+      this.inputErrors = [];
+      this.schemaErrors = null;
+      this.disabled = false;
+      this.loading = false;
+      this.showAfter = false;
+      this.showOptions = false;
+      this.$emit("update-preview", null);
     },
     reset() {
       this.data = null;
