@@ -32,4 +32,4 @@ Although, they're much more limited in terms of adjusting values. This is due to
 
 ### How font size and line height works?
 
-![typography](https://github.com/rszamszur/pdf-resume-builder/blob/assets/typography.png?raw=true)
+![typography](https://github.com/rszamszur/pdf-resume-builder/blob/master/examples/fontvsline.png?raw=true)
