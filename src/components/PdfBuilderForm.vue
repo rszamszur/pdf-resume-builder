@@ -66,230 +66,53 @@
     <div v-if="showOptions">
       <v-row>
         <v-col cols="12" md="6">
-          <div class="text-overline">Margin</div>
+          <div class="text-overline">Font size</div>
           <v-slider
-            v-if="templates[chosen].options.margin.left"
-            v-model="templates[chosen].options.margin.left"
+            v-for="(item, i) in templates[chosen].options.text"
+            :key="i"
+            v-model="templates[chosen].options.model.text[item.key]"
             color="primary"
-            label="Left"
+            :label="item.label"
             thumb-label
-            min="5"
-            max="30"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.margin.right"
-            v-model="templates[chosen].options.margin.right"
-            color="primary"
-            label="Right"
-            thumb-label
-            min="5"
-            max="30"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.margin.top"
-            v-model="templates[chosen].options.margin.top"
-            color="primary"
-            label="Top"
-            thumb-label
-            min="5"
-            max="30"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.margin.bottom"
-            v-model="templates[chosen].options.margin.bottom"
-            color="primary"
-            label="Bottom"
-            thumb-label
-            min="5"
-            max="30"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.margin.sidebar"
-            v-model="templates[chosen].options.margin.sidebar"
-            color="primary"
-            label="Sidebar"
-            thumb-label
-            min="1"
-            max="20"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.margin.content"
-            v-model="templates[chosen].options.margin.content"
-            color="primary"
-            label="Content"
-            thumb-label
-            min="1"
-            max="20"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.margin.column"
-            v-model="templates[chosen].options.margin.column"
-            color="primary"
-            label="Column"
-            thumb-label
-            min="1"
-            max="10"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.margin.list"
-            v-model="templates[chosen].options.margin.list"
-            color="primary"
-            label="List"
-            thumb-label
-            min="2"
-            max="10"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.margin.between"
-            v-model="templates[chosen].options.margin.between"
-            color="primary"
-            label="Between"
-            thumb-label
-            min="1"
-            max="15"
+            :min="item.min"
+            :max="item.max"
           ></v-slider>
         </v-col>
         <v-col cols="12" md="6">
-          <div class="text-overline">Text size</div>
+          <div class="text-overline">Line height</div>
           <v-slider
-            v-if="templates[chosen].options.text.name"
-            v-model="templates[chosen].options.text.name"
+            v-for="(item, i) in templates[chosen].options.height"
+            :key="i"
+            v-model="templates[chosen].options.model.height[item.key]"
             color="primary"
-            label="Name"
+            :label="item.label"
             thumb-label
-            min="20"
-            max="45"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.text.tagline"
-            v-model="templates[chosen].options.text.tagline"
-            color="primary"
-            label="Tagline"
-            thumb-label
-            min="10"
-            max="25"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.text.header"
-            v-model="templates[chosen].options.text.header"
-            color="primary"
-            label="Header"
-            thumb-label
-            min="12"
-            max="25"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.text.subHeader"
-            v-model="templates[chosen].options.text.subHeader"
-            color="primary"
-            label="Subheader"
-            thumb-label
-            min="8"
-            max="20"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.text.sidebarHeader"
-            v-model="templates[chosen].options.text.sidebarHeader"
-            color="primary"
-            label="Sidebar header"
-            thumb-label
-            min="10"
-            max="20"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.text.sidebarContent"
-            v-model="templates[chosen].options.text.sidebarContent"
-            color="primary"
-            label="Sidebar content"
-            thumb-label
-            min="8"
-            max="16"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.text.content"
-            v-model="templates[chosen].options.text.content"
-            color="primary"
-            label="Content"
-            thumb-label
-            min="8"
-            max="12"
+            :min="item.min"
+            :max="item.max"
           ></v-slider>
         </v-col>
         <v-col cols="12" md="12">
-          <div class="text-overline">Line height</div>
+          <div class="text-overline">Margin</div>
           <v-slider
-            v-if="templates[chosen].options.height.name"
-            v-model="templates[chosen].options.height.name"
+            v-for="(item, i) in templates[chosen].options.margin"
+            :key="i"
+            v-model="templates[chosen].options.model.margin[item.key]"
             color="primary"
-            label="Name"
+            :label="item.label"
             thumb-label
-            min="8"
-            max="16"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.height.tagline"
-            v-model="templates[chosen].options.height.tagline"
-            color="primary"
-            label="Tagline"
-            thumb-label
-            min="6"
-            max="12"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.height.header"
-            v-model="templates[chosen].options.height.header"
-            color="primary"
-            label="Header"
-            thumb-label
-            min="6"
-            max="12"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.height.subHeader"
-            v-model="templates[chosen].options.height.subHeader"
-            color="primary"
-            label="Subheader"
-            thumb-label
-            min="4"
-            max="10"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.height.sidebarHeader"
-            v-model="templates[chosen].options.height.sidebarHeader"
-            color="primary"
-            label="Sidebar header"
-            thumb-label
-            min="4"
-            max="12"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.height.sidebarContent"
-            v-model="templates[chosen].options.height.sidebarContent"
-            color="primary"
-            label="Sidebar content"
-            thumb-label
-            min="6"
-            max="12"
-          ></v-slider>
-          <v-slider
-            v-if="templates[chosen].options.height.content"
-            v-model="templates[chosen].options.height.content"
-            color="primary"
-            label="Content"
-            thumb-label
-            min="3"
-            max="6"
+            :min="item.min"
+            :max="item.max"
           ></v-slider>
         </v-col>
         <v-col cols="12" md="12" v-if="templates[chosen].options.sidebarWidth">
-          <div class="text-overline">Sidebar width</div>
+          <div class="text-overline">Sidebar</div>
           <v-slider
-            v-model="templates[chosen].options.sidebarWidth"
+            v-model="templates[chosen].options.model.sidebarWidth"
             color="primary"
-            label="Sidebar width"
+            :label="templates[chosen].options.sidebarWidth.label"
             thumb-label
-            min="60"
-            max="80"
+            :min="templates[chosen].options.sidebarWidth.min"
+            :max="templates[chosen].options.sidebarWidth.max"
           ></v-slider>
         </v-col>
       </v-row>
@@ -362,6 +185,11 @@ export default {
           link: "https://github.com/rszamszur/pdf-resume-builder/blob/assets/LessIsBetter_example.pdf",
           class: LessIsBetter,
           options: LessIsBetter.editableOptions(),
+          conf: {
+            margin: {},
+            text: {},
+            height: {}
+          }
         },
         {
           name: "ShineLikeDiamond",
@@ -446,7 +274,7 @@ export default {
     },
     generatePDF() {
       const cv = new this.templates[this.chosen].class();
-      cv.generatePDF(this.data, this.templates[this.chosen].options);
+      cv.generatePDF(this.data, this.templates[this.chosen].options.model);
     },
     reset() {
       this.data = null;
