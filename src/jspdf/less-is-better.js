@@ -269,6 +269,7 @@ export class LessIsBetter extends BaseTemplate {
                 ...options.height,
             }
             this.conf.sidebarWidth = options.sidebarWidth;
+            this.x = this.conf.margin.left;
             this.y = this.conf.margin.top;
             this.max_x = this.doc.internal.pageSize.width - this.conf.sidebarWidth - this.conf.margin.right;
         }
@@ -303,7 +304,7 @@ export class LessIsBetter extends BaseTemplate {
             }
         }
         if (data.numerPages) {
-            this._numberPages();
+            this._numberPages(false);
         }
 
         if (preview) {

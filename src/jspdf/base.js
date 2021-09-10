@@ -142,7 +142,7 @@ export class BaseTemplate {
                         required: ["name"],
                     },
                 },
-                numPages: {
+                numerPages: {
                     type: "boolean",
                     default: true,
                 },
