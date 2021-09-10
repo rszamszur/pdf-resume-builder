@@ -4,7 +4,7 @@
 
 This project is a simple, stateless, single-page application for generating PDF resume from JSON data. While there are many great opensource projects which render structured data to an online cv, I couldn't found one that can generate a neat PDF as well. Moreover, probably 99% of hiring forms still require a PDF resume anyways.
 
-For now, there is just one template that can still be a bit buggy. Unfortunately, I don't have the resources to thoroughly test it with each possible configuration, so please feel free to submit an issue if you have some rendering problems. That being said, there are some simple template adjustments (margins, font size, etc.) provided which can overcome some problems.
+For now, there are just three templates that can still be a bit buggy. Unfortunately, I don't have the resources to thoroughly test it with each possible configuration, so please feel free to submit an issue if you have some rendering problems. That being said, there are some simple template adjustments (margins, font size, etc.) provided which can overcome some problems.
 
 ## Usage
 

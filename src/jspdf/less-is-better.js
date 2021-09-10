@@ -21,6 +21,7 @@ export class LessIsBetter extends BaseTemplate {
                 content: 9,
             },
             font: {
+                pageNumber: "Roboto-Regular",
                 subHeader: "HKGrotesk-Bold",
                 subHeaderTagline: "HKGrotesk-Regular",
                 content: "Poppins-Light",
@@ -38,7 +39,9 @@ export class LessIsBetter extends BaseTemplate {
             color: {
                 white: "#ffffff",
                 black: "#000000",
-                gray: "#4d4e53",
+                pageNum: "#4d4e53",
+                content: "#000000",
+                subHeader: "#000000",
                 primary: "#000000",
             },
             height: {
@@ -59,6 +62,7 @@ export class LessIsBetter extends BaseTemplate {
         this.doc.addFileToVFS("HKGrotesk-Regular.ttf", HKGroteskRegular);
         this.doc.addFileToVFS("Poppins-Light.ttf", PoppinsLight);
         this.doc.addFileToVFS("Poppins-Bold.ttf", PoppinsBold);
+        this.max_x = this.doc.internal.pageSize.width - this.conf.sidebarWidth - this.conf.margin.right;
     }
 
     static editableOptions() {
@@ -108,7 +112,8 @@ export class LessIsBetter extends BaseTemplate {
                 ...this.conf.height,
                 ...options.height,
             }
-            this.heightRef = this.conf.margin.top;
+            this.y = this.conf.margin.top;
+            this.max_x = this.doc.internal.pageSize.width - this.conf.sidebarWidth - this.conf.margin.right;
         }
 
         if (data.about) {
@@ -138,19 +143,9 @@ export class LessIsBetter extends BaseTemplate {
                 } else {
                     this._addSidebar(data, false, false);
                 }
-
-                if (data.numPages) {
-                    this.doc.setFont("Roboto-Regular", "normal");
-                    this.doc.setFontSize(8);
-                    this.doc.setTextColor(this.conf.color.gray);
-                    this.doc.text(
-                        `${j} / ${pages}`,
-                        this.conf.margin.left,
-                        this.doc.internal.pageSize.height - 6
-                    ); 1
-                }
             }
         }
+        this._numberPages(false);
         this.doc.save("resume.pdf");
         this._reset();
     }
@@ -158,135 +153,135 @@ export class LessIsBetter extends BaseTemplate {
     _addSidebar(data, withContact, withExtras) {
         var docHeight = this.doc.internal.pageSize.height;
         var docWidth = this.doc.internal.pageSize.width;
-        var sidebarHeightRef = 182;
+        var sidebar_y = 182;
 
         this.doc.rect(docWidth - this.conf.sidebarWidth, 0, docWidth, docHeight, "F");
         this.doc.setFont("HKGrotesk-Bold", "normal");
         this.doc.setFontSize(this.conf.text.name);
         this.doc.setTextColor(this.conf.color.white);
 
-        this.doc.text(data.name.toUpperCase(), sidebarHeightRef, this.conf.margin.top - 5, {
+        this.doc.text(data.name.toUpperCase(), sidebar_y, this.conf.margin.top - 5, {
             angle: -90,
             charSpace: 1,
         });
-        sidebarHeightRef -= this.conf.height.name;
-        this.doc.text(data.lastname.toUpperCase(), sidebarHeightRef, this.conf.margin.top - 5, {
+        sidebar_y -= this.conf.height.name;
+        this.doc.text(data.lastname.toUpperCase(), sidebar_y, this.conf.margin.top - 5, {
             angle: -90,
             charSpace: 1,
         });
-        sidebarHeightRef -= this.conf.height.tagline;
+        sidebar_y -= this.conf.height.tagline;
         this.doc.setFont("Poppins-Light", "normal");
         this.doc.setFontSize(this.conf.text.tagline);
-        this.doc.text(data.tagline.toUpperCase(), sidebarHeightRef, this.conf.margin.top - 4, {
+        this.doc.text(data.tagline.toUpperCase(), sidebar_y, this.conf.margin.top - 4, {
             angle: -90,
             charSpace: 1,
         });
 
-        sidebarHeightRef = docHeight - this.conf.margin.bottom;
+        sidebar_y = docHeight - this.conf.margin.bottom;
         var sidebarMargin = (docWidth - this.conf.sidebarWidth) + this.conf.margin.sidebar;
 
         if (withContact) {
             this.doc.setFontSize(this.conf.text.sidebarContent);
-            sidebarHeightRef -= 7; // normalize height
+            sidebar_y -= 7; // normalize height
 
             if (data.contact.stackoverflow) {
                 var stackOverflow = new Image();
                 stackOverflow.src = require("../assets/icons/stack-overflow-white.png");
-                this.doc.addImage(stackOverflow, sidebarMargin, sidebarHeightRef, 7, 7);
+                this.doc.addImage(stackOverflow, sidebarMargin, sidebar_y, 7, 7);
                 this.doc.textWithLink(
                     "stackoverflow",
                     sidebarMargin + 8,
-                    sidebarHeightRef + 5,
+                    sidebar_y + 5,
                     {
                         url: data.contact.stackoverflow,
                     }
                 );
 
-                sidebarHeightRef -= this.conf.height.sidebarContent;
+                sidebar_y -= this.conf.height.sidebarContent;
             }
 
             if (data.contact.twitter) {
                 var twitter = new Image();
                 twitter.src = require("../assets/icons/twitter-white.png");
-                this.doc.addImage(twitter, sidebarMargin, sidebarHeightRef, 7, 7);
+                this.doc.addImage(twitter, sidebarMargin, sidebar_y, 7, 7);
                 this.doc.textWithLink(
                     data.contact.twitter,
                     sidebarMargin + 8,
-                    sidebarHeightRef + 5,
+                    sidebar_y + 5,
                     {
                         url: `https://twitter.com/${data.contact.twitter}`,
                     }
                 );
 
-                sidebarHeightRef -= this.conf.height.sidebarContent;
+                sidebar_y -= this.conf.height.sidebarContent;
             }
 
             if (data.contact.website) {
                 var website = new Image();
                 website.src = require("../assets/icons/web-white.png");
-                this.doc.addImage(website, sidebarMargin, sidebarHeightRef, 7, 7);
+                this.doc.addImage(website, sidebarMargin, sidebar_y, 7, 7);
                 this.doc.textWithLink(
                     data.contact.website,
                     sidebarMargin + 8,
-                    sidebarHeightRef + 5,
+                    sidebar_y + 5,
                     {
                         url: `https://${data.contact.website}`,
                     }
                 );
 
-                sidebarHeightRef -= this.conf.height.sidebarContent;
+                sidebar_y -= this.conf.height.sidebarContent;
             }
 
 
             if (data.contact.linkedin) {
                 var linkedin = new Image();
                 linkedin.src = require("../assets/icons/linkedin-white.png");
-                this.doc.addImage(linkedin, sidebarMargin, sidebarHeightRef, 7, 7);
+                this.doc.addImage(linkedin, sidebarMargin, sidebar_y, 7, 7);
                 this.doc.textWithLink(
                     data.contact.linkedin,
                     sidebarMargin + 8,
-                    sidebarHeightRef + 5,
+                    sidebar_y + 5,
                     {
                         url: `https://linkedin.com/in/${data.contact.linkedin}`,
                     }
                 );
 
-                sidebarHeightRef -= this.conf.height.sidebarContent;
+                sidebar_y -= this.conf.height.sidebarContent;
             }
 
             if (data.contact.github) {
                 var github = new Image();
                 github.src = require("../assets/icons/github-white.png");
-                this.doc.addImage(github, sidebarMargin, sidebarHeightRef, 7, 7);
+                this.doc.addImage(github, sidebarMargin, sidebar_y, 7, 7);
                 this.doc.textWithLink(
                     data.contact.github,
                     sidebarMargin + 8,
-                    sidebarHeightRef + 5,
+                    sidebar_y + 5,
                     {
                         url: `https://github.com/${data.contact.github}`,
                     }
                 );
 
-                sidebarHeightRef -= this.conf.height.sidebarContent;
+                sidebar_y -= this.conf.height.sidebarContent;
             }
 
             var phone = new Image();
             phone.src = require("../assets/icons/phone-white.png");
-            this.doc.addImage(phone, sidebarMargin, sidebarHeightRef, 7, 7);
-            this.doc.text(data.contact.phone, sidebarMargin + 8, sidebarHeightRef + 5);
+            this.doc.addImage(phone, sidebarMargin, sidebar_y, 7, 7);
+            this.doc.text(data.contact.phone, sidebarMargin + 8, sidebar_y + 5);
 
-            sidebarHeightRef -= this.conf.height.sidebarContent;
+            sidebar_y -= this.conf.height.sidebarContent;
 
             var email = new Image();
             email.src = require("../assets/icons/email-white.png");
-            this.doc.addImage(email, sidebarMargin, sidebarHeightRef, 7, 7);
-            this.doc.text(data.contact.email, sidebarMargin + 8, sidebarHeightRef + 5);
+            this.doc.addImage(email, sidebarMargin, sidebar_y, 7, 7);
+            this.doc.text(data.contact.email, sidebarMargin + 8, sidebar_y + 5);
 
-            sidebarHeightRef -= this.conf.height.content;
+            sidebar_y -= this.conf.height.content;
             this.doc.setFont("Roboto-Bold", "normal");
             this.doc.setFontSize(this.conf.text.sidebarHeader);
-            this.doc.text("CONTACT", sidebarMargin, sidebarHeightRef);
-            sidebarHeightRef -= this.conf.height.sidebarHeader * 2;
+            this.doc.text("CONTACT", sidebarMargin, sidebar_y);
+            sidebar_y -= this.conf.height.sidebarHeader * 2;
         }
 
         if (withExtras) {
@@ -294,14 +289,14 @@ export class LessIsBetter extends BaseTemplate {
                 this.doc.setFont("Poppins-Light", "normal");
                 this.doc.setFontSize(this.conf.text.sidebarContent);
                 data.languages.reverse().forEach(lang => {
-                    this.doc.text(`${lang.name} (${lang.level})`, sidebarMargin, sidebarHeightRef);
-                    sidebarHeightRef -= this.conf.height.sidebarContent;
+                    this.doc.text(`${lang.name} (${lang.level})`, sidebarMargin, sidebar_y);
+                    sidebar_y -= this.conf.height.sidebarContent;
                 });
 
                 this.doc.setFont("Roboto-Bold", "normal");
                 this.doc.setFontSize(this.conf.text.sidebarHeader);
-                this.doc.text("LANGUAGES", sidebarMargin, sidebarHeightRef);
-                sidebarHeightRef -= this.conf.height.sidebarHeader * 2;
+                this.doc.text("LANGUAGES", sidebarMargin, sidebar_y);
+                sidebar_y -= this.conf.height.sidebarHeader * 2;
             }
 
             if (data.interests) {
@@ -309,19 +304,19 @@ export class LessIsBetter extends BaseTemplate {
                 this.doc.setFontSize(this.conf.text.sidebarContent);
                 data.interests.reverse().forEach(item => {
                     if (item.link) {
-                        this.doc.textWithLink(item.name, sidebarMargin, sidebarHeightRef, {
+                        this.doc.textWithLink(item.name, sidebarMargin, sidebar_y, {
                             url: item.link,
                         });
                     } else {
-                        this.doc.text(item.name, sidebarMargin, sidebarHeightRef);
+                        this.doc.text(item.name, sidebarMargin, sidebar_y);
                     }
-                    sidebarHeightRef -= this.conf.height.sidebarContent;
+                    sidebar_y -= this.conf.height.sidebarContent;
                 });
 
                 this.doc.setFont("Roboto-Bold", "normal");
                 this.doc.setFontSize(this.conf.text.sidebarHeader);
-                this.doc.text("INTERESTS", sidebarMargin, sidebarHeightRef);
-                sidebarHeightRef -= this.conf.height.sidebarHeader * 2;
+                this.doc.text("INTERESTS", sidebarMargin, sidebar_y);
+                sidebar_y -= this.conf.height.sidebarHeader * 2;
             }
         }
     }
@@ -331,8 +326,8 @@ export class LessIsBetter extends BaseTemplate {
         this.doc.setTextColor(this.conf.color.black);
         this.doc.setFontSize(this.conf.text.header);
         this._isEnoughSpace(this.conf.height.header);
-        this.doc.text(name, this.totalLeftMargin, this.heightRef);
-        this.heightRef += this.conf.height.header;
+        this.doc.text(name, this.x, this.y);
+        this.y += this.conf.height.header;
     }
 
 }
