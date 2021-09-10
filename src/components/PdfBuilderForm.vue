@@ -38,15 +38,15 @@
       Chosen template: <strong>{{ templates[chosen].name }}</strong>
       <span v-if="templates[chosen].link != null">
         (
-        <a :href="templates[chosen].link" target="_blan">Example</a>
+        <a :href="templates[chosen].link" target="_blan">example.pdf</a>
         )
       </span>
     </div>
     <v-divider class="mb-4 mt-2"></v-divider>
     <h2 class="text-h5 text-sm-h3 text-md-h2 mb-4">Step 2: Load JSON Data</h2>
     <p>
-      <v-icon color="info">mdi-information</v-icon> If you don't know what
-      data? Have a look at:
+      <v-icon color="info">mdi-information</v-icon> If you don't know what data?
+      Have a look at:
       <a
         href="https://github.com/rszamszur/pdf-resume-builder/tree/master/examples"
         target="_blank"
@@ -89,7 +89,10 @@
       <v-icon color="info">mdi-information</v-icon> In case chosen template
       isn't rendering as you'd like, you can further tweak some of its
       <a
-        href="https://github.com/rszamszur/pdf-resume-builder#adjusting-options"
+        :href="
+          'https://github.com/rszamszur/pdf-resume-builder/blob/master/examples/' +
+          templates[chosen].name
+        "
         target="_blank"
         >options</a
       >:
@@ -187,21 +190,21 @@ export default {
         {
           name: "LessIsBetter",
           thumbnail: require("../assets/LessIsBetter.png"),
-          link: "https://github.com/rszamszur/pdf-resume-builder/blob/assets/LessIsBetter_example.pdf",
+          link: "https://github.com/rszamszur/pdf-resume-builder/blob/master/examples/LessIsBetter/example.pdf",
           class: LessIsBetter,
           options: LessIsBetter.editableOptions(),
         },
         {
           name: "ShineLikeDiamond",
           thumbnail: require("../assets/ShineLikeDiamond.png"),
-          link: "https://github.com/rszamszur/pdf-resume-builder/blob/assets/ShineLikeDiamond_example.pdf",
+          link: "https://github.com/rszamszur/pdf-resume-builder/blob/master/examples/ShineLikeDiamond/example.pdf",
           class: ShineLikeDiamond,
           options: ShineLikeDiamond.editableOptions(),
         },
         {
           name: "LetsTalkAboutIt",
           thumbnail: require("../assets/LetsTalkAboutIt.png"),
-          link: "https://github.com/rszamszur/pdf-resume-builder/blob/assets/LetsTalkAboutIt_example.pdf",
+          link: "https://github.com/rszamszur/pdf-resume-builder/blob/master/examples/LetsTalkAboutIt/example.pdf",
           class: LetsTalkAboutIt,
           options: LetsTalkAboutIt.editableOptions(),
         },
