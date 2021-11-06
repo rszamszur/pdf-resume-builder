@@ -23,6 +23,11 @@ NOTE! Some templates may provide more adjusting options than others.
 |---------|---------|---------|
 | <img src="https://github.com/rszamszur/pdf-resume-builder/blob/master/src/assets/LessIsBetter.png?raw=true" width="300"/> | <img src="https://github.com/rszamszur/pdf-resume-builder/blob/master/src/assets/ShineLikeDiamond.png?raw=true" width="300"/> | <img src="https://github.com/rszamszur/pdf-resume-builder/blob/master/src/assets/LetsTalkAboutIt.png?raw=true" width="300"/> |
 
+## Headless mode (experimental)
+1. Run `nix-env -i -f default.nix`
+2. Head to a directory containing `resume.json` file
+3. Run `pdf-resume-builder`
+
 ## Contributing
 
 Questions, comments or improvements? Please create an issue on Github. I do my best to include every contribution proposed in any way that I can.
