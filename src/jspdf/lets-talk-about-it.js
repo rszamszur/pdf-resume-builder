@@ -80,7 +80,7 @@ export class LetsTalkAboutIt extends BaseTemplate {
                         github: { type: "string" },
                         website: { type: "string" },
                     },
-                    required: ["email", "phone"],
+                    required: ["email"],
                 },
                 about: {
                     type: "object",
@@ -406,12 +406,16 @@ export class LetsTalkAboutIt extends BaseTemplate {
         this.y += this.conf.height.name;
 
         this.doc.setFontSize(this.conf.text.content);
-        this.doc.text("Phone number:", this.x, this.y);
-        var temp_x = this.doc.getTextWidth("Phone number: ")
-        this.doc.setFont("Roboto-Regular", "normal");
-        this.doc.setTextColor(this.conf.color.content);
-        this.doc.text(data.contact.phone, this.x + temp_x, this.y);
-        this.y += this.conf.height.content;
+
+        if (data.contact.phone) {
+            this.doc.setFont("Roboto-Bold", "normal");
+            this.doc.text("Phone number:", this.x, this.y);
+            var temp_x = this.doc.getTextWidth("Phone number: ")
+            this.doc.setFont("Roboto-Regular", "normal");
+            this.doc.setTextColor(this.conf.color.content);
+            this.doc.text(data.contact.phone, this.x + temp_x, this.y);
+            this.y += this.conf.height.content;
+        }
 
         this.doc.setFont("Roboto-Bold", "normal");
         this.doc.setTextColor(this.conf.color.black);

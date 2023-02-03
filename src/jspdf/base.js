@@ -33,7 +33,7 @@ export class BaseTemplate {
                         twitter: { type: "string" },
                         stackoverflow: { type: "string" },
                     },
-                    required: ["email", "phone"],
+                    required: ["email"],
                 },
                 about: { type: "string" },
                 education: {

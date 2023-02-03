@@ -431,12 +431,14 @@ export class LessIsBetter extends BaseTemplate {
                 sidebar_y -= this.conf.height.sidebarContent;
             }
 
-            var phone = new Image();
-            phone.src = require("../assets/icons/phone-white.png");
-            this.doc.addImage(phone, sidebarMargin, sidebar_y, 7, 7);
-            this.doc.text(data.contact.phone, sidebarMargin + 8, sidebar_y + 5);
+            if (data.contact.phone) {
+                var phone = new Image();
+                phone.src = require("../assets/icons/phone-white.png");
+                this.doc.addImage(phone, sidebarMargin, sidebar_y, 7, 7);
+                this.doc.text(data.contact.phone, sidebarMargin + 8, sidebar_y + 5);
 
-            sidebar_y -= this.conf.height.sidebarContent;
+                sidebar_y -= this.conf.height.sidebarContent;
+            }
 
             var email = new Image();
             email.src = require("../assets/icons/email-white.png");
