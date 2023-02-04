@@ -3,8 +3,7 @@
    "lastname": "Surname",
    "tagline": "Tagline",
    "contact": {
-      "email": "hire@domain.com",
-      "phone": "123 456 789"
+      "email": "hire@domain.com"
    },
    "education": [
       {

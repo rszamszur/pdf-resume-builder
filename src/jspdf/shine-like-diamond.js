@@ -313,11 +313,13 @@ export class ShineLikeDiamond extends BaseTemplate {
         this.doc.text(data.contact.email, this.conf.margin.sidebar + 8, sidebar_y + 4);
         sidebar_y += this.conf.height.sidebarContent;
 
-        var phone = new Image();
-        phone.src = require("../assets/icons/phone.png");
-        this.doc.addImage(phone, this.conf.margin.sidebar, sidebar_y, 6, 6);
-        this.doc.text(data.contact.phone, this.conf.margin.sidebar + 8, sidebar_y + 4);
-        sidebar_y += this.conf.height.sidebarContent;
+        if (data.contact.phone) {
+            var phone = new Image();
+            phone.src = require("../assets/icons/phone.png");
+            this.doc.addImage(phone, this.conf.margin.sidebar, sidebar_y, 6, 6);
+            this.doc.text(data.contact.phone, this.conf.margin.sidebar + 8, sidebar_y + 4);
+            sidebar_y += this.conf.height.sidebarContent;
+        }
 
         if (data.contact.github) {
             var github = new Image();
@@ -485,11 +487,13 @@ export class ShineLikeDiamond extends BaseTemplate {
         this.doc.text(data.contact.email, this.conf.margin.sidebar + 8, sidebar_y + 4);
         sidebar_y += this.conf.height.sidebarContent;
 
-        var phone = new Image();
-        phone.src = require("../assets/icons/phone-white.png");
-        this.doc.addImage(phone, this.conf.margin.sidebar, sidebar_y, 6, 6);
-        this.doc.text(data.contact.phone, this.conf.margin.sidebar + 8, sidebar_y + 4);
-        sidebar_y += this.conf.height.sidebarContent;
+        if (data.contact.phone) {
+            var phone = new Image();
+            phone.src = require("../assets/icons/phone-white.png");
+            this.doc.addImage(phone, this.conf.margin.sidebar, sidebar_y, 6, 6);
+            this.doc.text(data.contact.phone, this.conf.margin.sidebar + 8, sidebar_y + 4);
+            sidebar_y += this.conf.height.sidebarContent;
+            }
 
         if (data.contact.github) {
             var github = new Image();
