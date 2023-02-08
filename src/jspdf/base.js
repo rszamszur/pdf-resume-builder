@@ -216,13 +216,25 @@ export class BaseTemplate {
             this._printMultiLine(projects.details, false);
             this.y += this.conf.height.content; //normalize height
         }
+
+        var github = new Image();
+        github.src = require("../assets/icons/github.png");
+        var link = new Image();
+        link.src = require("../assets/icons/link.png");
+
         projects.items.forEach((project, index) => {
             this.doc.setFont(this.conf.font.header, "normal");
             this.doc.setTextColor(this.conf.color.header);
             this.doc.setFontSize(this.conf.text.header);
             this._isEnoughSpace(this.conf.height.header);
             if (project.link) {
-                this.doc.textWithLink(project.name, this.x, this.y, {
+                if (project.link.startsWith("https://github.com")) {
+                    this.doc.addImage(github, this.x - 0.5, this.y - 3.75, 5, 5);
+                } else {
+                    this.doc.addImage(link, this.x - 0.5, this.y - 3.75, 5, 5);
+                }
+
+                this.doc.textWithLink(project.name, this.x + 5.5, this.y, {
                     url: project.link,
                 });
             } else {
@@ -234,7 +246,7 @@ export class BaseTemplate {
             this._isEnoughSpace(this.conf.height.subheader);
             this.doc.text(project.tagline, this.x, this.y);
             this.y += this.conf.height.subheader;
-            this._printMultiLine(project.details, true);
+            this._printMultiLine(project.details, false);
             if (index != projects.items.length - 1) {
                 this.y += this.conf.height.content; //normalize height
             }
